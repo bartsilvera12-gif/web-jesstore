@@ -600,28 +600,89 @@
   }
 
   // ---- Settings
+  const SETTINGS_SCHEMA = {
+    whatsapp:         { title:'WhatsApp de contacto', fields:[
+      { k:'number',  label:'Número (sin +, con código país)', ph:'595973749759' },
+      { k:'display', label:'Cómo mostrarlo', ph:'+595 973 749759' }
+    ]},
+    payment_banco:    { title:'Transferencia bancaria', fields:[
+      { k:'name',    label:'Nombre visible', ph:'Transferencia Bancaria' },
+      { k:'bank',    label:'Banco',           ph:'Banco Continental' },
+      { k:'account', label:'Cuenta',          ph:'12-3456789-01' },
+      { k:'holder',  label:'Titular',         ph:'Jessica R. Benitez' },
+      { k:'ruc',     label:'RUC',             ph:'4567890-1' }
+    ]},
+    payment_tigo:     { title:'Tigo Money', fields:[
+      { k:'name',   label:'Nombre visible', ph:'Tigo Money' },
+      { k:'number', label:'Número',          ph:'0971 234 567' },
+      { k:'holder', label:'Titular',         ph:'Jessica R. Benitez' },
+      { k:'ci',     label:'CI',              ph:'4.567.890' }
+    ]},
+    payment_personal: { title:'Billetera Personal', fields:[
+      { k:'name',   label:'Nombre visible', ph:'Billetera Personal' },
+      { k:'number', label:'Número',          ph:'0985 123 456' },
+      { k:'holder', label:'Titular',         ph:'Jessica R. Benitez' },
+      { k:'ci',     label:'CI',              ph:'4.567.890' }
+    ]}
+  };
+
   async function viewSettings(){
     const m = $('#main');
     m.innerHTML = `<div class="page-head"><div class="h1">Configuración</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="setBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
     $('#reload').onclick = viewSettings;
     const { data, error } = await sbJess.from('settings').select('*').order('key');
     if(error){ $('#setBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
-    $('#setBox').innerHTML = (data||[]).map((s,i)=>`
-      <div class="card" style="margin-bottom:12px">
-        <div class="row" style="justify-content:space-between;margin-bottom:8px">
-          <div><b style="font-family:Orbitron">${s.key}</b> <span class="muted">${s.description||''}</span></div>
-          <button class="btn primary small" data-save="${s.key}">Guardar</button>
-        </div>
-        <textarea class="input" data-key="${s.key}" rows="4" style="font-family:monospace;font-size:13px">${JSON.stringify(s.value, null, 2)}</textarea>
-      </div>`).join('');
-    document.querySelectorAll('[data-save]').forEach(b => b.onclick = async () => {
-      const key = b.dataset.save;
-      const ta = document.querySelector(`[data-key="${key}"]`);
-      let value;
-      try{ value = JSON.parse(ta.value); }catch(e){ toast('JSON inválido', true); return; }
-      const { error } = await sbJess.from('settings').update({ value }).eq('key', key);
-      if(error){ toast(error.message, true); return; }
-      toast('Guardado');
+
+    const box = $('#setBox');
+    box.innerHTML = '';
+    const orderedKeys = ['whatsapp','payment_banco','payment_tigo','payment_personal'];
+    const rows = (data||[]).sort((a,b) => {
+      const ia = orderedKeys.indexOf(a.key); const ib = orderedKeys.indexOf(b.key);
+      return (ia<0?99:ia) - (ib<0?99:ib);
+    });
+
+    rows.forEach(s => {
+      const schema = SETTINGS_SCHEMA[s.key];
+      const card = el('div', { class:'card', style:{marginBottom:'14px'} });
+      const head = el('div', { class:'row', style:{justifyContent:'space-between',marginBottom:'14px',flexWrap:'wrap',gap:'10px'} });
+      head.innerHTML = `<div><b class="h2">${schema?schema.title:s.key}</b>${s.description?` <span class="muted" style="font-size:13px">${s.description}</span>`:''}</div>`;
+      const saveBtn = el('button', { class:'btn primary small' }, 'Guardar');
+      head.appendChild(saveBtn);
+      card.appendChild(head);
+
+      if(schema){
+        const grid = el('div', { class:'grid-2' });
+        const inputs = {};
+        schema.fields.forEach(f => {
+          const wrap = el('div');
+          wrap.innerHTML = `<label class="label">${f.label}</label>`;
+          const inp = el('input', { class:'input', type:'text', placeholder:f.ph||'', value: (s.value && s.value[f.k]) || '' });
+          wrap.appendChild(inp);
+          inputs[f.k] = inp;
+          grid.appendChild(wrap);
+        });
+        card.appendChild(grid);
+        saveBtn.onclick = async () => {
+          const value = {};
+          Object.keys(inputs).forEach(k => { value[k] = inputs[k].value.trim(); });
+          const { error } = await sbJess.from('settings').update({ value }).eq('key', s.key);
+          if(error){ toast(error.message, true); return; }
+          toast('Guardado');
+        };
+      } else {
+        // Fallback JSON para keys nuevas
+        const ta = el('textarea', { class:'input', rows:'5', style:{fontFamily:'monospace',fontSize:'13px'} }, JSON.stringify(s.value, null, 2));
+        card.appendChild(ta);
+        saveBtn.onclick = async () => {
+          let value;
+          try{ value = JSON.parse(ta.value); }catch(e){ toast('JSON inválido', true); return; }
+          const { error } = await sbJess.from('settings').update({ value }).eq('key', s.key);
+          if(error){ toast(error.message, true); return; }
+          toast('Guardado');
+        };
+      }
+
+      box.appendChild(card);
     });
   }
 
