@@ -635,17 +635,44 @@ class Component extends DCLogic {
     verifyStep:'idle', orderPin:'', countdownSec:0,
     products: [],           // se llena desde Supabase (jess_products_public)
     productsLoading: true,
-    submitting: false
+    submitting: false,
+    settings: {}            // se llena desde Supabase (jess_settings_public)
   };
 
   openCheckout=()=>{ if(!this.state.cart.length){ this.flash('Tu carrito está vacío'); return; } this.setState({ view:'checkout', cartOpen:false }); window.scrollTo({top:0}); };
   closeCheckout=()=>{ this.setState({ view:'home' }); window.scrollTo({top:0}); };
 
   payDetails(m){
-    const d={
-      'Tigo Money':{ label:'Tigo Money', lines:[['Número','0971 234 567'],['Titular','Jessica R. Benítez'],['CI','4.567.890']] },
-      'Billetera Personal':{ label:'Billetera Personal', lines:[['Número','0985 123 456'],['Titular','Jessica R. Benítez'],['CI','4.567.890']] },
-      'Transferencia Bancaria':{ label:'Transferencia Bancaria', lines:[['Banco','Banco Continental'],['Cuenta','12-3456789-01'],['Titular','Jessica R. Benítez'],['RUC','4567890-1']] }
+    const s = this.state.settings || {};
+    const tigo = s.payment_tigo || {};
+    const pers = s.payment_personal || {};
+    const banco = s.payment_banco || {};
+    const d = {
+      'Tigo Money':{
+        label: tigo.name || 'Tigo Money',
+        lines: [
+          ['Número', tigo.number || '0971 234 567'],
+          ['Titular', tigo.holder || 'Jessica R. Benítez'],
+          ['CI', tigo.ci || '4.567.890']
+        ]
+      },
+      'Billetera Personal':{
+        label: pers.name || 'Billetera Personal',
+        lines: [
+          ['Número', pers.number || '0985 123 456'],
+          ['Titular', pers.holder || 'Jessica R. Benítez'],
+          ['CI', pers.ci || '4.567.890']
+        ]
+      },
+      'Transferencia Bancaria':{
+        label: banco.name || 'Transferencia Bancaria',
+        lines: [
+          ['Banco', banco.bank || 'Banco Continental'],
+          ['Cuenta', banco.account || '12-3456789-01'],
+          ['Titular', banco.holder || 'Jessica R. Benítez'],
+          ['RUC', banco.ruc || '4567890-1']
+        ]
+      }
     };
     return d[m] || d['Transferencia Bancaria'];
   }
@@ -704,7 +731,8 @@ class Component extends DCLogic {
   onModalId=e=>this.setState({modalPlayerId:e.target.value});
   addModal=()=>{ const p=this.state.selProduct; if(!p) return; const pid=this.state.modalPlayerId.trim(); if(!pid){ this.flash('Ingresá tu ID de jugador'); return; } const label=this.fmt(p.diamonds)+(p.bonusDiamonds?' + '+this.fmt(p.bonusDiamonds):''); this.addToCart({ id:p.id+'-'+pid, productId:p.id, name:label+' diamantes · ID '+pid, diamonds:p.diamonds, bonusDiamonds:p.bonusDiamonds||0, price:p.price, type:'diamond', playerId:pid }); this.setState({productOpen:false}); };
 
-  wa(){ return String(this.props.whatsappNumber || '595973749759').replace(/[^0-9]/g,''); }
+  wa(){ const w=(this.state.settings||{}).whatsapp||{}; return String(w.number || this.props.whatsappNumber || '595973749759').replace(/[^0-9]/g,''); }
+  waDisplay(){ const w=(this.state.settings||{}).whatsapp||{}; return w.display || this.props.whatsappDisplay || '+595 973 749759'; }
   fmt(n){ return Number(n||0).toLocaleString('es-PY'); }
   tickerList(){
     const base=[
@@ -845,6 +873,19 @@ class Component extends DCLogic {
     window.addEventListener('scroll', this._onScroll, { passive:true });
     this._onScroll();
     this.loadProducts();
+    this.loadSettings();
+  }
+
+  async loadSettings(){
+    const sb = window.jessSb;
+    if(!sb) return;
+    try{
+      const { data, error } = await sb.from('jess_settings_public').select('*');
+      if(error) throw error;
+      const map = {};
+      (data || []).forEach(r => { map[r.key] = r.value; });
+      this.setState({ settings: map });
+    }catch(e){ console.warn('[JESS] No se pudieron cargar settings:', e); }
   }
 
   async loadProducts(){
@@ -1049,7 +1090,7 @@ class Component extends DCLogic {
       form:this.state.form, onFormChange:this.onFormChange, onSubmitOrder:this.onSubmitOrder,
       faqs, toast:this.state.toast,
       heroWaHref:'https://wa.me/'+this.wa()+'?text='+encodeURIComponent('¡Hola JESS STORE! Quiero recargar diamantes de Free Fire.'),
-      whatsappDisplay:this.props.whatsappDisplay || '+595 973 749759',
+      whatsappDisplay:this.waDisplay(),
       stat:{ recargas:this.fmt(this.state.stat.recargas)+'+', minutos:this.state.stat.minutos+' min', satis:this.state.stat.satis+'%' },
       steps:[
         { n:'1', title:'Elegí un paquete', desc:'Seleccioná la cantidad de diamantes que querés recargar.' },
