@@ -228,25 +228,7 @@
         <div class="js-package-card" data-reveal style="{{ p.cardStyle }}" style-hover="transform:translateY(-8px);box-shadow:0 20px 50px rgba(41,182,255,.28);border-color:rgba(41,182,255,.6)">
           <sc-if value="{{ p.tag }}" hint-placeholder-val="OFERTA"><span class="js-package-tag" style="{{ p.tagStyle }}">{{ p.tag }}</span></sc-if>
           <div style="display:flex;justify-content:center;margin:6px 0 18px">
-            <svg viewBox="0 0 72 72" style="width:72px;height:72px;filter:drop-shadow(0 0 14px rgba(41,182,255,.5))">
-              <defs>
-                <linearGradient id="diamGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#e8f6ff"/>
-                  <stop offset=".35" stop-color="#8fe3ff"/>
-                  <stop offset=".7" stop-color="#3ea6ff"/>
-                  <stop offset="1" stop-color="#1a5aa8"/>
-                </linearGradient>
-                <linearGradient id="diamShine" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="rgba(255,255,255,.85)"/>
-                  <stop offset="1" stop-color="rgba(255,255,255,0)"/>
-                </linearGradient>
-              </defs>
-              <path d="M14 26 L36 8 L58 26 L36 64 Z" fill="url(#diamGrad)" stroke="#bfe4ff" stroke-width="1"/>
-              <path d="M14 26 L36 26 L36 8 Z" fill="rgba(255,255,255,.35)"/>
-              <path d="M36 26 L58 26 L36 8 Z" fill="rgba(255,255,255,.55)"/>
-              <path d="M14 26 L36 26 L36 64 Z" fill="rgba(0,0,0,.15)"/>
-              <path d="M20 20 L26 12 L28 14 L22 22 Z" fill="url(#diamShine)"/>
-            </svg>
+            <img src="uploads/diamond.webp" alt="Diamante" style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(41,182,255,.5))">
           </div>
           <div class="js-package-diamonds" style="font-family:'Orbitron';font-weight:900;font-size:clamp(22px,2.4vw,30px);text-align:center;line-height:1.1;color:#fff;white-space:nowrap;letter-spacing:-.5px">{{ p.diamondsFmt }}</div>
           <div class="js-package-label" style="text-align:center;color:#8ea3c8;font-weight:600;letter-spacing:1px;font-size:13px;margin-top:4px;margin-bottom:16px">DIAMANTES</div>

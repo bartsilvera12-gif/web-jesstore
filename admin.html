@@ -185,7 +185,8 @@
   window.closeModal = () => $('#modal').classList.remove('on');
   $('#modal').addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
 
-  const statusTag = s => { const map={pending:'PENDIENTE',payment_review:'REVISAR PAGO',paid:'PAGADO',processing:'EN PROCESO',completed:'COMPLETADO',cancelled:'CANCELADO',rejected:'RECHAZADO',approved:'APROBADO',under_review:'EN REVISIÓN',refunded:'REEMBOLSADO'}; const cls='tag-'+(s||'pending'); return `<span class="tag ${cls}">${map[s]||s||'—'}</span>`; };
+  const STATUS_LABEL = {pending:'Pendiente',payment_review:'Revisar pago',paid:'Pagado',processing:'En proceso',completed:'Completado',cancelled:'Cancelado',rejected:'Rechazado',approved:'Aprobado',under_review:'En revisión',refunded:'Reembolsado'};
+  const statusTag = s => { const cls='tag-'+(s||'pending'); const label=(STATUS_LABEL[s]||s||'—').toUpperCase(); return `<span class="tag ${cls}">${label}</span>`; };
 
   // ---- Auth
   async function boot(){
@@ -382,7 +383,7 @@
         <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">CAMBIAR ESTADO</div>
         <div class="row">
           <select class="input" id="newStatus" style="flex:1">
-            ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+            ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${STATUS_LABEL[s]||s}</option>`).join('')}
           </select>
           <button class="btn primary" id="saveStatus">Guardar</button>
         </div>
