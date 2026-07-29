@@ -27,7 +27,7 @@ insert into jess.products
   (id, category_id, name, slug, diamonds, bonus_diamonds, price, is_featured, is_active, sort_order, description)
 values
   ('00000000-0000-0000-0000-000000000101', '00000000-0000-0000-0000-000000000001',
-   '110 diamantes', 'ff-110',   100,   10,   9000, false, true, 10,
+   '100+10 diamantes', 'ff-110',   100,   10,   9000, false, true, 10,
    '100 diamantes + 10 de bonus'),
   ('00000000-0000-0000-0000-000000000102', '00000000-0000-0000-0000-000000000001',
    '341 diamantes', 'ff-341',   310,   31,  25000, false, true, 20,
