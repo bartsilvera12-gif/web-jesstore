@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(mkdir -p \"/Users/ivangonzalez/Proyectos/JESS/Prototipo interactivo con carrito/backend\")",
-      "Bash(python3 -m http.server 8765)"
-    ]
-  }
-}
