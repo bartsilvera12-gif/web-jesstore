@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./backend/supabase-config.js"></script>
+<script>
+  // Cliente global — lo usa el Component en <script type="text/x-dc"> más abajo.
+  window.jessSb = (function () {
+    try {
+      var c = window.JESS_SUPABASE || {};
+      if (!c.url || !c.anonKey || c.anonKey === 'REEMPLAZAR_CON_ANON_KEY') {
+        console.warn('[JESS] Falta configurar backend/supabase-config.js');
+        return null;
+      }
+      return window.supabase.createClient(c.url, c.anonKey);
+    } catch (e) { console.error('[JESS] No se pudo iniciar Supabase:', e); return null; }
+  })();
+</script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:245px}
+  body{background:#04060f;color:#e8eefc;font-family:'Rajdhani',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#3ea6ff;text-decoration:none}
+  a:hover{color:#7cc6ff}
+  input,select,button,textarea{font-family:inherit}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:#070b19}
+  ::-webkit-scrollbar-thumb{background:#182645;border-radius:6px}
+  @keyframes jsFloat{0%{transform:translateY(0)}50%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+  @keyframes jsFadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes jsGlow{0%,100%{box-shadow:0 0 22px rgba(41,182,255,.35),0 0 60px rgba(41,182,255,.15)}50%{box-shadow:0 0 34px rgba(245,197,66,.45),0 0 80px rgba(245,197,66,.18)}}
+  @keyframes jsShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  @keyframes jsSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  @keyframes jsPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+  @keyframes jsSweep{0%{transform:translateX(-120%) skewX(-18deg)}100%{transform:translateX(320%) skewX(-18deg)}}
+  @keyframes jsHalo{0%,100%{opacity:.25}50%{opacity:.6}}
+  @keyframes jsTicker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;overflow:hidden;background:radial-gradient(1200px 700px at 78% -8%,rgba(41,182,255,.16),transparent 55%),radial-gradient(1000px 600px at 10% 10%,rgba(245,197,66,.08),transparent 55%),linear-gradient(180deg,#04060f 0%,#060a1a 40%,#04060f 100%);min-height:100vh">
+
+  <!-- HEADER -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:4px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
+    <div ref="{{ progressRef }}" style="position:absolute;left:0;bottom:-1px;height:3px;width:0%;background:linear-gradient(90deg,#3ea6ff,#8fe3ff,#f5c542);box-shadow:0 0 12px rgba(41,182,255,.8);transition:width .12s linear;z-index:2"></div>
+    <a href="#inicio" style="display:flex;align-items:center;gap:12px;transition:transform .25s ease" style-hover="transform:scale(1.05)">
+      <img src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
+    </a>
+    <nav style="display:flex;align-items:center;gap:clamp(10px,1.6vw,26px);flex-wrap:wrap">
+      <a href="#inicio" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Inicio</a>
+      <a href="#paquetes" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Comprar diamantes</a>
+      <a href="#proceso" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Cómo funciona</a>
+      <a href="#faq" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Preguntas frecuentes</a>
+      <a href="#contacto" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Contacto</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button onClick="{{ openCart }}" style="position:relative;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(41,182,255,.4);color:#dff0ff;font-weight:700;padding:9px 14px;border-radius:12px;cursor:pointer;font-size:14px;transition:all .22s ease" style-hover="background:rgba(41,182,255,.16);border-color:#3ea6ff;box-shadow:0 0 20px rgba(41,182,255,.4);transform:translateY(-2px)">
+        Carrito
+        <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}"><span style="min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffe08a,#f5c542);color:#111;border-radius:11px;font-weight:900;font-size:12px;padding:0 6px;font-family:'Orbitron'">{{ cartCount }}</span></sc-if>
+      </button>
+      <a href="#paquetes" style="background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:10px 20px;border-radius:12px;font-size:14px;letter-spacing:.4px;box-shadow:0 6px 20px rgba(245,197,66,.35);transition:all .22s ease" style-hover="transform:translateY(-2px) scale(1.03);box-shadow:0 10px 28px rgba(245,197,66,.6);filter:brightness(1.08)">COMPRAR AHORA</a>
+    </div>
+    <div style="width:100%;order:9;overflow:hidden;margin:6px 0 -4px;padding:8px 0;border-top:1px solid rgba(41,182,255,.18);background:linear-gradient(90deg,rgba(5,8,18,.9),rgba(10,16,36,.9),rgba(5,8,18,.9));mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
+      <div style="display:flex;width:max-content;gap:34px;animation:jsTicker 42s linear infinite">
+        <sc-for list="{{ ticker }}" as="t" hint-placeholder-count="16">
+          <div style="display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:13.5px;font-weight:600;color:#9db0d4">
+            <span style="font-size:14px">🔥</span>
+            <b style="color:#e8eefc;font-weight:800">{{ t.user }}</b>
+            <span>recargó</span>
+            <b style="color:#8fe3ff;font-weight:800">{{ t.amount }}</b>
+            <span style="color:#5f74a0">·</span>
+            <span style="color:#ffd76a;font-weight:700">{{ t.when }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" style="position:relative;padding:clamp(265px,27vh,295px) clamp(16px,5vw,64px) clamp(60px,8vh,90px);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(30px,4vw,60px);justify-content:center">
+    <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
+    <div style="position:relative;z-index:2;flex:1 1 440px;max-width:640px;animation:jsFadeUp .8s ease both">
+      <h1 style="font-family:'Orbitron';font-weight:900;font-size:clamp(34px,5.4vw,58px);line-height:1.05;letter-spacing:-.5px;margin-bottom:20px;text-wrap:balance">
+        Recargá tus <span style="background:linear-gradient(135deg,#8fe3ff,#29b6ff);-webkit-background-clip:text;background-clip:text;color:transparent">diamantes</span> de forma <span style="background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent">rápida y segura</span>
+      </h1>
+      <p style="font-size:clamp(16px,2vw,20px);color:#a9bbdc;max-width:520px;line-height:1.5;margin-bottom:30px;font-weight:500">Elegí tu paquete, enviá tu ID de jugador y recibí tus diamantes de Free Fire en minutos.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px">
+        <a href="#paquetes" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:16px 30px;border-radius:14px;font-size:16px;letter-spacing:.5px;box-shadow:0 10px 30px rgba(245,197,66,.35);transition:all .25s ease;position:relative;overflow:hidden" style-hover="transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px rgba(245,197,66,.6);filter:brightness(1.08)" style-after="content:'';position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:jsSweep 3.4s ease-in-out infinite">VER PAQUETES</a>
+      </div>
+    </div>
+    <div style="position:relative;z-index:2;flex:1 1 360px;max-width:520px;display:flex;justify-content:center;animation:jsFadeUp 1s ease both">
+      <div style="position:absolute;width:min(420px,80%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(41,182,255,.35),transparent 65%);filter:blur(30px);animation:jsHalo 6s ease-in-out infinite;pointer-events:none;z-index:0"></div>
+      <div style="position:relative;width:100%;max-width:460px;aspect-ratio:4/5;border-radius:22px;overflow:hidden;border:1px solid rgba(41,182,255,.28);background:repeating-linear-gradient(135deg,#0a1024,#0a1024 14px,#0c1430 14px,#0c1430 28px);display:flex;align-items:center;justify-content:center;animation:jsGlow 5s ease-in-out infinite">
+        <div style="position:absolute;top:24px;left:24px;right:24px;display:flex;justify-content:center"><img src="uploads/logo-1785247877729.png" style="width:80%;filter:drop-shadow(0 6px 20px rgba(41,182,255,.5))"></div>
+        <div style="position:absolute;inset:64px 24px 24px;animation:jsFloat 5s ease-in-out infinite">
+          <image-slot id="hero-diamantes" shape="rounded" radius="18" fit="cover" placeholder="Subí la imagen oficial de diamantes Free Fire" style="width:100%;height:100%"></image-slot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAQUETES -->
+  <section id="paquetes" style="position:relative;z-index:2;padding:clamp(50px,7vh,80px) clamp(16px,5vw,64px);max-width:1200px;margin:0 auto">
+    <div data-reveal style="text-align:center;margin-bottom:44px">
+      <div style="display:flex;justify-content:center;margin-bottom:18px">
+        <div style="display:flex;align-items:center;gap:16px;padding:14px 26px;border-radius:16px;border:1px solid rgba(245,197,66,.3);background:linear-gradient(135deg,rgba(13,20,44,.85),rgba(7,11,26,.85));box-shadow:0 12px 34px rgba(0,0,0,.4)">
+          <span style="color:#8ea3c8;font-weight:700;letter-spacing:2px;font-size:12px">RECARGAS PARA</span>
+          <img src="uploads/pasted-1785326533230-0.png" alt="Free Fire" style="height:clamp(26px,3.4vw,38px);width:auto;filter:brightness(0) invert(1) drop-shadow(0 0 14px rgba(41,182,255,.55))">
+        </div>
+      </div>
+      <div style="color:#ffd76a;font-weight:700;letter-spacing:2px;font-size:13px;margin-bottom:10px">PAQUETES DE DIAMANTES</div>
+      <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(28px,4vw,44px);margin-bottom:12px">Elegí tu recarga</h2>
+      <p style="color:#8ea3c8;font-size:17px;max-width:560px;margin:0 auto;font-weight:500">Precios en guaraníes. Todos los paquetes se acreditan directo a tu cuenta de Free Fire.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+      <sc-for list="{{ packages }}" as="p" hint-placeholder-count="6">
+        <div data-reveal style="{{ p.cardStyle }}" style-hover="transform:translateY(-8px);box-shadow:0 20px 50px rgba(41,182,255,.28);border-color:rgba(41,182,255,.6)">
+          <sc-if value="{{ p.tag }}" hint-placeholder-val="OFERTA"><span style="{{ p.tagStyle }}">{{ p.tag }}</span></sc-if>
+          <div style="display:flex;justify-content:center;margin:6px 0 18px"><image-slot id="{{ p.slotId }}" shape="rounded" radius="10" fit="contain" placeholder="💎" style="width:72px;height:72px;filter:drop-shadow(0 0 14px rgba(41,182,255,.4))"></image-slot></div>
+          <div style="font-family:'Orbitron';font-weight:900;font-size:38px;text-align:center;line-height:1;color:#fff">{{ p.diamondsFmt }}</div>
+          <div style="text-align:center;color:#8ea3c8;font-weight:600;letter-spacing:1px;font-size:13px;margin-top:4px;margin-bottom:16px">DIAMANTES</div>
+          <div style="text-align:center;font-family:'Orbitron';font-weight:700;font-size:24px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:18px">{{ p.priceFmt }} Gs.</div>
+          <button onClick="{{ p.add }}" style="width:100%;background:rgba(41,182,255,.12);border:1.5px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:13px;border-radius:12px;cursor:pointer;font-size:15px;letter-spacing:.5px;transition:all .2s" style-hover="background:linear-gradient(135deg,#3ea6ff,#29d4ff);color:#03121f;border-color:transparent;box-shadow:0 8px 24px rgba(41,182,255,.4)">COMPRAR</button>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- CUSTOM -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px">
+      <div data-reveal style="position:relative;background:linear-gradient(135deg,rgba(13,20,44,.9),rgba(9,13,30,.9));border:1px dashed rgba(41,182,255,.45);border-radius:18px;padding:20px 22px">
+        <div style="font-family:'Orbitron';font-weight:700;font-size:17px;color:#fff;margin-bottom:4px">Paquete personalizado</div>
+        <div style="color:#8ea3c8;font-size:13px;font-weight:600;margin-bottom:12px">Ingresá la cantidad de diamantes que querés</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input value="{{ custom }}" onInput="{{ onCustomChange }}" inputmode="numeric" placeholder="Ej: 800" style="flex:1;min-width:0;background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:12px 14px;border-radius:11px;font-size:16px;font-weight:700">
+          <button onClick="{{ addCustom }}" style="background:rgba(41,182,255,.14);border:1.5px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:12px 16px;border-radius:11px;cursor:pointer;font-size:14px;white-space:nowrap;transition:all .22s ease" style-hover="background:linear-gradient(135deg,#3ea6ff,#29d4ff);color:#03121f;border-color:transparent;box-shadow:0 8px 22px rgba(41,182,255,.45)">Agregar</button>
+        </div>
+        <div style="color:#ffd76a;font-size:13px;font-weight:700;margin-top:10px;font-family:'Orbitron'">{{ customPriceFmt }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso" style="position:relative;z-index:2;padding:clamp(50px,7vh,80px) clamp(16px,5vw,64px);max-width:1150px;margin:0 auto">
+    <div data-reveal style="text-align:center;margin-bottom:44px">
+      <div style="color:#3ea6ff;font-weight:700;letter-spacing:2px;font-size:13px;margin-bottom:10px">CÓMO FUNCIONA</div>
+      <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(28px,4vw,44px)">4 pasos y listo</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <div data-reveal style="position:relative;background:linear-gradient(180deg,rgba(13,20,44,.7),rgba(7,11,26,.7));border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:26px 22px;transition:all .25s ease" style-hover="transform:translateY(-6px);border-color:rgba(41,182,255,.4);box-shadow:0 18px 40px rgba(0,0,0,.4)">
+          <div style="font-family:'Orbitron';font-weight:900;font-size:44px;background:linear-gradient(135deg,#3ea6ff,#29d4ff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;margin-bottom:14px">{{ s.n }}</div>
+          <div style="font-family:'Orbitron';font-weight:700;font-size:18px;color:#fff;margin-bottom:8px">{{ s.title }}</div>
+          <div style="color:#8ea3c8;font-size:15px;font-weight:500;line-height:1.5">{{ s.desc }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- BANNER ART -->
+  <section style="position:relative;z-index:2;padding:clamp(20px,3vh,40px) clamp(16px,5vw,64px)">
+    <div data-reveal style="position:relative;max-width:1200px;margin:0 auto;border-radius:22px;overflow:hidden;border:1px solid rgba(245,197,66,.28);box-shadow:0 24px 60px rgba(0,0,0,.5)">
+      <img src="uploads/pasted-1785326641080-0.png" alt="Free Fire" style="display:block;width:100%;height:auto">
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,15,.9) 0%,rgba(4,6,15,.5) 38%,transparent 70%)"></div>
+      <div style="position:absolute;top:0;bottom:0;left:0;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:clamp(20px,4vw,54px);max-width:min(520px,58%)">
+        <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(18px,2.6vw,34px);line-height:1.12;text-wrap:balance">Entrá a la partida con <span style="background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent">ventaja</span></h2>
+        <p style="color:#c3d2ee;font-size:clamp(12px,1.3vw,16px);font-weight:500;line-height:1.45">Skins, pases y personajes. Recargá tus diamantes en minutos y desbloqueá todo.</p>
+        <a href="#paquetes" style="align-self:flex-start;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:clamp(9px,1.2vw,14px) clamp(16px,2.2vw,28px);border-radius:12px;font-size:clamp(12px,1.2vw,15px);letter-spacing:.4px;box-shadow:0 10px 28px rgba(245,197,66,.4);transition:all .25s ease" style-hover="transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px rgba(245,197,66,.6);filter:brightness(1.08)">RECARGAR AHORA</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKOUT SUBPAGE -->
+  <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:95;overflow-y:auto;background:radial-gradient(900px 500px at 80% 0%,rgba(41,182,255,.12),transparent 60%),linear-gradient(180deg,#05070f,#070b1a)">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px clamp(16px,5vw,48px);border-bottom:1px solid rgba(245,197,66,.22);background:rgba(6,10,26,.86);backdrop-filter:blur(14px);position:sticky;top:0;z-index:3">
+    <img src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:56px;width:auto;filter:drop-shadow(0 4px 16px rgba(41,182,255,.5))">
+    <button onClick="{{ closeCheckout }}" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(41,182,255,.4);color:#dff0ff;font-weight:700;padding:11px 18px;border-radius:12px;cursor:pointer;font-size:14px;transition:all .2s" style-hover="background:rgba(41,182,255,.16);border-color:#3ea6ff;transform:translateX(-3px)">← Volver a la tienda</button>
+  </div>
+  <section style="position:relative;z-index:2;padding:clamp(30px,5vh,54px) clamp(16px,5vw,64px) 70px;max-width:1200px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:34px">
+      <div style="color:#ffd76a;font-weight:700;letter-spacing:2px;font-size:13px;margin-bottom:10px">FINALIZAR COMPRA</div>
+      <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(26px,3.6vw,40px)">Detalles de tu pedido</h2>
+    </div>
+    <form onSubmit="{{ onSubmitOrder }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:24px;align-items:start">
+
+      <div data-reveal style="background:linear-gradient(180deg,rgba(13,20,44,.92),rgba(7,11,26,.92));border:1px solid rgba(255,255,255,.09);border-radius:22px;padding:clamp(22px,3vw,34px)">
+        <h3 style="font-family:'Orbitron';font-weight:900;font-size:20px;color:#fff;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:22px">Detalles de facturación</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Nombres <span style="color:#ff6b6b">*</span></label><input name="firstName" value="{{ form.firstName }}" onInput="{{ onFormChange }}" placeholder="Tu nombre" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Apellidos <span style="color:#ff6b6b">*</span></label><input name="lastName" value="{{ form.lastName }}" onInput="{{ onFormChange }}" placeholder="Tu apellido" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Número de Cédula <span style="color:#ff6b6b">*</span></label><input name="cedula" value="{{ form.cedula }}" onInput="{{ onFormChange }}" placeholder="4.567.890" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Ciudad <span style="color:#ff6b6b">*</span></label><input name="city" value="{{ form.city }}" onInput="{{ onFormChange }}" placeholder="Asunción" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Dirección de correo electrónico</label><input name="email" value="{{ form.email }}" onInput="{{ onFormChange }}" placeholder="tucorreo@mail.com" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1"><label style="font-weight:700;font-size:14px;color:#c3d2ee">WhatsApp <span style="color:#ff6b6b">*</span></label><input name="whatsapp" value="{{ form.whatsapp }}" onInput="{{ onFormChange }}" placeholder="+595 9XX XXXXXX" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px">
+          <div onClick="{{ toggleNewsletter }}" style="display:flex;align-items:center;gap:11px;cursor:pointer"><span style="{{ nlBox }}">✓</span><span style="color:#c3d2ee;font-weight:600;font-size:15px">Suscribirme a las ofertas de Jess Store</span></div>
+        </div>
+      </div>
+
+      <div data-reveal style="background:linear-gradient(180deg,rgba(13,20,44,.95),rgba(7,11,26,.95));border:1px solid rgba(245,197,66,.3);border-radius:22px;padding:clamp(22px,3vw,30px);box-shadow:0 24px 60px rgba(0,0,0,.45)">
+        <h3 style="font-family:'Orbitron';font-weight:900;font-size:20px;color:#fff;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:18px">Tu pedido</h3>
+        <div style="display:flex;justify-content:space-between;color:#8ea3c8;font-weight:700;letter-spacing:1px;font-size:12px;margin-bottom:14px"><span>PRODUCTO</span><span>SUBTOTAL</span></div>
+        <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:14px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.1)">
+            <sc-for list="{{ checkoutItems }}" as="i" hint-placeholder-count="2">
+              <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start">
+                <div style="min-width:0"><div style="color:#dbe6fb;font-weight:700;font-size:15px;line-height:1.35">Diamantes Free Fire vía ID · {{ i.name }}</div><div style="color:#8ea3c8;font-weight:600;font-size:13px;margin-top:3px">{{ i.qty }}</div></div>
+                <div style="font-family:'Orbitron';font-weight:700;font-size:15px;color:#fff;white-space:nowrap">{{ i.amount }} Gs.</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);color:#c3d2ee;font-weight:700;font-size:15px"><span>Subtotal</span><span style="font-family:'Orbitron'">{{ subtotalFmt }} Gs.</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 0 20px"><span style="font-family:'Orbitron';font-weight:900;font-size:17px;color:#fff">Total</span><span style="font-family:'Orbitron';font-weight:900;font-size:26px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent">{{ subtotalFmt }} Gs.</span></div>
+        </sc-if>
+        <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:26px 0;text-align:center;color:#6b7da0;font-weight:600;font-size:14px">Tu carrito está vacío.<br><span onClick="{{ closeCheckout }}" style="color:#3ea6ff;font-weight:700;cursor:pointer">Elegí un paquete →</span></div>
+        </sc-if>
+        <div style="color:#8ea3c8;font-weight:700;letter-spacing:1px;font-size:12px;margin:6px 0 12px">MÉTODO DE PAGO</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+          <sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="3">
+            <div onClick="{{ m.pick }}" style="{{ m.rowStyle }}">
+              <span style="{{ m.dotStyle }}"><span style="{{ m.innerStyle }}"></span></span>
+              <span style="flex:1;color:#e8eefc;font-weight:700;font-size:15px">{{ m.name }}</span>
+              <image-slot id="{{ m.slotId }}" shape="rounded" radius="9" fit="cover" placeholder="logo" style="width:64px;height:34px;flex-shrink:0;background:rgba(255,255,255,.07)"></image-slot>
+            </div>
+          </sc-for>
+        </div>
+        <button type="submit" style="width:100%;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:16px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.5px;border:none;box-shadow:0 12px 30px rgba(245,197,66,.35);transition:all .25s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 44px rgba(245,197,66,.55);filter:brightness(1.08)">REALIZAR EL PEDIDO</button>
+        <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">🔒 Nunca pedimos la contraseña de tu cuenta.</div>
+      </div>
+    </form>
+  </section>
+  </div>
+  </sc-if>
+
+  <!-- METODOS DE PAGO -->
+  <section style="position:relative;z-index:2;padding:clamp(40px,6vh,70px) clamp(16px,5vw,64px);max-width:1100px;margin:0 auto">
+    <div data-reveal style="text-align:center;margin-bottom:34px">
+      <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(24px,3.4vw,36px);margin-bottom:8px">Métodos de pago</h2>
+      <p style="color:#8ea3c8;font-weight:500">Los métodos son configurables. Consultá los datos al confirmar tu pedido.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+      <sc-for list="{{ payments }}" as="m" hint-placeholder-count="3">
+        <div data-reveal style="display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,rgba(13,20,44,.8),rgba(7,11,26,.8));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .25s ease" style-hover="transform:translateY(-5px);border-color:rgba(245,197,66,.45);box-shadow:0 16px 40px rgba(0,0,0,.4)">
+          <image-slot id="{{ m.slotId }}" shape="rounded" radius="16" fit="cover" placeholder="logo" style="width:64px;height:64px;flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)"></image-slot>
+          <div><div style="font-family:'Orbitron';font-weight:700;font-size:17px;color:#fff">{{ m.name }}</div><div style="color:#8ea3c8;font-size:14px;font-weight:500">{{ m.desc }}</div></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- BANDA ART FULL BLEED -->
+  <section style="position:relative;z-index:2;margin:clamp(20px,4vh,48px) 0;overflow:hidden">
+    <img src="uploads/pasted-1785326792683-0.png" alt="Free Fire" style="display:block;width:100%;height:clamp(220px,34vw,460px);object-fit:cover;object-position:center 32%">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#04060f 0%,rgba(4,6,15,.25) 26%,rgba(4,6,15,.3) 62%,#04060f 100%)"></div>
+    <div style="position:absolute;left:0;right:0;bottom:clamp(16px,4vw,40px);display:flex;justify-content:center;padding:0 20px">
+      <div style="text-align:center">
+        <div style="color:#ffd76a;font-weight:800;letter-spacing:3px;font-size:clamp(11px,1.2vw,14px);margin-bottom:8px">RECARGA OFICIAL VÍA ID</div>
+        <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(18px,2.6vw,32px);text-shadow:0 4px 24px rgba(0,0,0,.85)">Todos tus personajes favoritos, un solo lugar</h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIANZA -->
+  <section style="position:relative;z-index:2;padding:clamp(40px,6vh,70px) clamp(16px,5vw,64px);max-width:1150px;margin:0 auto">
+    <div data-reveal style="text-align:center;margin-bottom:36px">
+      <div style="color:#ffd76a;font-weight:700;letter-spacing:2px;font-size:13px;margin-bottom:10px">POR QUÉ ELEGIRNOS</div>
+      <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(24px,3.4vw,38px)">Compra con confianza</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px">
+      <sc-for list="{{ trust }}" as="f" hint-placeholder-count="4">
+        <div data-reveal style="text-align:center;background:linear-gradient(180deg,rgba(13,20,44,.7),rgba(7,11,26,.7));border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:28px 20px;transition:all .25s ease" style-hover="transform:translateY(-6px);border-color:rgba(41,182,255,.45);box-shadow:0 18px 44px rgba(41,182,255,.2)">
+          <div style="width:60px;height:60px;margin:0 auto 16px;border-radius:16px;background:rgba(41,182,255,.12);border:1px solid rgba(41,182,255,.35);display:flex;align-items:center;justify-content:center"><div style="width:26px;height:26px;background:linear-gradient(135deg,#8fe3ff,#29b6ff);transform:rotate(45deg);border-radius:5px"></div></div>
+          <div style="font-family:'Orbitron';font-weight:700;font-size:17px;color:#fff;margin-bottom:8px">{{ f.title }}</div>
+          <div style="color:#8ea3c8;font-size:14px;font-weight:500;line-height:1.5">{{ f.desc }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="position:relative;z-index:2;padding:clamp(40px,6vh,70px) clamp(16px,5vw,64px);max-width:820px;margin:0 auto">
+    <div data-reveal style="text-align:center;margin-bottom:34px">
+      <h2 style="font-family:'Orbitron';font-weight:900;font-size:clamp(24px,3.4vw,38px)">Preguntas frecuentes</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+        <div data-reveal style="{{ q.wrapStyle }}">
+          <button onClick="{{ q.toggle }}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;background:none;border:none;color:#fff;font-weight:700;font-size:16px;text-align:left;cursor:pointer;padding:18px 20px;font-family:'Rajdhani';transition:color .2s ease" style-hover="color:#ffd76a">{{ q.q }}<span style="{{ q.iconStyle }}">+</span></button>
+          <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}"><div style="padding:0 20px 20px;color:#a9bbdc;font-size:15px;font-weight:500;line-height:1.6">{{ q.a }}</div></sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <div data-reveal style="margin-top:20px;text-align:center;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:14px;padding:16px;color:#ffd76a;font-weight:700;font-size:15px">🔒 Nunca solicitamos la contraseña de tu cuenta. Solo necesitamos tu ID de jugador.</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contacto" style="position:relative;z-index:2;border-top:1px solid rgba(245,197,66,.2);background:rgba(4,7,15,.7);padding:clamp(40px,6vh,60px) clamp(16px,5vw,64px) 30px;margin-top:40px">
+    <div style="max-width:1150px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px">
+      <div>
+        <img src="uploads/logo-1785247877729.png" style="height:64px;margin-bottom:14px">
+        <p style="color:#8ea3c8;font-size:14px;font-weight:500;line-height:1.6;max-width:280px">Recargas de diamantes Free Fire rápidas, seguras y al mejor precio en Paraguay.</p>
+      </div>
+      <div>
+        <div style="font-family:'Orbitron';font-weight:700;color:#fff;font-size:15px;margin-bottom:14px">Enlaces</div>
+        <div style="display:flex;flex-direction:column;gap:9px"><a href="#paquetes" style="color:#8ea3c8;font-weight:600;transition:color .2s ease,transform .2s ease;display:inline-block" style-hover="color:#8fe3ff;transform:translateX(4px)">Comprar diamantes</a><a href="#proceso" style="color:#8ea3c8;font-weight:600;transition:color .2s ease,transform .2s ease;display:inline-block" style-hover="color:#8fe3ff;transform:translateX(4px)">Cómo funciona</a><a href="#faq" style="color:#8ea3c8;font-weight:600;transition:color .2s ease,transform .2s ease;display:inline-block" style-hover="color:#8fe3ff;transform:translateX(4px)">Preguntas frecuentes</a><a href="#contacto" style="color:#8ea3c8;font-weight:600;transition:color .2s ease,transform .2s ease;display:inline-block" style-hover="color:#8fe3ff;transform:translateX(4px)">Términos y condiciones</a></div>
+      </div>
+      <div>
+        <div style="font-family:'Orbitron';font-weight:700;color:#fff;font-size:15px;margin-bottom:14px">Contacto</div>
+        <a href="{{ heroWaHref }}" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:rgba(37,211,102,.12);border:1px solid #25d366;color:#7ff0a5;font-weight:800;padding:11px 18px;border-radius:12px;font-size:14px;margin-bottom:16px"><svg viewBox="0 0 24 24" width="20" height="20" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4zm-3 3.3c-.2 0-.4 0-.6.3-.2.3-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.2.2 1.6 2.6 4 3.5 1.9.8 2.3.6 2.7.6.4 0 1.3-.5 1.5-1 .2-.6.2-1 .1-1.1l-.6-.3s-1.4-.7-1.6-.8c-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.2-.1-.9-.4-1.8-1.2-.7-.6-1.1-1.3-1.2-1.5-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.3z"/></svg>{{ whatsappDisplay }}</a>
+        <div style="display:flex;gap:10px">
+          <a href="https://facebook.com" target="_blank" title="Facebook" style="width:42px;height:42px;border-radius:12px;background:rgba(24,119,242,.14);border:1px solid rgba(24,119,242,.4);display:flex;align-items:center;justify-content:center;transition:all .2s" style-hover="background:#1877f2;border-color:#1877f2;transform:translateY(-3px)"><svg viewBox="0 0 24 24" width="20" height="20" fill="#4a9bff"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></a>
+          <a href="https://instagram.com" target="_blank" title="Instagram" style="width:42px;height:42px;border-radius:12px;background:rgba(214,41,118,.14);border:1px solid rgba(214,41,118,.4);display:flex;align-items:center;justify-content:center;transition:all .2s" style-hover="background:linear-gradient(135deg,#feda75,#d62976,#4f5bd5);border-color:transparent;transform:translateY(-3px)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ff6ba6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="#ff6ba6" stroke="none"/></svg></a>
+          <a href="https://tiktok.com" target="_blank" title="TikTok" style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;transition:all .2s" style-hover="background:#010101;border-color:#25f4ee;transform:translateY(-3px)"><svg viewBox="0 0 24 24" width="20" height="20" fill="#e9eefc"><path d="M16.5 3c.3 1.9 1.4 3.4 3.5 3.7v2.4c-1.2.1-2.4-.2-3.5-.8v5.8c0 3-2.1 5.4-5.1 5.4a5 5 0 0 1-5.1-5c0-2.9 2.4-5.1 5.4-4.9v2.6c-.3-.1-.7-.1-1-.1a2.3 2.3 0 0 0 .3 4.6c1.4 0 2.4-1.1 2.4-2.5V3h3.1z"/></svg></a>
+          <a href="{{ heroWaHref }}" target="_blank" title="WhatsApp" style="width:42px;height:42px;border-radius:12px;background:rgba(37,211,102,.14);border:1px solid rgba(37,211,102,.45);display:flex;align-items:center;justify-content:center;transition:all .2s" style-hover="background:#25d366;border-color:#25d366;transform:translateY(-3px)"><svg viewBox="0 0 24 24" width="20" height="20" fill="#5cf08c"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4zm-3 3.3c-.2 0-.4 0-.6.3-.2.3-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.2.2 1.6 2.6 4 3.5 1.9.8 2.3.6 2.7.6.4 0 1.3-.5 1.5-1 .2-.6.2-1 .1-1.1l-.6-.3s-1.4-.7-1.6-.8c-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.2-.1-.9-.4-1.8-1.2-.7-.6-1.1-1.3-1.2-1.5-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.3z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1150px;margin:30px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);color:#6b7da0;font-size:13px;font-weight:500;line-height:1.6;text-align:center">
+      <p style="margin-bottom:8px">JESS STORE OFFICIAL es una tienda independiente y no está afiliada oficialmente con Garena ni Free Fire. Todas las marcas pertenecen a sus respectivos dueños.</p>
+      <p>© 2026 JESS STORE OFFICIAL · Todos los derechos reservados.</p>
+    </div>
+    <div style="max-width:1150px;margin:18px auto 0;display:flex;justify-content:flex-end;padding-right:clamp(0px,6vw,86px)">
+      <a href="https://neura.com.py" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;color:#6b7da0;font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.08);transition:all .2s" style-hover="color:#8fe3ff;border-color:rgba(41,182,255,.45);background:rgba(41,182,255,.07)">Desarrollado por <b style="font-family:'Orbitron';font-weight:800;letter-spacing:.5px">NEURA</b></a>
+    </div>
+  </footer>
+
+  <!-- ORDER CONFIRMATION -->
+  <sc-if value="{{ hasOrder }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeOrder }}" style="position:fixed;inset:0;z-index:110;background:rgba(2,4,10,.85);backdrop-filter:blur(6px)"></div>
+    <div style="position:fixed;z-index:111;top:50%;left:50%;transform:translate(-50%,-50%);width:min(620px,94vw);max-height:92vh;overflow-y:auto;background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.45);border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.7)">
+      <div style="padding:26px 26px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div style="width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:rgba(62,232,122,.14);border:1.5px solid #3ee87a;display:flex;align-items:center;justify-content:center;font-size:28px;color:#3ee87a">✓</div>
+        <h3 style="font-family:'Orbitron';font-weight:900;font-size:22px;color:#fff;margin-bottom:6px">¡Pedido confirmado!</h3>
+        <div style="font-family:'Orbitron';font-weight:700;font-size:15px;color:#ffd76a;letter-spacing:1px">{{ orderNumber }}</div>
+        <p style="color:#8ea3c8;font-weight:500;font-size:14px;margin-top:10px">Realizá la transferencia con los datos de abajo y subí tu comprobante.</p>
+      </div>
+      <div style="padding:22px 26px">
+        <div style="color:#8ea3c8;font-weight:700;letter-spacing:1px;font-size:12px;margin-bottom:10px">RESUMEN</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px">
+          <sc-for list="{{ orderItems }}" as="i" hint-placeholder-count="1">
+            <div style="display:flex;justify-content:space-between;gap:12px;color:#dbe6fb;font-weight:600;font-size:15px"><span>{{ i.label }}</span><span style="color:#fff;white-space:nowrap">{{ i.amount }}</span></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);margin-bottom:20px">
+          <span style="color:#8ea3c8;font-weight:700">Total a pagar</span>
+          <span style="font-family:'Orbitron';font-weight:900;font-size:24px;color:#ffd76a">{{ orderTotalFmt }} Gs.</span>
+        </div>
+        <div style="background:rgba(41,182,255,.07);border:1px solid rgba(41,182,255,.3);border-radius:14px;padding:18px;margin-bottom:18px">
+          <div style="font-family:'Orbitron';font-weight:800;font-size:15px;color:#8fe3ff;margin-bottom:12px">{{ orderMethod }}</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ orderPayLines }}" as="l" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;gap:12px;font-size:15px"><span style="color:#8ea3c8;font-weight:600">{{ l.k }}</span><span style="color:#fff;font-weight:700;font-family:'Orbitron';font-size:14px">{{ l.v }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+        <label style="display:block;cursor:pointer;border:1.5px dashed rgba(245,197,66,.45);border-radius:14px;padding:18px;text-align:center;margin-bottom:8px;transition:all .2s" style-hover="border-color:#f5c542;background:rgba(245,197,66,.06)">
+          <input type="file" accept="image/*" onChange="{{ onReceipt }}" style="display:none">
+          <div style="color:#ffd76a;font-weight:800;font-size:15px;margin-bottom:4px">📎 Subir comprobante de pago</div>
+          <div style="color:#6b7da0;font-size:13px;font-weight:500">JPG o PNG · toca para elegir</div>
+        </label>
+        <sc-if value="{{ hasReceipt }}" hint-placeholder-val="{{ false }}">
+          <div style="background:rgba(62,232,122,.1);border:1px solid rgba(62,232,122,.4);border-radius:11px;padding:11px 14px;color:#7ff0a5;font-weight:700;font-size:14px;margin-bottom:16px">✓ {{ receiptName }}</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+          <button onClick="{{ sendReceipt }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(37,211,102,.12);border:1.5px solid #25d366;color:#7ff0a5;font-weight:800;padding:14px;border-radius:12px;cursor:pointer;font-size:15px;transition:all .2s" style-hover="background:#25d366;color:#03140a;transform:translateY(-2px)">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4zm-3 3.3c-.2 0-.4 0-.6.3-.2.3-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.2.2 1.6 2.6 4 3.5 1.9.8 2.3.6 2.7.6.4 0 1.3-.5 1.5-1 .2-.6.2-1 .1-1.1l-.6-.3s-1.4-.7-1.6-.8c-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.2-.1-.9-.4-1.8-1.2-.7-.6-1.1-1.3-1.2-1.5-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.3z"/></svg>
+            Enviar comprobante por WhatsApp
+          </button>
+          <button onClick="{{ closeOrder }}" style="width:100%;background:none;border:none;color:#6b7da0;font-weight:700;padding:8px;cursor:pointer;font-size:14px;font-family:'Rajdhani'">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- PRODUCT MODAL -->
+  <sc-if value="{{ productOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeProduct }}" style="position:fixed;inset:0;z-index:100;background:rgba(2,4,10,.8);backdrop-filter:blur(6px)"></div>
+    <div style="position:fixed;z-index:101;top:50%;left:50%;transform:translate(-50%,-50%);width:min(680px,94vw);max-height:90vh;overflow-y:auto;background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(41,182,255,.4);border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.65)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0a1024;z-index:2">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:38px;background:linear-gradient(135deg,#8fe3ff,#29b6ff);transform:rotate(45deg);border-radius:9px;box-shadow:0 0 16px rgba(41,182,255,.5)"></div>
+          <div><div style="font-family:'Orbitron';font-weight:900;font-size:17px;color:#fff">Diamantes Free Fire</div><div style="color:#8ea3c8;font-size:13px;font-weight:600">Recarga vía ID</div></div>
+        </div>
+        <button onClick="{{ closeProduct }}" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:18px">✕</button>
+      </div>
+      <div style="padding:22px">
+        <div style="background:rgba(41,182,255,.08);border:1px solid rgba(41,182,255,.25);border-radius:12px;padding:16px;color:#bfe4ff;font-weight:600;font-size:15px;margin-bottom:18px;text-align:center">Se te acreditarán <b style="color:#8fe3ff;font-family:'Orbitron'">{{ modalTotalDiamonds }} 💎</b> en tu cuenta</div>
+        <div style="text-align:center;font-family:'Orbitron';font-weight:900;font-size:32px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:20px">{{ modalPriceFmt }} Gs.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+          <label style="font-weight:700;font-size:14px;color:#c3d2ee">ID del jugador <span style="color:#ff6b6b">*</span></label>
+          <input value="{{ modalPlayerId }}" onInput="{{ onModalId }}" placeholder="Ej: 1234567890" style="background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:14px 15px;border-radius:12px;font-size:16px;font-weight:700">
+        </div>
+        <button onClick="{{ addModal }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ff7a7a,# f2545b);background:linear-gradient(135deg,#ff7a7a,#f2545b);color:#fff;font-weight:900;padding:16px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.6px;border:none;box-shadow:0 12px 30px rgba(242,84,91,.4);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(242,84,91,.6);filter:brightness(1.06)">AÑADIR AL CARRITO</button>
+        <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">🔒 Nunca pedimos tu contraseña, solo tu ID de jugador.</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- CART DRAWER -->
+  <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeCart }}" style="position:fixed;inset:0;z-index:90;background:rgba(2,4,10,.7);backdrop-filter:blur(4px)"></div>
+  </sc-if>
+  <aside style="{{ drawerStyle }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="font-family:'Orbitron';font-weight:900;font-size:20px;color:#fff">Tu carrito</div>
+      <button onClick="{{ closeCart }}" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:18px">✕</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:18px 24px">
+      <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px">
+              <div style="width:40px;height:40px;flex-shrink:0;background:linear-gradient(135deg,#8fe3ff,#29b6ff);transform:rotate(45deg);border-radius:8px"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:700;color:#fff;font-size:15px">{{ c.name }}</div>
+                <div style="color:#ffd76a;font-weight:700;font-size:14px;font-family:'Orbitron'">{{ c.lineFmt }} Gs.</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <button onClick="{{ c.dec }}" style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:16px;transition:all .18s ease" style-hover="background:rgba(41,182,255,.25);border-color:#3ea6ff">−</button>
+                <span style="min-width:20px;text-align:center;font-weight:800;color:#fff">{{ c.qty }}</span>
+                <button onClick="{{ c.inc }}" style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:16px;transition:all .18s ease" style-hover="background:rgba(41,182,255,.25);border-color:#3ea6ff">+</button>
+              </div>
+              <button onClick="{{ c.remove }}" style="background:none;border:none;color:#6b7da0;cursor:pointer;font-size:18px">✕</button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:50px 20px;color:#6b7da0">
+          <div style="width:70px;height:70px;margin:0 auto 18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);transform:rotate(45deg);border-radius:16px"></div>
+          <div style="font-weight:600">Tu carrito está vacío</div>
+          <div style="font-size:14px;margin-top:6px">Agregá un paquete para empezar.</div>
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:20px 24px;border-top:1px solid rgba(255,255,255,.08)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px">
+          <span style="color:#8ea3c8;font-weight:600;transition:color .2s ease,transform .2s ease;display:inline-block" style-hover="color:#8fe3ff;transform:translateX(4px)">Total</span>
+          <span style="font-family:'Orbitron';font-weight:900;font-size:24px;color:#ffd76a">{{ cartTotalFmt }} Gs.</span>
+        </div>
+        <button onClick="{{ cartCheckout }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:15px;border-radius:13px;cursor:pointer;font-size:16px;border:none;margin-bottom:10px;box-shadow:0 10px 26px rgba(245,197,66,.35);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,197,66,.55);filter:brightness(1.06)">FINALIZAR COMPRA</button>
+        <div style="text-align:center;color:#6b7da0;font-weight:600;font-size:13px">Pago por Giros Tigo · Personal · Depósito</div>
+      </div>
+    </sc-if>
+  </aside>
+
+  <!-- TOAST -->
+  <sc-if value="{{ toast }}" hint-placeholder-val="Agregado">
+    <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:120;background:linear-gradient(135deg,#0d1730,#111d3e);border:1px solid rgba(245,197,66,.4);color:#fff;font-weight:700;padding:14px 24px;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.5)">{{ toast }}</div>
+  </sc-if>
+
+  <!-- FLOATING WHATSAPP -->
+  <a href="{{ heroWaHref }}" target="_blank" style="position:fixed;bottom:24px;right:24px;z-index:80;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c4b);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(37,211,102,.5);transition:all .25s ease" style-hover="transform:scale(1.12) rotate(-6deg);box-shadow:0 14px 40px rgba(37,211,102,.7)"><svg viewBox="0 0 24 24" width="34" height="34" fill="#fff"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4zm-3 3.3c-.2 0-.4 0-.6.3-.2.3-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.2.2 1.6 2.6 4 3.5 1.9.8 2.3.6 2.7.6.4 0 1.3-.5 1.5-1 .2-.6.2-1 .1-1.1l-.6-.3s-1.4-.7-1.6-.8c-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.2-.1-.9-.4-1.8-1.2-.7-.6-1.1-1.3-1.2-1.5-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.3z"/></svg></a>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:900},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;595973749759&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;},&quot;whatsappDisplay&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+595 973 749759&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;},&quot;particlesEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Efectos&quot;}}">
+class Component extends DCLogic {
+  _load(){ try{ return JSON.parse(localStorage.getItem('jess_cart')||'[]'); }catch(e){ return []; } }
+  state = {
+    cart: this._load(),
+    cartOpen: false,
+    openFaq: 0,
+    custom: '',
+    toast: null,
+    stat: { recargas:0, minutos:0, satis:0 },
+    form: { firstName:'', lastName:'', cedula:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
+    productOpen:false, selOpt:0, modalPlayerId:'',
+    order:null, receiptName:'', view:'home',
+    products: [],           // se llena desde Supabase (jess_products_public)
+    productsLoading: true,
+    submitting: false
+  };
+
+  openCheckout=()=>{ if(!this.state.cart.length){ this.flash('Tu carrito está vacío'); return; } this.setState({ view:'checkout', cartOpen:false }); window.scrollTo({top:0}); };
+  closeCheckout=()=>{ this.setState({ view:'home' }); window.scrollTo({top:0}); };
+
+  payDetails(m){
+    const d={
+      'Tigo Money':{ label:'Tigo Money', lines:[['Número','0971 234 567'],['Titular','Jessica R. Benítez'],['CI','4.567.890']] },
+      'Billetera Personal':{ label:'Billetera Personal', lines:[['Número','0985 123 456'],['Titular','Jessica R. Benítez'],['CI','4.567.890']] },
+      'Transferencia Bancaria':{ label:'Transferencia Bancaria', lines:[['Banco','Banco Continental'],['Cuenta','12-3456789-01'],['Titular','Jessica R. Benítez'],['RUC','4567890-1']] }
+    };
+    return d[m] || d['Transferencia Bancaria'];
+  }
+  setMethod(m){ this.setState({ form:{ ...this.state.form, method:m } }); }
+  toggleChk(k){ this.setState({ form:{ ...this.state.form, [k]:!this.state.form[k] } }); }
+  nextOrderNumber(){
+    let n=1; try{ n=parseInt(localStorage.getItem('jess_seq')||'0',10)+1; localStorage.setItem('jess_seq',String(n)); }catch(e){}
+    return 'JESS-'+String(n).padStart(6,'0');
+  }
+  onReceipt=e=>{ const f=e.target.files&&e.target.files[0]; if(f) this.setState({receiptName:f.name}); };
+  closeOrder=()=>{ this.setState({order:null,receiptName:'',view:'home'}); window.scrollTo({top:0}); };
+  sendReceipt=()=>{
+    const o=this.state.order; if(!o) return;
+    const msg=`¡Hola JESS STORE! 👋 Envío el comprobante de mi pedido ${o.number}.\n\n👤 ${o.name}\n🎮 ID: ${o.playerId}\n💳 ${o.method}\n💰 Total: ${o.totalFmt} Gs.`;
+    window.open(`https://wa.me/${this.wa()}?text=${encodeURIComponent(msg)}`,'_blank');
+  };
+
+  optList(){
+    const base=[[100,10],[200,20],[310,31],[410,41],[520,52],[620,62],[830,83],[1060,106],[1150,115],[1360,136],[1570,157],[1880,188],[2180,218],[2470,247],[3210,321],[3730,373],[4320,432],[4840,484],[5600,560]];
+    return base.map(([d,b])=>{ const t=d+b; const rate=63-Math.min(1,(t-110)/6050)*21; const price=Math.round(t*rate/1000)*1000; return { diamonds:d, bonus:b, total:t, price }; });
+  }
+  openProduct(p){ this.setState({ productOpen:true, selProduct:p, modalPlayerId:'' }); }
+  closeProduct=()=>this.setState({productOpen:false});
+  selOptFn(i){ this.setState({selOpt:i}); }
+  onModalId=e=>this.setState({modalPlayerId:e.target.value});
+  addModal=()=>{ const p=this.state.selProduct; if(!p) return; const pid=this.state.modalPlayerId.trim(); if(!pid){ this.flash('Ingresá tu ID de jugador'); return; } this.addToCart({ id:p.id+'-'+pid, productId:p.id, name:this.fmt(p.diamonds)+' diamantes · ID '+pid, diamonds:p.diamonds, bonusDiamonds:p.bonusDiamonds||0, price:p.price, type:'diamond', playerId:pid }); this.setState({productOpen:false}); };
+
+  wa(){ return String(this.props.whatsappNumber || '595973749759').replace(/[^0-9]/g,''); }
+  fmt(n){ return Number(n||0).toLocaleString('es-PY'); }
+  tickerList(){
+    const base=[
+      ['Ju***','1.166 Diamantes','hace 2 min'],['F7***','572 Diamantes','hace 4 min'],
+      ['Mar***','110 Diamantes','hace 6 min'],['LU***','2.398 Diamantes','ahora'],
+      ['DG***','341 Diamantes','hace 9 min'],['ZE***','6.160 Diamantes','hace 12 min'],
+      ['Sofi***','572 Diamantes','hace 14 min'],['Kev***','1.166 Diamantes','hace 18 min'],
+      ['Ro***','110 Diamantes','hace 21 min'],['Bel***','2.398 Diamantes','hace 25 min'],
+      ['Ni***','341 Diamantes','hace 28 min'],['Ale***','572 Diamantes','hace 33 min']
+    ].map(([user,amount,when])=>({user,amount,when}));
+    return base.concat(base);
+  }
+  rate(){ return 52; }
+
+  persist(cart){ this.setState({ cart }); try{ localStorage.setItem('jess_cart', JSON.stringify(cart)); }catch(e){} }
+  flash(msg){ this.setState({ toast: msg }); clearTimeout(this._t); this._t = setTimeout(()=>this.setState({toast:null}), 2200); }
+
+  addToCart(p){
+    const cart = this.state.cart.slice();
+    const i = cart.findIndex(x=>x.id===p.id);
+    if(i>=0) cart[i] = { ...cart[i], qty: cart[i].qty+1 };
+    else cart.push({
+      id:p.id,
+      productId:p.productId||null,   // UUID de jess.products cuando viene del catálogo
+      name:p.name,
+      diamonds:p.diamonds||0,
+      bonusDiamonds:p.bonusDiamonds||0,
+      price:p.price,
+      qty:1,
+      type:p.type||'diamond'
+    });
+    this.persist(cart);
+    this.setState({ cartOpen:true });
+    this.flash('✅ Agregado al carrito');
+  }
+  changeQty(id,d){ this.persist(this.state.cart.map(x=>x.id===id?{...x,qty:x.qty+d}:x).filter(x=>x.qty>0)); }
+  removeFromCart(id){ this.persist(this.state.cart.filter(x=>x.id!==id)); }
+
+  addCustom(){
+    const n = parseInt(this.state.custom,10);
+    if(!n || n<100){ this.flash('Ingresá al menos 100 diamantes'); return; }
+    const price = Math.round(n*this.rate()/500)*500;
+    this.addToCart({ id:'custom-'+n, name:this.fmt(n)+' diamantes (personalizado)', diamonds:n, price, type:'custom' });
+    this.setState({ custom:'' });
+  }
+
+  cartCount(){ return this.state.cart.reduce((s,x)=>s+x.qty,0); }
+  cartTotal(){ return this.state.cart.reduce((s,x)=>s+x.price*x.qty,0); }
+
+  onCustomChange = e => this.setState({ custom: e.target.value.replace(/[^0-9]/g,'') });
+  onFormChange = e => this.setState({ form: { ...this.state.form, [e.target.name]: e.target.value } });
+  openCart = () => this.setState({ cartOpen:true });
+  closeCart = () => this.setState({ cartOpen:false });
+  toggleFaq(i){ this.setState({ openFaq: this.state.openFaq===i ? -1 : i }); }
+
+  cartCheckout = () => { this.openCheckout(); };
+
+  onSubmitOrder = async e => {
+    e.preventDefault();
+    if(this.state.submitting) return;
+    const f = this.state.form;
+    if(!f.firstName || !f.lastName || !f.cedula || !f.city || !f.whatsapp){ this.flash('Completá todos los campos obligatorios'); return; }
+    if(!this.state.cart.length){ this.flash('Tu carrito está vacío'); return; }
+
+    this.setState({ submitting:true });
+    const items = this.state.cart.map(x=>({ label:`${x.name} x${x.qty}`, amount:this.fmt(x.price*x.qty) }));
+    const totalFmt = this.fmt(this.cartTotal());
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+    let orderNumber = null;
+    const sb = window.jessSb;
+    if(sb){
+      try{
+        const payload = {
+          customer: {
+            name:  (f.firstName+' '+f.lastName).trim(),
+            phone: f.whatsapp,
+            email: f.email || null
+          },
+          player_id: f.cedula,
+          payment_method: f.method,
+          discount: 0,
+          notes: null,
+          items: this.state.cart.map(x=>({
+            product_id: (x.productId && uuidRe.test(x.productId)) ? x.productId : null,
+            product_name: x.name,
+            diamonds: x.diamonds || 0,
+            bonus_diamonds: x.bonusDiamonds || 0,
+            quantity: x.qty,
+            unit_price: x.price
+          }))
+        };
+        const { data, error } = await sb.rpc('create_jess_order', { payload });
+        if(error) throw error;
+        orderNumber = data && data.order_number;
+      }catch(err){
+        console.error('[JESS] Error creando el pedido:', err);
+        this.flash('No se pudo registrar el pedido, guardamos una copia local');
+      }
+    }
+    if(!orderNumber) orderNumber = this.nextOrderNumber(); // fallback offline
+
+    this.setState({
+      submitting:false,
+      order:{ number:orderNumber, name:f.firstName+' '+f.lastName, playerId:f.cedula, method:f.method,
+        whatsapp:f.whatsapp, items, totalFmt, pay:this.payDetails(f.method) },
+      receiptName:''
+    });
+    this.persist([]);
+  };
+
+  rootRef = el => { this._root = el; };
+  progressRef = el => { this._prog = el; };
+  _onScroll = () => {
+    if(!this._prog) return;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    this._prog.style.width = (h>0 ? Math.min(100,(window.pageYOffset/h)*100) : 0) + '%';
+  };
+  canvasRef = el => { this._canvas = el; };
+
+  componentDidMount(){
+    this.initReveal();
+    if(this.props.particlesEnabled !== false) this.initParticles();
+    this.animateStats();
+    window.addEventListener('scroll', this._onScroll, { passive:true });
+    this._onScroll();
+    this.loadProducts();
+  }
+
+  async loadProducts(){
+    const sb = window.jessSb;
+    if(!sb){
+      // Sin Supabase: caemos al catálogo hardcodeado como fallback.
+      this.setState({ products: this.fallbackProducts(), productsLoading:false });
+      return;
+    }
+    try{
+      const { data, error } = await sb
+        .from('jess_products_public')
+        .select('*');
+      if(error) throw error;
+      const products = (data || []).map(p => ({
+        id:            p.id,
+        diamonds:      p.diamonds,
+        bonusDiamonds: p.bonus_diamonds,
+        price:         Number(p.price),
+        name:          p.name,
+        tag:           p.is_featured ? 'MÁS POPULAR' : '',
+        featured:      p.is_featured
+      }));
+      this.setState({ products, productsLoading:false });
+    }catch(e){
+      console.error('[JESS] Error cargando productos:', e);
+      this.flash('No se pudo cargar el catálogo');
+      this.setState({ products: this.fallbackProducts(), productsLoading:false });
+    }
+  }
+
+  fallbackProducts(){
+    return [
+      { id:'d110',  diamonds:110,  price:9000,   name:'110 diamantes',   tag:'' },
+      { id:'d341',  diamonds:341,  price:25000,  name:'341 diamantes',   tag:'OFERTA' },
+      { id:'d572',  diamonds:572,  price:38000,  name:'572 diamantes',   tag:'' },
+      { id:'d1166', diamonds:1166, price:70000,  name:'1.166 diamantes', tag:'MÁS POPULAR', featured:true },
+      { id:'d2398', diamonds:2398, price:131000, name:'2.398 diamantes', tag:'' },
+      { id:'d6160', diamonds:6160, price:316000, name:'6.160 diamantes', tag:'MEJOR VALOR' }
+    ];
+  }
+  componentWillUnmount(){
+    cancelAnimationFrame(this._raf); cancelAnimationFrame(this._sraf);
+    if(this._io) this._io.disconnect();
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('scroll', this._onScroll);
+  }
+
+  initReveal(){
+    if(!this._root || !('IntersectionObserver' in window)){ this._root && this._root.querySelectorAll('[data-reveal]').forEach(el=>{el.style.opacity='1';el.style.transform='none';}); return; }
+    const io = new IntersectionObserver(ents=>{
+      ents.forEach(en=>{ if(en.isIntersecting){ en.target.style.opacity='1'; en.target.style.transform='none'; io.unobserve(en.target); } });
+    },{ threshold:0.1, rootMargin:'0px 0px -8% 0px' });
+    this._root.querySelectorAll('[data-reveal]').forEach(el=>{
+      el.style.opacity='0'; el.style.transform='translateY(28px)';
+      el.style.transition='opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1)';
+      io.observe(el);
+    });
+    this._io = io;
+  }
+
+  initParticles(){
+    const c = this._canvas; if(!c) return;
+    const ctx = c.getContext('2d');
+    let W, H, dots;
+    const resize = ()=>{
+      const r = c.getBoundingClientRect();
+      W = c.width = r.width; H = c.height = r.height;
+      dots = Array.from({length:Math.min(46,Math.round(W/28))}, ()=>({
+        x:Math.random()*W, y:Math.random()*H, r:Math.random()*2+0.6,
+        vy:-(Math.random()*0.35+0.12), vx:(Math.random()-0.5)*0.25,
+        a:Math.random()*0.5+0.25, gold:Math.random()>0.55
+      }));
+    };
+    this._onResize = resize; window.addEventListener('resize', resize); resize();
+    const loop = ()=>{
+      ctx.clearRect(0,0,W,H);
+      dots.forEach(d=>{
+        d.y+=d.vy; d.x+=d.vx;
+        if(d.y< -8){ d.y=H+8; d.x=Math.random()*W; }
+        if(d.x<0) d.x=W; if(d.x>W) d.x=0;
+        ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,7);
+        ctx.fillStyle = d.gold ? `rgba(245,197,66,${d.a})` : `rgba(90,190,255,${d.a})`;
+        ctx.shadowBlur = 8; ctx.shadowColor = d.gold ? 'rgba(245,197,66,.6)' : 'rgba(90,190,255,.6)';
+        ctx.fill();
+      });
+      this._raf = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  animateStats(){
+    const targets = { recargas:5240, minutos:5, satis:99 };
+    const start = performance.now(), dur = 1600;
+    const ease = t => 1-Math.pow(1-t,3);
+    const step = now => {
+      const t = Math.min(1,(now-start)/dur), e = ease(t);
+      this.setState({ stat:{ recargas:Math.round(targets.recargas*e), minutos:Math.round(targets.minutos*e), satis:Math.round(targets.satis*e) } });
+      if(t<1) this._sraf = requestAnimationFrame(step);
+    };
+    this._sraf = requestAnimationFrame(step);
+  }
+
+  renderVals(){
+    const cardBase = 'position:relative;background:linear-gradient(180deg,rgba(13,20,44,.85),rgba(7,11,26,.9));border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:26px 22px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease';
+    const cardFeat = 'position:relative;background:linear-gradient(180deg,rgba(30,26,10,.6),rgba(13,20,44,.9));border:1.5px solid rgba(245,197,66,.55);border-radius:20px;padding:26px 22px;box-shadow:0 0 40px rgba(245,197,66,.15);transition:transform .25s ease,box-shadow .25s ease';
+    const tagBlue = 'position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#3ea6ff,#29d4ff);color:#03121f;font-weight:900;font-size:11px;letter-spacing:1px;padding:5px 14px;border-radius:100px;white-space:nowrap';
+    const tagGold = 'position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#ffe08a,#f5c542);color:#1a1204;font-weight:900;font-size:11px;letter-spacing:1px;padding:5px 14px;border-radius:100px;white-space:nowrap;box-shadow:0 4px 16px rgba(245,197,66,.5)';
+
+    const base = (this.state.products && this.state.products.length)
+      ? this.state.products
+      : this.fallbackProducts();
+    const packages = base.map(p=>({
+      slotId: 'diam-'+p.id,
+      diamondsFmt: this.fmt(p.diamonds),
+      priceFmt: this.fmt(p.price),
+      tag: p.tag,
+      cardStyle: p.featured ? cardFeat : cardBase,
+      tagStyle: p.featured ? tagGold : tagBlue,
+      add: ()=>this.openProduct(p)
+    }));
+
+    const cn = parseInt(this.state.custom,10);
+    const customPriceFmt = (cn && cn>=100) ? ('≈ '+this.fmt(Math.round(cn*this.rate()/500)*500)+' Gs.') : 'Precio estimado según cantidad';
+
+    const cartItems = this.state.cart.map(x=>({
+      name:x.name, qty:x.qty, lineFmt:this.fmt(x.price*x.qty),
+      inc:()=>this.changeQty(x.id,1), dec:()=>this.changeQty(x.id,-1), remove:()=>this.removeFromCart(x.id)
+    }));
+
+    const faqData = [
+      { q:'¿Qué información necesito para comprar?', a:'Solo tu ID de jugador de Free Fire y elegir un paquete. Con eso acreditamos los diamantes directo a tu cuenta.' },
+      { q:'¿Cuánto tarda la recarga?', a:'La mayoría de las recargas se completan en pocos minutos tras confirmar el pago. En horarios pico puede demorar un poco más.' },
+      { q:'¿Necesitan mi contraseña?', a:'No. Nunca solicitamos la contraseña de tu cuenta ni tu correo. Únicamente tu ID de jugador. Desconfiá de cualquiera que te pida la contraseña.' },
+      { q:'¿Cómo confirmo el pago?', a:'Al confirmar tu pedido te mostramos los datos de pago (Tigo Money, Billetera Personal o transferencia bancaria). Hacés el pago, subís el comprobante y procesamos tu recarga.' },
+      { q:'¿Los precios son en guaraníes?', a:'Sí, todos los precios están en guaraníes (Gs.) y son configurables. Consultanos por promociones y paquetes especiales.' }
+    ];
+    const faqs = faqData.map((f,i)=>({
+      q:f.q, a:f.a, open:this.state.openFaq===i, toggle:()=>this.toggleFaq(i),
+      wrapStyle:'background:linear-gradient(180deg,rgba(13,20,44,.7),rgba(7,11,26,.7));border:1px solid '+(this.state.openFaq===i?'rgba(245,197,66,.4)':'rgba(255,255,255,.08)')+';border-radius:14px;overflow:hidden;transition:border-color .2s',
+      iconStyle:'font-family:Orbitron;font-weight:900;font-size:22px;color:'+(this.state.openFaq===i?'#f5c542':'#3ea6ff')+';transition:transform .25s;flex-shrink:0;transform:rotate('+(this.state.openFaq===i?'45deg':'0')+')'
+    }));
+
+    const drawerBase = 'position:fixed;top:0;right:0;bottom:0;z-index:100;width:min(420px,92vw);display:flex;flex-direction:column;background:linear-gradient(180deg,#080d1e,#050813);border-left:1px solid rgba(245,197,66,.25);box-shadow:-20px 0 60px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.2,.7,.3,1);transform:translateX(';
+    const drawerStyle = drawerBase + (this.state.cartOpen ? '0' : '105%') + ')';
+
+    const sp=this.state.selProduct || { diamonds:0, price:0 };
+
+    return {
+      ticker:this.tickerList(),
+      rootRef:this.rootRef, canvasRef:this.canvasRef, progressRef:this.progressRef,
+      packages, cartItems,
+      custom:this.state.custom, onCustomChange:this.onCustomChange, addCustom:()=>this.addCustom(), customPriceFmt,
+      cartOpen:this.state.cartOpen, openCart:this.openCart, closeCart:this.closeCart, cartCheckout:this.cartCheckout,
+      cartCount:this.cartCount(), cartTotalFmt:this.fmt(this.cartTotal()),
+      hasItems:this.state.cart.length>0, cartEmpty:this.state.cart.length===0,
+      drawerStyle,
+      productOpen:this.state.productOpen, closeProduct:this.closeProduct, addModal:this.addModal,
+      payMethods:[
+        { name:'Tigo Money', slotId:'pay-tigo', sel:this.state.form.method==='Tigo Money',
+          pick:()=>this.setMethod('Tigo Money'),
+          rowStyle:'display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:13px;cursor:pointer;transition:all .2s;border:1.5px solid '+(this.state.form.method==='Tigo Money'?'rgba(41,182,255,.6);background:rgba(41,182,255,.1)':'rgba(255,255,255,.1);background:rgba(255,255,255,.02)'),
+          dotStyle:'width:20px;height:20px;border-radius:50%;flex-shrink:0;border:2px solid '+(this.state.form.method==='Tigo Money'?'#3ea6ff':'rgba(255,255,255,.3)')+';display:flex;align-items:center;justify-content:center',
+          innerStyle:'width:10px;height:10px;border-radius:50%;background:'+(this.state.form.method==='Tigo Money'?'#3ea6ff':'transparent') },
+        { name:'Billetera Personal', slotId:'pay-personal', sel:this.state.form.method==='Billetera Personal',
+          pick:()=>this.setMethod('Billetera Personal'),
+          rowStyle:'display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:13px;cursor:pointer;transition:all .2s;border:1.5px solid '+(this.state.form.method==='Billetera Personal'?'rgba(41,182,255,.6);background:rgba(41,182,255,.1)':'rgba(255,255,255,.1);background:rgba(255,255,255,.02)'),
+          dotStyle:'width:20px;height:20px;border-radius:50%;flex-shrink:0;border:2px solid '+(this.state.form.method==='Billetera Personal'?'#3ea6ff':'rgba(255,255,255,.3)')+';display:flex;align-items:center;justify-content:center',
+          innerStyle:'width:10px;height:10px;border-radius:50%;background:'+(this.state.form.method==='Billetera Personal'?'#3ea6ff':'transparent') },
+        { name:'Transferencia Bancaria', slotId:'pay-banco', sel:this.state.form.method==='Transferencia Bancaria',
+          pick:()=>this.setMethod('Transferencia Bancaria'),
+          rowStyle:'display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:13px;cursor:pointer;transition:all .2s;border:1.5px solid '+(this.state.form.method==='Transferencia Bancaria'?'rgba(41,182,255,.6);background:rgba(41,182,255,.1)':'rgba(255,255,255,.1);background:rgba(255,255,255,.02)'),
+          dotStyle:'width:20px;height:20px;border-radius:50%;flex-shrink:0;border:2px solid '+(this.state.form.method==='Transferencia Bancaria'?'#3ea6ff':'rgba(255,255,255,.3)')+';display:flex;align-items:center;justify-content:center',
+          innerStyle:'width:10px;height:10px;border-radius:50%;background:'+(this.state.form.method==='Transferencia Bancaria'?'#3ea6ff':'transparent') }
+      ],
+      checkoutItems:this.state.cart.map(x=>({ name:x.name, qty:'× '+x.qty, amount:this.fmt(x.price*x.qty) })),
+      subtotalFmt:this.fmt(this.cartTotal()),
+      newsletterOn:this.state.form.newsletter, createAccountOn:this.state.form.createAccount,
+      toggleNewsletter:()=>this.toggleChk('newsletter'), toggleAccount:()=>this.toggleChk('createAccount'),
+      nlBox:'width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1.5px solid '+(this.state.form.newsletter?'#f5c542;background:#f5c542;color:#1a1204':'rgba(255,255,255,.25);background:transparent;color:transparent'),
+      acBox:'width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1.5px solid '+(this.state.form.createAccount?'#f5c542;background:#f5c542;color:#1a1204':'rgba(255,255,255,.25);background:transparent;color:transparent'),
+      isCheckout:this.state.view==='checkout', openCheckout:this.openCheckout, closeCheckout:this.closeCheckout,
+      order:this.state.order, hasOrder:!!this.state.order,
+      orderNumber:this.state.order?this.state.order.number:'',
+      orderItems:this.state.order?this.state.order.items:[],
+      orderTotalFmt:this.state.order?this.state.order.totalFmt:'',
+      orderMethod:this.state.order?this.state.order.method:'',
+      orderPayLines:this.state.order?this.state.order.pay.lines.map(l=>({k:l[0],v:l[1]})):[],
+      closeOrder:this.closeOrder, sendReceipt:this.sendReceipt,
+      onReceipt:this.onReceipt, receiptName:this.state.receiptName,
+      hasReceipt:!!this.state.receiptName,
+      modalPlayerId:this.state.modalPlayerId, onModalId:this.onModalId,
+      modalTotalDiamonds:this.fmt(sp.diamonds), modalPriceFmt:this.fmt(sp.price),
+      form:this.state.form, onFormChange:this.onFormChange, onSubmitOrder:this.onSubmitOrder,
+      faqs, toast:this.state.toast,
+      heroWaHref:'https://wa.me/'+this.wa()+'?text='+encodeURIComponent('¡Hola JESS STORE! 👋 Quiero recargar diamantes de Free Fire.'),
+      whatsappDisplay:this.props.whatsappDisplay || '+595 973 749759',
+      stat:{ recargas:this.fmt(this.state.stat.recargas)+'+', minutos:this.state.stat.minutos+' min', satis:this.state.stat.satis+'%' },
+      steps:[
+        { n:'1', title:'Elegí un paquete', desc:'Seleccioná la cantidad de diamantes que querés recargar.' },
+        { n:'2', title:'Ingresá tu ID', desc:'Escribí tu ID de jugador de Free Fire en el formulario.' },
+        { n:'3', title:'Elegí el pago', desc:'Giros Tigo, Billetera Personal o depósito bancario.' },
+        { n:'4', title:'Recibí la recarga', desc:'Confirmás el pago y acreditamos tus diamantes en minutos.' }
+      ],
+      payments:[
+        { slotId:'pay-tigo', name:'Tigo Money', desc:'Giro rápido a nuestro número Tigo' },
+        { slotId:'pay-personal', name:'Billetera Personal', desc:'Pago móvil desde tu Billetera Personal' },
+        { slotId:'pay-banco', name:'Transferencia Bancaria', desc:'Depósito a cuenta bancaria' }
+      ],
+      trust:[
+        { title:'Entrega rápida', desc:'Recargas acreditadas en minutos tras confirmar el pago.' },
+        { title:'Atención personalizada', desc:'Te acompañamos en todo el proceso por WhatsApp.' },
+        { title:'Pagos seguros', desc:'Métodos locales confiables y comprobante siempre.' },
+        { title:'Soporte por WhatsApp', desc:'Escribinos cuando quieras, respondemos rápido.' }
+      ],
+      socials:['FB','IG','TK','WA']
+    };
+  }
+}
+</script>
+</body>
+</html>
