@@ -32,7 +32,7 @@
 <script src="./image-slot.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth;scroll-padding-top:150px}
+  html{scroll-behavior:smooth;scroll-padding-top:140px}
   body{background:#04060f;color:#e8eefc;font-family:'Rajdhani',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   a{color:#3ea6ff;text-decoration:none}
   a:hover{color:#7cc6ff}
@@ -108,10 +108,10 @@
 <div ref="{{ rootRef }}" style="position:relative;overflow:hidden;background:radial-gradient(1200px 700px at 78% -8%,rgba(41,182,255,.16),transparent 55%),radial-gradient(1000px 600px at 10% 10%,rgba(245,197,66,.08),transparent 55%),linear-gradient(180deg,#04060f 0%,#060a1a 40%,#04060f 100%);min-height:100vh">
 
   <!-- HEADER -->
-  <header class="js-header" style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:2px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
+  <header class="js-header" style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:4px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
     <div ref="{{ progressRef }}" style="position:absolute;left:0;bottom:-1px;height:3px;width:0%;background:linear-gradient(90deg,#3ea6ff,#8fe3ff,#f5c542);box-shadow:0 0 12px rgba(41,182,255,.8);transition:width .12s linear;z-index:2"></div>
     <a href="#inicio" style="display:flex;align-items:center;gap:12px;transition:transform .25s ease" style-hover="transform:scale(1.05)">
-      <img class="js-logo" src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(58px,5.4vw,72px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
+      <img class="js-logo" src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
     </a>
     <nav class="js-nav-desktop" style="display:flex;align-items:center;gap:clamp(10px,1.6vw,26px);flex-wrap:wrap">
       <a href="#inicio" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Inicio</a>
@@ -130,20 +130,6 @@
       <button onClick="{{ toggleMenu }}" class="js-hamburger" aria-label="Abrir menú">
         <span></span><span></span><span></span>
       </button>
-    </div>
-    <div class="js-ticker" style="width:100%;order:9;overflow:hidden;margin:6px 0 -4px;padding:8px 0;border-top:1px solid rgba(41,182,255,.18);background:linear-gradient(90deg,rgba(5,8,18,.9),rgba(10,16,36,.9),rgba(5,8,18,.9));mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
-      <div style="display:flex;width:max-content;gap:34px;animation:jsTicker 42s linear infinite">
-        <sc-for list="{{ ticker }}" as="t" hint-placeholder-count="16">
-          <div style="display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:13.5px;font-weight:600;color:#9db0d4">
-            <span style="font-size:14px">🔥</span>
-            <b style="color:#e8eefc;font-weight:800">{{ t.user }}</b>
-            <span>recargó</span>
-            <b style="color:#8fe3ff;font-weight:800">{{ t.amount }}</b>
-            <span style="color:#5f74a0">·</span>
-            <span style="color:#ffd76a;font-weight:700">{{ t.when }}</span>
-          </div>
-        </sc-for>
-      </div>
     </div>
   </header>
 
@@ -173,7 +159,7 @@
   </sc-if>
 
   <!-- HERO -->
-  <section id="inicio" class="js-hero-section" style="position:relative;padding:clamp(170px,18vh,200px) clamp(16px,5vw,64px) clamp(60px,8vh,90px);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(30px,4vw,60px);justify-content:center">
+  <section id="inicio" class="js-hero-section" style="position:relative;padding:clamp(160px,17vh,190px) clamp(16px,5vw,64px) clamp(60px,8vh,90px);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(30px,4vw,60px);justify-content:center">
     <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
     <div class="js-hero-text" style="position:relative;z-index:2;flex:1 1 440px;max-width:640px;animation:jsFadeUp .8s ease both">
       <h1 style="font-family:'Orbitron';font-weight:900;font-size:clamp(34px,5.4vw,58px);line-height:1.05;letter-spacing:-.5px;margin-bottom:20px;text-wrap:balance">
