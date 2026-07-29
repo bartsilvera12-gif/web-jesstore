@@ -815,20 +815,62 @@
   // ACTIVIDAD
   // =====================================================================
   const ACTION_LABEL = { 'order.set_status':'Cambio de estado de pedido', 'payment.review':'Revisión de pago' };
+
+  function formatActivityDetail(action, detail){
+    if(!detail) return '<span class="muted">—</span>';
+    const parts = [];
+    if(action === 'order.set_status'){
+      if(detail.status) parts.push(`Marcado como <b>${escapeHtml(STATUS_LABEL[detail.status]||detail.status)}</b>`);
+      if(detail.notes)  parts.push(`<span class="muted">Nota: ${escapeHtml(detail.notes)}</span>`);
+    } else if(action === 'payment.review'){
+      const ok = detail.approve === true || detail.approve === 'true';
+      parts.push(ok ? `<span style="color:#7ff0a5;font-weight:800">Pago aprobado</span>` : `<span style="color:#ffb0b4;font-weight:800">Pago rechazado</span>`);
+      if(detail.notes) parts.push(`<span class="muted">Nota: ${escapeHtml(detail.notes)}</span>`);
+    } else {
+      Object.entries(detail).forEach(([k,v]) => {
+        if(v === null || v === undefined || v === '') return;
+        parts.push(`<span class="muted">${escapeHtml(k)}:</span> ${escapeHtml(String(v))}`);
+      });
+    }
+    return parts.length ? parts.join('<br>') : '<span class="muted">—</span>';
+  }
+
+  function shortId(id){
+    if(!id) return '';
+    return String(id).slice(0,8);
+  }
+
   async function viewActivity(){
     const m = $('#main');
     m.innerHTML = `<div class="page-head"><div class="titles"><div class="h1">Actividad</div><div class="sub">Historial de acciones del panel</div></div><button class="btn ghost" onclick="viewActivity()">Actualizar</button></div><div id="actBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
     const { data, error } = await sbJess.from('activity_log').select('*').order('created_at',{ascending:false}).limit(300);
     if(error){ $('#actBox').innerHTML = errBox(error); return; }
     if(!(data||[]).length){ $('#actBox').innerHTML = '<div class="card muted">Todavía no hay actividad registrada.</div>'; return; }
+
+    // Buscar los pedidos relacionados para mostrar el N° en lugar del UUID crudo
+    const orderIds = [...new Set((data||[]).filter(r => r.entity === 'order').map(r => r.entity_id))].filter(Boolean);
+    let orderMap = {};
+    if(orderIds.length){
+      const { data:ords } = await sbJess.from('orders').select('id,order_number').in('id', orderIds);
+      orderMap = Object.fromEntries((ords||[]).map(o => [o.id, o.order_number]));
+    }
+
+    const entityLabel = r => {
+      if(!r.entity) return '';
+      if(r.entity === 'order' && orderMap[r.entity_id]) return `Pedido <b>${escapeHtml(orderMap[r.entity_id])}</b>`;
+      if(r.entity === 'payment') return `Pago <span class="muted" style="font-family:monospace">#${shortId(r.entity_id)}</span>`;
+      return `${escapeHtml(r.entity)} <span class="muted" style="font-family:monospace">#${shortId(r.entity_id)}</span>`;
+    };
+
     $('#actBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
-      <thead><tr><th>Cuándo</th><th>Quién</th><th>Acción</th><th>Detalle</th></tr></thead>
+      <thead><tr><th>Cuándo</th><th>Quién</th><th>Sobre</th><th>Acción</th><th>Detalle</th></tr></thead>
       <tbody>${(data||[]).map(r=>`
         <tr>
           <td>${fmtDate(r.created_at)}</td>
           <td>${escapeHtml(r.actor_email||'—')}</td>
-          <td><b>${escapeHtml(ACTION_LABEL[r.action]||r.action)}</b><br><span class="muted" style="font-size:12px">${escapeHtml(r.entity||'')} ${escapeHtml(r.entity_id||'')}</span></td>
-          <td style="font-size:13px">${r.detail?escapeHtml(JSON.stringify(r.detail)):'—'}</td>
+          <td>${entityLabel(r)}</td>
+          <td>${escapeHtml(ACTION_LABEL[r.action]||r.action)}</td>
+          <td style="font-size:14px">${formatActivityDetail(r.action, r.detail)}</td>
         </tr>`).join('')}</tbody></table></div></div>`;
   }
   window.viewActivity = viewActivity;
