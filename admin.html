@@ -170,8 +170,7 @@
   }
   const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
   // Handles para acceder a schemas expuestos
-  const sbJess  = sb.schema ? sb.schema('jess')       : sb;
-  const sbAdmin = sb.schema ? sb.schema('jess_admin') : sb;
+  const sbJess = sb.schema ? sb.schema('jess') : sb;
 
   // ---- Estado global
   const state = { view:'dashboard', me:null, isOwner:false };
@@ -198,7 +197,7 @@
   }
   async function checkAdmin(){
     try{
-      const { data, error } = await sbAdmin.rpc('is_admin');
+      const { data, error } = await sbJess.rpc('is_admin');
       if(error) throw error;
       return !!data;
     }catch(e){ console.error(e); return false; }
@@ -214,7 +213,7 @@
     state.me = user;
     $('#whoEmail').textContent = user.email;
     // owner?
-    sbAdmin.rpc('is_owner').then(({data})=>{
+    sbJess.rpc('is_owner').then(({data})=>{
       state.isOwner = !!data;
       $('#whoRole').textContent = state.isOwner ? 'owner' : 'admin';
       $('#navAdmins').style.display = state.isOwner ? '' : 'none';
@@ -266,8 +265,8 @@
     document.getElementById('reload').onclick = viewDashboard;
 
     const [dash, latest] = await Promise.all([
-      sbAdmin.from('v_dashboard').select('*').single(),
-      sbAdmin.from('v_orders').select('*').order('created_at',{ascending:false}).limit(10)
+      sbJess.from('v_dashboard').select('*').single(),
+      sbJess.from('v_orders').select('*').order('created_at',{ascending:false}).limit(10)
     ]);
 
     const s = dash.data || {};
@@ -316,7 +315,7 @@
 
   async function loadOrders(){
     const status = $('#fStatus').value;
-    let q = sbAdmin.from('v_orders').select('*').order('created_at',{ascending:false}).limit(200);
+    let q = sbJess.from('v_orders').select('*').order('created_at',{ascending:false}).limit(200);
     if(status) q = q.eq('status', status);
     const { data, error } = await q;
     if(error){ $('#ordersBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
@@ -350,7 +349,7 @@
 
   async function openOrderDetail(id){
     const [{data:o}, items, payments] = await Promise.all([
-      sbAdmin.from('v_orders').select('*').eq('id',id).single(),
+      sbJess.from('v_orders').select('*').eq('id',id).single(),
       sbJess.from('order_items').select('*').eq('order_id',id),
       sbJess.from('payments').select('*').eq('order_id',id).order('created_at',{ascending:false})
     ]);
@@ -392,7 +391,7 @@
     openModal('Pedido ' + o.order_number, body, [el('button',{class:'btn ghost', onclick:closeModal},'Cerrar')]);
     body.querySelector('#saveStatus').onclick = async () => {
       const st = body.querySelector('#newStatus').value;
-      const { error } = await sbAdmin.rpc('set_order_status', { p_order_id:id, p_status:st, p_notes:null });
+      const { error } = await sbJess.rpc('set_order_status', { p_order_id:id, p_status:st, p_notes:null });
       if(error){ toast(error.message, true); return; }
       toast('Estado actualizado'); closeModal(); loadOrders && loadOrders();
     };
@@ -401,7 +400,7 @@
   }
 
   async function reviewPay(paymentId, approve, orderId){
-    const { error } = await sbAdmin.rpc('review_payment', { p_payment_id:paymentId, p_approve:approve, p_notes:null });
+    const { error } = await sbJess.rpc('review_payment', { p_payment_id:paymentId, p_approve:approve, p_notes:null });
     if(error){ toast(error.message, true); return; }
     toast(approve ? 'Pago aprobado' : 'Pago rechazado');
     closeModal();
@@ -443,7 +442,7 @@
   async function loadSales(from, to){
     const fromTs = from + 'T00:00:00';
     const toTs   = to   + 'T23:59:59';
-    const { data:orders, error } = await sbAdmin
+    const { data:orders, error } = await sbJess
       .from('v_orders').select('*')
       .eq('status','completed')
       .gte('created_at', fromTs).lte('created_at', toTs)
@@ -499,7 +498,7 @@
   }
 
   async function exportSalesCsv(from, to){
-    const { data, error } = await sbAdmin
+    const { data, error } = await sbJess
       .from('v_orders').select('*')
       .eq('status','completed')
       .gte('created_at', from+'T00:00:00').lte('created_at', to+'T23:59:59')
@@ -605,7 +604,7 @@
     const m = $('#main');
     m.innerHTML = `<div class="page-head"><div class="h1">Configuración</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="setBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
     $('#reload').onclick = viewSettings;
-    const { data, error } = await sbAdmin.from('settings').select('*').order('key');
+    const { data, error } = await sbJess.from('settings').select('*').order('key');
     if(error){ $('#setBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
     $('#setBox').innerHTML = (data||[]).map((s,i)=>`
       <div class="card" style="margin-bottom:12px">
@@ -620,7 +619,7 @@
       const ta = document.querySelector(`[data-key="${key}"]`);
       let value;
       try{ value = JSON.parse(ta.value); }catch(e){ toast('JSON inválido', true); return; }
-      const { error } = await sbAdmin.from('settings').update({ value }).eq('key', key);
+      const { error } = await sbJess.from('settings').update({ value }).eq('key', key);
       if(error){ toast(error.message, true); return; }
       toast('Guardado');
     });
@@ -631,7 +630,7 @@
     const m = $('#main');
     m.innerHTML = `<div class="page-head"><div class="h1">Actividad</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="actBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
     $('#reload').onclick = viewActivity;
-    const { data, error } = await sbAdmin.from('activity_log').select('*').order('created_at',{ascending:false}).limit(200);
+    const { data, error } = await sbJess.from('activity_log').select('*').order('created_at',{ascending:false}).limit(200);
     if(error){ $('#actBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
     $('#actBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
       <thead><tr><th>Cuándo</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>ID</th><th>Detalle</th></tr></thead>
@@ -673,11 +672,11 @@
         is_active: true
       };
       if(!payload.user_id || !payload.email){ toast('UUID y email obligatorios', true); return; }
-      const { error } = await sbAdmin.from('admin_users').insert(payload);
+      const { error } = await sbJess.from('admin_users').insert(payload);
       if(error){ toast(error.message, true); return; }
       toast('Admin agregado'); viewAdmins();
     };
-    const { data, error } = await sbAdmin.from('admin_users').select('*').order('created_at');
+    const { data, error } = await sbJess.from('admin_users').select('*').order('created_at');
     if(error){ $('#adBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
     $('#adBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
       <thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Estado</th><th>Creado</th><th></th></tr></thead>
@@ -694,13 +693,13 @@
           </td>
         </tr>`).join('')}</tbody></table></div></div>`;
     document.querySelectorAll('[data-toggle]').forEach(b => b.onclick = async () => {
-      const { error } = await sbAdmin.from('admin_users').update({ is_active: b.dataset.active !== 'true' }).eq('user_id', b.dataset.toggle);
+      const { error } = await sbJess.from('admin_users').update({ is_active: b.dataset.active !== 'true' }).eq('user_id', b.dataset.toggle);
       if(error){ toast(error.message, true); return; }
       toast('Actualizado'); viewAdmins();
     });
     document.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
       if(!confirm('¿Eliminar admin?')) return;
-      const { error } = await sbAdmin.from('admin_users').delete().eq('user_id', b.dataset.del);
+      const { error } = await sbJess.from('admin_users').delete().eq('user_id', b.dataset.del);
       if(error){ toast(error.message, true); return; }
       toast('Eliminado'); viewAdmins();
     });
