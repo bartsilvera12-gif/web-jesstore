@@ -602,7 +602,7 @@ class Component extends DCLogic {
   closeProduct=()=>this.setState({productOpen:false});
   selOptFn(i){ this.setState({selOpt:i}); }
   onModalId=e=>this.setState({modalPlayerId:e.target.value});
-  addModal=()=>{ const p=this.state.selProduct; if(!p) return; const pid=this.state.modalPlayerId.trim(); if(!pid){ this.flash('Ingresá tu ID de jugador'); return; } this.addToCart({ id:p.id+'-'+pid, productId:p.id, name:this.fmt(p.diamonds)+' diamantes · ID '+pid, diamonds:p.diamonds, bonusDiamonds:p.bonusDiamonds||0, price:p.price, type:'diamond', playerId:pid }); this.setState({productOpen:false}); };
+  addModal=()=>{ const p=this.state.selProduct; if(!p) return; const pid=this.state.modalPlayerId.trim(); if(!pid){ this.flash('Ingresá tu ID de jugador'); return; } const label=this.fmt(p.diamonds)+(p.bonusDiamonds?' + '+this.fmt(p.bonusDiamonds):''); this.addToCart({ id:p.id+'-'+pid, productId:p.id, name:label+' diamantes · ID '+pid, diamonds:p.diamonds, bonusDiamonds:p.bonusDiamonds||0, price:p.price, type:'diamond', playerId:pid }); this.setState({productOpen:false}); };
 
   wa(){ return String(this.props.whatsappNumber || '595973749759').replace(/[^0-9]/g,''); }
   fmt(n){ return Number(n||0).toLocaleString('es-PY'); }
@@ -767,12 +767,12 @@ class Component extends DCLogic {
 
   fallbackProducts(){
     return [
-      { id:'d110',  diamonds:100+10,  price:9000,   name:'100+10 diamantes',   tag:'' },
-      { id:'d341',  diamonds:310+31,  price:25000,  name:'310+31 diamantes',   tag:'OFERTA' },
-      { id:'d572',  diamonds:520+52,  price:38000,  name:'520+52 diamantes',   tag:'' },
-      { id:'d1166', diamonds:1060+106, price:70000,  name:'1.060+106 diamantes', tag:'MÁS POPULAR', featured:true },
-      { id:'d2398', diamonds:2180+218, price:131000, name:'2.180+218 diamantes', tag:'' },
-      { id:'d6160', diamonds:5600+560, price:316000, name:'5.600+560 diamantes', tag:'MEJOR VALOR' }
+      { id:'d110',  diamonds:100,  bonusDiamonds:10,  price:9000,   name:'100 + 10 diamantes',   tag:'' },
+      { id:'d341',  diamonds:310,  bonusDiamonds:31,  price:25000,  name:'310 + 31 diamantes',   tag:'OFERTA' },
+      { id:'d572',  diamonds:520,  bonusDiamonds:52,  price:38000,  name:'520 + 52 diamantes',   tag:'' },
+      { id:'d1166', diamonds:1060, bonusDiamonds:106, price:70000,  name:'1.060 + 106 diamantes', tag:'MÁS POPULAR', featured:true },
+      { id:'d2398', diamonds:2180, bonusDiamonds:218, price:131000, name:'2.180 + 218 diamantes', tag:'' },
+      { id:'d6160', diamonds:5600, bonusDiamonds:560, price:316000, name:'5.600 + 560 diamantes', tag:'MEJOR VALOR' }
     ];
   }
   componentWillUnmount(){
@@ -848,7 +848,7 @@ class Component extends DCLogic {
       : this.fallbackProducts();
     const packages = base.map(p=>({
       slotId: 'diam-'+p.id,
-      diamondsFmt: this.fmt(p.diamonds),
+      diamondsFmt: this.fmt(p.diamonds) + (p.bonusDiamonds ? ' + ' + this.fmt(p.bonusDiamonds) : ''),
       priceFmt: this.fmt(p.price),
       tag: p.tag,
       cardStyle: p.featured ? cardFeat : cardBase,
@@ -927,7 +927,7 @@ class Component extends DCLogic {
       onReceipt:this.onReceipt, receiptName:this.state.receiptName,
       hasReceipt:!!this.state.receiptName,
       modalPlayerId:this.state.modalPlayerId, onModalId:this.onModalId,
-      modalTotalDiamonds:this.fmt(sp.diamonds), modalPriceFmt:this.fmt(sp.price),
+      modalTotalDiamonds:this.fmt((sp.diamonds||0)+(sp.bonusDiamonds||0)), modalPriceFmt:this.fmt(sp.price),
       form:this.state.form, onFormChange:this.onFormChange, onSubmitOrder:this.onSubmitOrder,
       faqs, toast:this.state.toast,
       heroWaHref:'https://wa.me/'+this.wa()+'?text='+encodeURIComponent('¡Hola JESS STORE! 👋 Quiero recargar diamantes de Free Fire.'),
