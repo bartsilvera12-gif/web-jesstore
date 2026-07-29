@@ -590,7 +590,8 @@ class Component extends DCLogic {
   closeOrder=()=>{ this.setState({order:null,receiptName:'',view:'home'}); window.scrollTo({top:0}); };
   sendReceipt=()=>{
     const o=this.state.order; if(!o) return;
-    const msg=`¡Hola JESS STORE! 👋 Envío el comprobante de mi pedido ${o.number}.\n\n👤 ${o.name}\n🎮 ID: ${o.playerId}\n💳 ${o.method}\n💰 Total: ${o.totalFmt} Gs.`;
+    const shortNum = '#' + String(o.number || '').replace(/^JESS-/,'');
+    const msg=`¡Hola JESS STORE! Envío el comprobante de mi pedido ${shortNum}.\n\nNombre: ${o.name}\n🏦 ${o.method}\n💰 Total: ${o.totalFmt} Gs.`;
     window.open(`https://wa.me/${this.wa()}?text=${encodeURIComponent(msg)}`,'_blank');
   };
 
