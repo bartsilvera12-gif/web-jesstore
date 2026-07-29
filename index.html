@@ -109,7 +109,19 @@
 
   <!-- HEADER -->
   <header class="js-header" style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:4px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
-    <div ref="{{ progressRef }}" style="position:absolute;left:0;bottom:-1px;height:3px;width:0%;background:linear-gradient(90deg,#3ea6ff,#8fe3ff,#f5c542);box-shadow:0 0 12px rgba(41,182,255,.8);transition:width .12s linear;z-index:2"></div>
+    <div ref="{{ progressRef }}" style="position:absolute;left:0;bottom:-1px;height:3px;width:0%;background:linear-gradient(90deg,#3ea6ff,#8fe3ff,#f5c542);box-shadow:0 0 12px rgba(41,182,255,.8);transition:width .12s linear;z-index:2">
+      <svg style="position:absolute;right:-24px;top:50%;transform:translateY(-50%);width:28px;height:14px;filter:drop-shadow(0 0 6px rgba(245,197,66,.9));overflow:visible" viewBox="0 0 28 14">
+        <defs>
+          <linearGradient id="jsBulletBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe8a0"/><stop offset=".5" stop-color="#f5c542"/><stop offset="1" stop-color="#a8791a"/></linearGradient>
+          <linearGradient id="jsBulletTip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f5ff"/><stop offset=".5" stop-color="#c5d0e8"/><stop offset="1" stop-color="#6b7d9c"/></linearGradient>
+        </defs>
+        <rect x="0" y="3" width="16" height="8" rx="1" fill="url(#jsBulletBody)"/>
+        <rect x="1.5" y="3" width="1" height="8" fill="rgba(0,0,0,.25)"/>
+        <rect x="14" y="3" width="1" height="8" fill="rgba(0,0,0,.35)"/>
+        <path d="M16 3 L26 7 L16 11 Z" fill="url(#jsBulletTip)"/>
+        <path d="M16 3 L26 7 L22 5 Z" fill="rgba(255,255,255,.35)"/>
+      </svg>
+    </div>
     <a href="#inicio" style="display:flex;align-items:center;gap:12px;transition:transform .25s ease" style-hover="transform:scale(1.05)">
       <img class="js-logo" src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
     </a>
