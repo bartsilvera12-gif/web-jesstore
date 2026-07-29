@@ -1015,15 +1015,26 @@ class Component extends DCLogic {
     const base = (this.state.products && this.state.products.length)
       ? this.state.products
       : this.fallbackProducts();
-    const packages = base.map(p=>({
-      slotId: 'diam-'+p.id,
-      diamondsFmt: this.fmt(p.diamonds) + (p.bonusDiamonds ? ' + ' + this.fmt(p.bonusDiamonds) : ''),
-      priceFmt: this.fmt(p.price),
-      tag: p.tag,
-      cardStyle: p.featured ? cardFeat : cardBase,
-      tagStyle: p.featured ? tagGold : tagBlue,
-      add: ()=>this.openProduct(p)
-    }));
+    const packages = base.map(p=>{
+      const label = this.fmt(p.diamonds) + (p.bonusDiamonds ? ' + ' + this.fmt(p.bonusDiamonds) : '');
+      return {
+        slotId: 'diam-'+p.id,
+        diamondsFmt: label,
+        priceFmt: this.fmt(p.price),
+        tag: p.tag,
+        cardStyle: p.featured ? cardFeat : cardBase,
+        tagStyle: p.featured ? tagGold : tagBlue,
+        add: ()=>this.addToCart({
+          id: p.id,
+          productId: p.id,
+          name: label + ' diamantes',
+          diamonds: p.diamonds,
+          bonusDiamonds: p.bonusDiamonds || 0,
+          price: p.price,
+          type: 'diamond'
+        })
+      };
+    });
 
     const cn = parseInt(this.state.custom,10);
     const customPriceFmt = (cn && cn>=100) ? ('≈ '+this.fmt(Math.round(cn*this.rate()/500)*500)+' Gs.') : 'Precio estimado según cantidad';
