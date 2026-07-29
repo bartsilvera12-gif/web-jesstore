@@ -118,44 +118,6 @@
   <!-- HEADER -->
   <header class="js-header" style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:4px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
     <div ref="{{ progressRef }}" style="position:absolute;left:0;bottom:-1px;height:3px;width:0%;background:linear-gradient(90deg,#3ea6ff,#8fe3ff,#f5c542);box-shadow:0 0 12px rgba(41,182,255,.8);transition:width .12s linear;z-index:2">
-      <svg style="position:absolute;right:-30px;top:50%;transform:translateY(-50%);width:36px;height:18px;filter:drop-shadow(0 0 8px rgba(245,197,66,.85)) drop-shadow(0 0 3px rgba(255,180,80,.9));overflow:visible" viewBox="0 0 36 18">
-        <defs>
-          <linearGradient id="jsBulletCase" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#fff2c0"/>
-            <stop offset=".25" stop-color="#ffd85e"/>
-            <stop offset=".5" stop-color="#e0a828"/>
-            <stop offset=".75" stop-color="#a8791a"/>
-            <stop offset="1" stop-color="#6d4a10"/>
-          </linearGradient>
-          <linearGradient id="jsBulletShine" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="rgba(255,255,255,.6)"/>
-            <stop offset="1" stop-color="rgba(255,255,255,0)"/>
-          </linearGradient>
-          <linearGradient id="jsBulletTipG" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#fafcff"/>
-            <stop offset=".35" stop-color="#dbe4f4"/>
-            <stop offset=".65" stop-color="#9aacc7"/>
-            <stop offset="1" stop-color="#546682"/>
-          </linearGradient>
-          <linearGradient id="jsBulletTipShine" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="rgba(255,255,255,.85)"/>
-            <stop offset="1" stop-color="rgba(255,255,255,0)"/>
-          </linearGradient>
-          <radialGradient id="jsBulletRim" cx=".5" cy=".5" r=".5">
-            <stop offset="0" stop-color="#ffe08a"/>
-            <stop offset="1" stop-color="#8a5f0e"/>
-          </radialGradient>
-        </defs>
-        <ellipse cx="1.5" cy="9" rx="1.5" ry="8" fill="url(#jsBulletRim)"/>
-        <rect x="1.5" y="1" width="18" height="16" fill="url(#jsBulletCase)"/>
-        <rect x="1.5" y="2" width="18" height="4" fill="url(#jsBulletShine)"/>
-        <rect x="3.5" y="1" width=".8" height="16" fill="rgba(0,0,0,.28)"/>
-        <rect x="17" y="1" width="1" height="16" fill="rgba(0,0,0,.35)"/>
-        <rect x="18" y="1" width="1.5" height="16" fill="rgba(255,255,255,.25)"/>
-        <path d="M19.5 1 L33 9 L19.5 17 Z" fill="url(#jsBulletTipG)"/>
-        <path d="M19.5 1 L33 9 L27 6 L19.5 3.5 Z" fill="url(#jsBulletTipShine)"/>
-        <ellipse cx="24" cy="9" rx="1.2" ry="4.5" fill="rgba(255,255,255,.28)"/>
-      </svg>
       <div class="js-boom" style="right:-24px;top:50%;width:60px;height:60px">
         <div class="js-boom-flash" style="position:absolute;top:50%;left:50%;width:36px;height:36px;background:radial-gradient(circle,rgba(255,235,150,1) 0%,rgba(245,197,66,.85) 35%,rgba(255,120,60,.5) 65%,transparent 80%);border-radius:50%;opacity:0"></div>
         <div class="js-boom-ring" style="position:absolute;top:50%;left:50%;width:26px;height:26px;border:3px solid #ffe08a;border-radius:50%;opacity:0;box-shadow:0 0 12px rgba(255,220,120,.8)"></div>
