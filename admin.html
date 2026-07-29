@@ -21,32 +21,41 @@
   ::-webkit-scrollbar-track{background:#070b19}
   ::-webkit-scrollbar-thumb{background:#182645;border-radius:6px}
   .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .btn{background:rgba(41,182,255,.14);border:1.5px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:9px 14px;border-radius:10px;cursor:pointer;font-size:14px;transition:all .18s}
+  .btn{background:rgba(41,182,255,.14);border:1.5px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:9px 14px;border-radius:10px;cursor:pointer;font-size:14px;transition:all .18s;display:inline-flex;align-items:center;gap:8px}
   .btn:hover{background:rgba(41,182,255,.25);border-color:#3ea6ff}
   .btn.primary{background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;border:none;font-weight:900}
   .btn.primary:hover{filter:brightness(1.08)}
   .btn.danger{background:rgba(242,84,91,.14);border-color:#f2545b;color:#ffb0b4}
   .btn.danger:hover{background:rgba(242,84,91,.28)}
+  .btn.success{background:rgba(62,232,122,.14);border-color:#3ee87a;color:#7ff0a5}
+  .btn.success:hover{background:rgba(62,232,122,.28)}
   .btn.ghost{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.14);color:#cdd8ef}
   .btn.small{padding:6px 10px;font-size:12.5px;border-radius:8px}
   .input{background:#070c1c;border:1px solid rgba(255,255,255,.14);color:#fff;padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;width:100%}
   .input:focus{outline:none;border-color:#3ea6ff}
   .label{display:block;font-weight:700;font-size:13px;color:#c3d2ee;margin-bottom:6px;letter-spacing:.3px}
   .card{background:linear-gradient(180deg,rgba(13,20,44,.85),rgba(7,11,26,.9));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px}
+  .card h3{font-family:'Orbitron';font-weight:800;font-size:15px;color:#8ea3c8;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
   .h1{font-family:'Orbitron';font-weight:900;font-size:26px;letter-spacing:.5px}
   .h2{font-family:'Orbitron';font-weight:800;font-size:18px}
   .muted{color:#8ea3c8}
-  .tag{display:inline-block;padding:3px 9px;border-radius:100px;font-weight:800;font-size:11px;letter-spacing:.6px;text-transform:uppercase}
+  .tag{display:inline-block;padding:3px 10px;border-radius:100px;font-weight:800;font-size:11px;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
   .tag-pending{background:rgba(255,215,106,.14);color:#ffd76a;border:1px solid rgba(255,215,106,.35)}
-  .tag-review{background:rgba(41,182,255,.14);color:#8fe3ff;border:1px solid rgba(41,182,255,.35)}
+  .tag-payment_review,.tag-under_review{background:rgba(41,182,255,.14);color:#8fe3ff;border:1px solid rgba(41,182,255,.35)}
   .tag-paid,.tag-approved{background:rgba(62,232,122,.14);color:#7ff0a5;border:1px solid rgba(62,232,122,.35)}
   .tag-processing{background:rgba(143,227,255,.14);color:#8fe3ff;border:1px solid rgba(143,227,255,.35)}
-  .tag-completed{background:rgba(62,232,122,.18);color:#3ee87a;border:1px solid rgba(62,232,122,.5)}
-  .tag-cancelled,.tag-rejected{background:rgba(242,84,91,.14);color:#ffb0b4;border:1px solid rgba(242,84,91,.35)}
+  .tag-completed{background:rgba(62,232,122,.22);color:#3ee87a;border:1px solid rgba(62,232,122,.55)}
+  .tag-cancelled,.tag-rejected,.tag-refunded{background:rgba(242,84,91,.14);color:#ffb0b4;border:1px solid rgba(242,84,91,.35)}
+  .tag-owner{background:rgba(245,197,66,.15);color:#ffd76a;border:1px solid rgba(245,197,66,.45)}
+  .tag-admin{background:rgba(41,182,255,.14);color:#8fe3ff;border:1px solid rgba(41,182,255,.35)}
+  .tag-active{background:rgba(62,232,122,.15);color:#7ff0a5;border:1px solid rgba(62,232,122,.4)}
+  .tag-inactive{background:rgba(255,255,255,.06);color:#8ea3c8;border:1px solid rgba(255,255,255,.15)}
   table{width:100%;border-collapse:collapse}
-  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;vertical-align:middle}
-  th{color:#8ea3c8;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.02)}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;vertical-align:middle}
+  th{color:#8ea3c8;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.02)}
   tr:hover td{background:rgba(41,182,255,.04)}
+  .checkbox{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+  .checkbox input{width:18px;height:18px;accent-color:#f5c542}
 
   /* LOGIN */
   #login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -67,24 +76,24 @@
 
   main{padding:26px 30px;max-width:100%;overflow-x:hidden}
   .page-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+  .page-head .titles{display:flex;flex-direction:column;gap:4px}
+  .page-head .titles .sub{color:#8ea3c8;font-size:14px}
+  .back{background:none;border:none;color:#8fe3ff;font-weight:700;font-size:14px;cursor:pointer;padding:0;margin-bottom:12px;display:inline-flex;align-items:center;gap:6px}
+  .back:hover{color:#fff}
   .grid-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
   .stat{padding:20px}
   .stat .k{color:#8ea3c8;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
   .stat .v{font-family:'Orbitron';font-weight:900;font-size:26px;color:#fff}
   .stat.gold .v{background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent}
   .stat.blue .v{background:linear-gradient(135deg,#8fe3ff,#3ea6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat.green .v{background:linear-gradient(135deg,#7ff0a5,#3ee87a);-webkit-background-clip:text;background-clip:text;color:transparent}
 
   .table-wrap{background:linear-gradient(180deg,rgba(13,20,44,.85),rgba(7,11,26,.9));border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
   .table-scroll{overflow-x:auto}
 
-  /* MODAL */
-  .modal-bg{position:fixed;inset:0;z-index:100;background:rgba(2,4,10,.75);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
-  .modal-bg.on{display:flex}
-  .modal{width:min(640px,100%);background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.35);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.7);margin:auto 0}
-  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08)}
-  .modal-body{padding:20px 22px}
-  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:flex-end;gap:10px}
-  .close{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:16px}
+  .kv{display:grid;grid-template-columns:120px 1fr;gap:8px 16px;font-size:14px}
+  .kv .k{color:#8ea3c8;font-weight:700}
+  .kv .v{color:#e8eefc;font-weight:600}
 
   /* TOAST */
   #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;background:linear-gradient(135deg,#0d1730,#111d3e);border:1px solid rgba(245,197,66,.4);color:#fff;font-weight:700;padding:12px 20px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.5);display:none}
@@ -92,19 +101,38 @@
   #toast.err{border-color:#f2545b}
 
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
   @media (max-width:900px){
     #app{grid-template-columns:1fr}
     aside{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;padding:14px;gap:8px}
     aside .logo{border:none;padding:0;margin:0;flex:1}
-    aside .logo img{height:50px}
+    aside .logo img{height:60px}
     aside .nav{flex-direction:row;flex-wrap:wrap;flex:100%}
     aside .who{margin:0;padding:0;border:none;flex:100%}
     main{padding:18px 14px}
-    .grid-2{grid-template-columns:1fr}
+    .grid-2,.grid-3{grid-template-columns:1fr}
+    .kv{grid-template-columns:1fr}
   }
 
   .loader{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:#8fe3ff;border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
   @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;z-index:100;background:rgba(2,4,10,.78);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;animation:fadeIn .18s ease}
+  .modal-bg.on{display:flex}
+  .modal{width:min(720px,100%);background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.35);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.7);margin:auto 0;animation:popIn .22s cubic-bezier(.2,.7,.3,1.2)}
+  .modal.wide{width:min(860px,100%)}
+  .modal.narrow{width:min(460px,100%)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0a1024;z-index:2;border-radius:18px 18px 0 0}
+  .modal-head .h2{font-family:'Orbitron';font-weight:900;font-size:19px;color:#fff}
+  .modal-head .sub{color:#8ea3c8;font-size:13px;margin-top:2px}
+  .modal-body{padding:22px}
+  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;position:sticky;bottom:0;background:#0a1024;border-radius:0 0 18px 18px}
+  .modal-foot .l,.modal-foot .r{display:flex;gap:10px;flex-wrap:wrap}
+  .close{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:17px;display:inline-flex;align-items:center;justify-content:center}
+  .close:hover{background:rgba(41,182,255,.18);border-color:#3ea6ff}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 </style>
 </head>
 <body>
@@ -113,12 +141,12 @@
 <div id="login" style="display:none">
   <div class="card">
     <img src="uploads/logo-1785247877729.png" alt="JESS STORE">
-    <div class="h1" style="margin:6px 0 4px">Panel de admin</div>
+    <div class="h1" style="margin:6px 0 4px">Panel de administración</div>
     <div class="muted" style="margin-bottom:22px">Ingresá con tu cuenta autorizada</div>
     <form id="loginForm" style="text-align:left;display:flex;flex-direction:column;gap:12px">
-      <div><label class="label">Email</label><input class="input" type="email" name="email" required autocomplete="email"></div>
+      <div><label class="label">Correo</label><input class="input" type="email" name="email" required autocomplete="email"></div>
       <div><label class="label">Contraseña</label><input class="input" type="password" name="password" required autocomplete="current-password"></div>
-      <button class="btn primary" type="submit" style="padding:13px;font-size:15px;margin-top:6px">Entrar</button>
+      <button class="btn primary" type="submit" style="padding:13px;font-size:15px;margin-top:6px;justify-content:center">Entrar</button>
       <div id="loginMsg" class="muted" style="text-align:center;font-size:13px;min-height:16px"></div>
     </form>
   </div>
@@ -129,7 +157,7 @@
   <aside>
     <div class="logo"><img src="uploads/logo-1785247877729.png" alt="JESS"></div>
     <nav class="nav" id="nav">
-      <a data-view="dashboard" class="active">Dashboard</a>
+      <a data-view="dashboard" class="active">Inicio</a>
       <a data-view="orders">Pedidos</a>
       <a data-view="sales">Ventas</a>
       <a data-view="products">Productos</a>
@@ -147,76 +175,106 @@
   <main id="main"></main>
 </div>
 
-<!-- MODAL GENÉRICO -->
+<div id="toast"></div>
+
+<!-- MODAL -->
 <div class="modal-bg" id="modal">
-  <div class="modal">
+  <div class="modal" id="modalCard">
     <div class="modal-head">
-      <div class="h2" id="modalTitle">—</div>
-      <button class="close" onclick="closeModal()">✕</button>
+      <div><div class="h2" id="modalTitle">—</div><div class="sub" id="modalSub" style="display:none"></div></div>
+      <button class="close" id="modalClose" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-body" id="modalBody">—</div>
-    <div class="modal-foot" id="modalFoot"></div>
+    <div class="modal-foot" id="modalFoot" style="display:none"><div class="l" id="modalFootL"></div><div class="r" id="modalFootR"></div></div>
   </div>
 </div>
 
-<div id="toast"></div>
-
 <script>
-  // ---- Supabase client
   const cfg = window.JESS_SUPABASE || {};
   if(!cfg.url || !cfg.anonKey || cfg.anonKey === 'REEMPLAZAR_CON_ANON_KEY'){
     document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#e8eefc"><h2>Falta configurar Supabase</h2><p>Editá <code>backend/supabase-config.js</code> con tu <b>URL</b> y <b>anon key</b> reales.</p></div>';
     throw new Error('supabase not configured');
   }
   const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
-  // Handles para acceder a schemas expuestos
   const sbJess = sb.schema ? sb.schema('jess') : sb;
 
-  // ---- Estado global
-  const state = { view:'dashboard', me:null, isOwner:false };
+  const state = { view:'dashboard', me:null, isOwner:false, ctx:{} };
 
-  // ---- UI helpers
   const $ = s => document.querySelector(s);
-  const el = (t,a={},c=[])=>{ const n=document.createElement(t); for(const k in a){ if(k==='style') Object.assign(n.style,a[k]); else if(k.startsWith('on')) n.addEventListener(k.slice(2),a[k]); else n.setAttribute(k,a[k]); } (Array.isArray(c)?c:[c]).forEach(x=>{ if(x==null) return; n.appendChild(typeof x==='string'?document.createTextNode(x):x); }); return n; };
+  const escapeHtml = s => (s==null?'':String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmt = n => Number(n||0).toLocaleString('es-PY');
   const fmtDate = s => { if(!s) return '—'; const d=new Date(s); return d.toLocaleString('es-PY',{dateStyle:'short',timeStyle:'short'}); };
   const toast = (msg, err=false) => { const t=$('#toast'); t.textContent=msg; t.className = 'on' + (err?' err':''); clearTimeout(toast._t); toast._t = setTimeout(()=>t.className='',2600); };
-  const openModal = (title, body, foot=[]) => { $('#modalTitle').textContent=title; const b=$('#modalBody'); b.innerHTML=''; b.appendChild(body); const f=$('#modalFoot'); f.innerHTML=''; foot.forEach(x=>f.appendChild(x)); $('#modal').classList.add('on'); };
-  window.closeModal = () => $('#modal').classList.remove('on');
-  $('#modal').addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
 
-  const STATUS_LABEL = {pending:'Pendiente',payment_review:'Revisar pago',paid:'Pagado',processing:'En proceso',completed:'Completado',cancelled:'Cancelado',rejected:'Rechazado',approved:'Aprobado',under_review:'En revisión',refunded:'Reembolsado'};
-  const statusTag = s => { const cls='tag-'+(s||'pending'); const label=(STATUS_LABEL[s]||s||'—').toUpperCase(); return `<span class="tag ${cls}">${label}</span>`; };
+  // ---- Modal system
+  function openModal({ title, subtitle, bodyHtml, size, actions }){
+    $('#modalTitle').textContent = title || '';
+    const sub = $('#modalSub');
+    if(subtitle){ sub.innerHTML = subtitle; sub.style.display=''; } else { sub.style.display='none'; }
+    $('#modalBody').innerHTML = bodyHtml || '';
+    $('#modalCard').className = 'modal' + (size==='wide'?' wide':size==='narrow'?' narrow':'');
+    const foot = $('#modalFoot'), footL = $('#modalFootL'), footR = $('#modalFootR');
+    footL.innerHTML = ''; footR.innerHTML = '';
+    if(actions && actions.length){
+      foot.style.display = 'flex';
+      actions.forEach(a => {
+        const b = document.createElement('button');
+        b.className = 'btn ' + (a.style||'ghost');
+        b.textContent = a.label;
+        b.onclick = a.onClick;
+        (a.side==='left' ? footL : footR).appendChild(b);
+      });
+    } else foot.style.display = 'none';
+    $('#modal').classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){ $('#modal').classList.remove('on'); document.body.style.overflow = ''; }
+  window.closeModal = closeModal;
+  document.addEventListener('DOMContentLoaded', () => {
+    $('#modalClose').onclick = closeModal;
+    $('#modal').addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+  });
 
-  // ---- Auth
+  function askConfirm({ title, message, confirmLabel='Confirmar', cancelLabel='Cancelar', danger=false }){
+    return new Promise(resolve => {
+      openModal({
+        title: title || '¿Confirmar?',
+        size: 'narrow',
+        bodyHtml: `<div style="color:#c3d2ee;font-size:15px;line-height:1.5">${escapeHtml(message||'')}</div>`,
+        actions: [
+          { label: cancelLabel, style:'ghost',  onClick: () => { closeModal(); resolve(false); } },
+          { label: confirmLabel, style: danger?'danger':'primary', onClick: () => { closeModal(); resolve(true); } }
+        ]
+      });
+    });
+  }
+
+  const STATUS_LABEL = { pending:'Pendiente', payment_review:'Revisar pago', paid:'Pagado', processing:'En proceso', completed:'Completado', cancelled:'Cancelado', rejected:'Rechazado', approved:'Aprobado', under_review:'En revisión', refunded:'Reembolsado' };
+  const ROLE_LABEL = { owner:'Dueño', admin:'Admin' };
+  const statusTag = s => `<span class="tag tag-${s||'pending'}">${(STATUS_LABEL[s]||s||'—').toUpperCase()}</span>`;
+
+  // ---- AUTH
   async function boot(){
     const { data:{session} } = await sb.auth.getSession();
     if(!session){ showLogin(); return; }
-    const isAdmin = await checkAdmin();
-    if(!isAdmin){ await sb.auth.signOut(); showLogin('No estás autorizado como admin.'); return; }
+    const ok = await checkAdmin();
+    if(!ok){ await sb.auth.signOut(); showLogin('No estás autorizado como administrador.'); return; }
     showApp(session.user);
   }
   async function checkAdmin(){
-    try{
-      const { data, error } = await sbJess.rpc('is_admin');
-      if(error) throw error;
-      return !!data;
-    }catch(e){ console.error(e); return false; }
+    try{ const { data } = await sbJess.rpc('is_admin'); return !!data; }
+    catch(e){ console.error(e); return false; }
   }
-  function showLogin(msg){
-    $('#app').style.display='none';
-    $('#login').style.display='';
-    if(msg) $('#loginMsg').textContent=msg;
-  }
+  function showLogin(msg){ $('#app').style.display='none'; $('#login').style.display=''; if(msg) $('#loginMsg').textContent=msg; }
   function showApp(user){
     $('#login').style.display='none';
     $('#app').style.display='grid';
     state.me = user;
     $('#whoEmail').textContent = user.email;
-    // owner?
     sbJess.rpc('is_owner').then(({data})=>{
       state.isOwner = !!data;
-      $('#whoRole').textContent = state.isOwner ? 'owner' : 'admin';
+      $('#whoRole').textContent = state.isOwner ? 'Dueño' : 'Administrador';
       $('#navAdmins').style.display = state.isOwner ? '' : 'none';
     });
     router();
@@ -229,193 +287,253 @@
     const { error } = await sb.auth.signInWithPassword({ email, password });
     if(error){ $('#loginMsg').textContent = error.message || 'Error al ingresar'; return; }
     const ok = await checkAdmin();
-    if(!ok){ await sb.auth.signOut(); $('#loginMsg').textContent='Tu usuario no está en la lista de admins.'; return; }
+    if(!ok){ await sb.auth.signOut(); $('#loginMsg').textContent='Tu cuenta no está en la lista de administradores.'; return; }
     const { data:{user} } = await sb.auth.getUser();
     showApp(user);
   });
+  $('#btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
 
-  $('#btnLogout').addEventListener('click', async () => {
-    await sb.auth.signOut();
-    location.reload();
-  });
-
-  // ---- Router / Sidebar
   $('#nav').addEventListener('click', e => {
     const a = e.target.closest('a[data-view]');
     if(!a) return;
-    state.view = a.dataset.view;
-    document.querySelectorAll('#nav a').forEach(x=>x.classList.toggle('active', x===a));
-    router();
+    goto(a.dataset.view);
   });
+
+  function goto(view, ctx){
+    state.view = view; state.ctx = ctx || {};
+    document.querySelectorAll('#nav a').forEach(x => x.classList.toggle('active', x.dataset.view === view));
+    router();
+  }
 
   function router(){
     const v = state.view;
-    if(v==='dashboard') return viewDashboard();
-    if(v==='orders')    return viewOrders();
-    if(v==='sales')     return viewSales();
-    if(v==='products')  return viewProducts();
-    if(v==='settings')  return viewSettings();
-    if(v==='activity')  return viewActivity();
-    if(v==='admins')    return viewAdmins();
+    if(v==='dashboard')   return viewDashboard();
+    if(v==='orders')      return viewOrders();
+    if(v==='sales')       return viewSales();
+    if(v==='products')    return viewProducts();
+    if(v==='settings')    return viewSettings();
+    if(v==='activity')    return viewActivity();
+    if(v==='admins')      return viewAdmins();
   }
 
-  // ---- Dashboard
+  // =====================================================================
+  // INICIO / DASHBOARD
+  // =====================================================================
   async function viewDashboard(){
     const m = $('#main');
-    m.innerHTML = '<div class="page-head"><div class="h1">Dashboard</div><button class="btn ghost" id="reload">Actualizar</button></div><div class="grid-stats" id="stats"><div class="stat card"><div class="k">Cargando…</div><div class="v"><span class="loader"></span></div></div></div><div class="card" id="latest"><div class="h2" style="margin-bottom:14px">Últimos pedidos</div><div class="muted"><span class="loader"></span> cargando…</div></div>';
-    document.getElementById('reload').onclick = viewDashboard;
+    m.innerHTML = `
+      <div class="page-head">
+        <div class="titles"><div class="h1">Inicio</div><div class="sub">Resumen general de la tienda</div></div>
+        <button class="btn ghost" onclick="viewDashboard()">Actualizar</button>
+      </div>
+      <div class="grid-stats" id="stats"><div class="stat card"><div class="k">Cargando…</div><div class="v"><span class="loader"></span></div></div></div>
+      <div class="card"><h3>Últimos pedidos</h3><div id="latest" class="muted"><span class="loader"></span> cargando…</div></div>`;
 
     const [dash, latest] = await Promise.all([
       sbJess.from('v_dashboard').select('*').single(),
       sbJess.from('v_orders').select('*').order('created_at',{ascending:false}).limit(10)
     ]);
-
-    const s = dash.data || {};
+    const s = (dash && dash.data) || {};
+    // Ingresos: sumamos completados + pagados (el usuario ya cobró aunque no haya cerrado)
     const stats = [
-      { k:'Pedidos hoy',       v:fmt(s.orders_today),      cls:'gold' },
-      { k:'Ingresos hoy',      v:fmt(s.revenue_today)+' Gs', cls:'gold' },
-      { k:'Pedidos pendientes',v:fmt(s.orders_pending),    cls:'blue' },
-      { k:'Completados',       v:fmt(s.orders_completed),  cls:'blue' },
-      { k:'Ingresos totales',  v:fmt(s.revenue_total)+' Gs' },
-      { k:'Clientes',          v:fmt(s.customers_total) },
-      { k:'Productos activos', v:fmt(s.products_active) },
-      { k:'Total pedidos',     v:fmt(s.orders_total) }
+      { k:'Pedidos hoy',        v:fmt(s.orders_today),               cls:'blue' },
+      { k:'Pedidos pendientes', v:fmt(s.orders_pending),             cls:'gold' },
+      { k:'Completados',        v:fmt(s.orders_completed),           cls:'green' },
+      { k:'Ingresos totales',   v:fmt(s.revenue_total)+' Gs',        cls:'gold' },
+      { k:'Ingresos hoy',       v:fmt(s.revenue_today)+' Gs',        cls:'green' },
+      { k:'Clientes',           v:fmt(s.customers_total) },
+      { k:'Productos activos',  v:fmt(s.products_active) },
+      { k:'Total pedidos',      v:fmt(s.orders_total) }
     ];
     $('#stats').innerHTML = stats.map(x=>`<div class="stat card ${x.cls||''}"><div class="k">${x.k}</div><div class="v">${x.v}</div></div>`).join('');
 
-    const rows = latest.data || [];
-    $('#latest').innerHTML = '<div class="h2" style="margin-bottom:14px">Últimos pedidos</div>' + (rows.length? renderOrdersTable(rows) : '<div class="muted">Sin pedidos aún.</div>');
+    const rows = (latest && latest.data) || [];
+    $('#latest').innerHTML = rows.length ? ordersTable(rows) : '<div class="muted">Todavía no hay pedidos.</div>';
     wireOrderRows();
   }
+  window.viewDashboard = viewDashboard;
 
-  // ---- Orders
+  // =====================================================================
+  // PEDIDOS
+  // =====================================================================
   async function viewOrders(){
     const m = $('#main');
     m.innerHTML = `
       <div class="page-head">
-        <div class="h1">Pedidos</div>
+        <div class="titles"><div class="h1">Pedidos</div><div class="sub">Todos los pedidos ordenados por fecha</div></div>
         <div class="row">
           <select class="input" id="fStatus" style="width:auto">
             <option value="">Todos los estados</option>
-            <option value="pending">Pendiente</option>
-            <option value="payment_review">Revisar pago</option>
-            <option value="paid">Pagado</option>
-            <option value="processing">En proceso</option>
-            <option value="completed">Completado</option>
-            <option value="cancelled">Cancelado</option>
-            <option value="rejected">Rechazado</option>
+            ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}">${STATUS_LABEL[s]}</option>`).join('')}
           </select>
-          <button class="btn ghost" id="reload">Actualizar</button>
+          <button class="btn ghost" onclick="viewOrders()">Actualizar</button>
         </div>
       </div>
       <div id="ordersBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
-    $('#reload').onclick = viewOrders;
     $('#fStatus').onchange = loadOrders;
     loadOrders();
   }
+  window.viewOrders = viewOrders;
 
   async function loadOrders(){
     const status = $('#fStatus').value;
-    let q = sbJess.from('v_orders').select('*').order('created_at',{ascending:false}).limit(200);
+    let q = sbJess.from('v_orders').select('*').order('created_at',{ascending:false}).limit(300);
     if(status) q = q.eq('status', status);
     const { data, error } = await q;
-    if(error){ $('#ordersBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
-    $('#ordersBox').innerHTML = data.length? renderOrdersTable(data) : '<div class="card muted">Sin resultados.</div>';
+    if(error){ $('#ordersBox').innerHTML = errBox(error); return; }
+    $('#ordersBox').innerHTML = data.length ? ordersTable(data) : '<div class="card muted">No hay pedidos con ese filtro.</div>';
     wireOrderRows();
   }
 
-  function renderOrdersTable(rows){
+  function ordersTable(rows){
     return `<div class="table-wrap"><div class="table-scroll"><table>
-      <thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>ID Jugador</th><th>Total</th><th>Estado</th><th>Pago</th><th></th></tr></thead>
-      <tbody>${rows.map(o=>`
+      <thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th>ID Jugador</th><th>Total</th><th>Estado</th><th>Pago</th><th></th></tr></thead>
+      <tbody>${rows.map(o => `
         <tr>
-          <td><b style="font-family:Orbitron">${o.order_number||'—'}</b></td>
+          <td><b style="font-family:Orbitron">${escapeHtml(o.order_number||'—')}</b></td>
           <td>${fmtDate(o.created_at)}</td>
-          <td>${o.customer_name||'—'}<br><span class="muted" style="font-size:12px">${o.customer_phone||''}</span></td>
-          <td>${o.player_id||'—'}</td>
+          <td>${escapeHtml(o.customer_name||'—')}<br><span class="muted" style="font-size:12px">${escapeHtml(o.customer_phone||'')}</span></td>
+          <td>${escapeHtml(o.player_id||'—')}</td>
           <td><b>${fmt(o.total)} Gs.</b></td>
           <td>${statusTag(o.status)}</td>
           <td>${statusTag(o.payment_status)}</td>
-          <td style="text-align:right"><button class="btn small" data-order="${o.id}">Ver</button></td>
+          <td style="text-align:right"><button class="btn small" data-order="${o.id}">Ver detalle</button></td>
         </tr>`).join('')}
       </tbody>
     </table></div></div>`;
   }
-
   function wireOrderRows(){
-    document.querySelectorAll('[data-order]').forEach(b=>{
-      b.onclick = () => openOrderDetail(b.dataset.order);
-    });
+    document.querySelectorAll('[data-order]').forEach(b => b.onclick = () => openOrderModal(b.dataset.order));
   }
 
-  async function openOrderDetail(id){
-    const [{data:o}, items, payments] = await Promise.all([
+  // ---- PEDIDO DETALLE (modal)
+  async function openOrderModal(id){
+    openModal({ title:'Pedido', bodyHtml:'<div class="muted"><span class="loader"></span> cargando…</div>', size:'wide' });
+    const [{data:o, error:eo}, {data:items}, {data:payments}] = await Promise.all([
       sbJess.from('v_orders').select('*').eq('id',id).single(),
       sbJess.from('order_items').select('*').eq('order_id',id),
       sbJess.from('payments').select('*').eq('order_id',id).order('created_at',{ascending:false})
     ]);
-    if(!o){ toast('No se encontró el pedido', true); return; }
-    const body = el('div');
-    body.innerHTML = `
-      <div class="grid-2" style="margin-bottom:16px">
-        <div class="card"><div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:6px">CLIENTE</div><b>${o.customer_name}</b><div class="muted">${o.customer_phone||''}</div><div class="muted">${o.customer_email||''}</div></div>
-        <div class="card"><div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:6px">JUGADOR</div><b>ID: ${o.player_id||'—'}</b><div class="muted">${o.player_nickname||''}</div></div>
+    if(eo || !o){ openModal({ title:'Error', bodyHtml: errBox(eo||{message:'Pedido no encontrado'}), size:'narrow', actions:[{label:'Cerrar', style:'ghost', onClick:closeModal}] }); return; }
+
+    const body = `
+      <div class="row" style="margin-bottom:14px;gap:8px">${statusTag(o.status)} ${statusTag(o.payment_status)}<span class="muted" style="font-size:13px;margin-left:6px">${fmtDate(o.created_at)}</span></div>
+      <div class="grid-2">
+        <div class="card"><h3>Cliente</h3>
+          <div class="kv">
+            <div class="k">Nombre</div>       <div class="v">${escapeHtml(o.customer_name||'—')}</div>
+            <div class="k">Teléfono</div>     <div class="v">${escapeHtml(o.customer_phone||'—')}</div>
+            <div class="k">Correo</div>       <div class="v">${escapeHtml(o.customer_email||'—')}</div>
+          </div>
+        </div>
+        <div class="card"><h3>Datos del juego</h3>
+          <div class="kv">
+            <div class="k">ID Jugador</div>   <div class="v">${escapeHtml(o.player_id||'—')}</div>
+            <div class="k">Nickname</div>     <div class="v">${escapeHtml(o.player_nickname||'—')}</div>
+            <div class="k">Método pago</div>  <div class="v">${escapeHtml(o.payment_method||'—')}</div>
+          </div>
+        </div>
       </div>
-      <div class="card" style="margin-bottom:14px">
-        <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">ÍTEMS</div>
-        ${(items.data||[]).map(i=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div>${i.product_name} <span class="muted">× ${i.quantity}</span></div><b>${fmt(i.subtotal)} Gs.</b></div>`).join('')}
-        <div class="row" style="justify-content:space-between;padding-top:12px;font-weight:900"><span>Total</span><span style="font-family:Orbitron;color:#ffd76a">${fmt(o.total)} Gs.</span></div>
+
+      <div class="card" style="margin-top:14px"><h3>Ítems</h3>
+        <table>
+          <thead><tr><th>Producto</th><th style="text-align:right">Cant.</th><th style="text-align:right">Precio</th><th style="text-align:right">Subtotal</th></tr></thead>
+          <tbody>${(items||[]).map(i=>`
+            <tr>
+              <td>${escapeHtml(i.product_name)}<br><span class="muted" style="font-size:12px">${fmt(i.diamonds)} + ${fmt(i.bonus_diamonds)} diamantes</span></td>
+              <td style="text-align:right">${i.quantity}</td>
+              <td style="text-align:right">${fmt(i.unit_price)} Gs.</td>
+              <td style="text-align:right"><b>${fmt(i.subtotal)} Gs.</b></td>
+            </tr>`).join('')}
+            <tr><td colspan="3" style="text-align:right"><b>Total</b></td><td style="text-align:right"><b style="font-family:Orbitron;color:#ffd76a;font-size:16px">${fmt(o.total)} Gs.</b></td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="card" style="margin-bottom:14px">
-        <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">PAGOS</div>
-        ${(payments.data||[]).length ? (payments.data||[]).map(p=>`
-          <div class="row" style="justify-content:space-between;padding:6px 0;gap:10px;flex-wrap:wrap">
-            <div><b>${p.method}</b> · ${fmt(p.amount)} Gs. ${statusTag(p.status)}</div>
-            <div class="row">
-              <button class="btn small primary" data-approve="${p.id}">Aprobar</button>
-              <button class="btn small danger"  data-reject="${p.id}">Rechazar</button>
+
+      <div class="card" style="margin-top:14px"><h3>Pagos</h3>
+        ${(payments||[]).length ? (payments||[]).map(p => `
+          <div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);gap:10px;flex-wrap:wrap">
+            <div>
+              <b>${escapeHtml(p.method)}</b> · ${fmt(p.amount)} Gs.
+              <span style="margin-left:8px">${statusTag(p.status)}</span>
+              <div class="muted" style="font-size:12px;margin-top:3px">${fmtDate(p.created_at)}${p.reviewed_at ? ' · Revisado '+fmtDate(p.reviewed_at) : ''}</div>
             </div>
+            ${p.status==='pending' || p.status==='under_review' ? `
+              <div class="row">
+                <button class="btn small success" data-approve="${p.id}">Aprobar</button>
+                <button class="btn small danger" data-reject="${p.id}">Rechazar</button>
+              </div>` : ''}
           </div>
         `).join('') : '<div class="muted">Sin pagos registrados.</div>'}
-        ${o.receipt_url ? `<div style="margin-top:8px"><a href="${o.receipt_url}" target="_blank">Ver comprobante</a></div>` : ''}
+        ${o.receipt_url ? `<div style="margin-top:10px"><a href="${escapeHtml(o.receipt_url)}" target="_blank">Ver comprobante subido</a></div>` : ''}
       </div>
-      <div class="card">
-        <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">CAMBIAR ESTADO</div>
-        <div class="row">
-          <select class="input" id="newStatus" style="flex:1">
-            ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${STATUS_LABEL[s]||s}</option>`).join('')}
-          </select>
+
+      <div class="card" style="margin-top:14px"><h3>Cambiar estado del pedido</h3>
+        <div class="row" style="align-items:flex-end">
+          <div style="flex:1;min-width:180px">
+            <label class="label">Nuevo estado</label>
+            <select class="input" id="newStatus">
+              ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${STATUS_LABEL[s]}</option>`).join('')}
+            </select>
+          </div>
+          <div style="flex:2;min-width:220px">
+            <label class="label">Notas (opcional)</label>
+            <input class="input" id="newNotes" value="${escapeHtml(o.notes||'')}">
+          </div>
           <button class="btn primary" id="saveStatus">Guardar</button>
         </div>
-        ${o.notes ? `<div class="muted" style="margin-top:10px;font-size:13px">Notas: ${o.notes}</div>` : ''}
+        <div class="muted" style="font-size:12.5px;margin-top:10px">Marcá <b>Completado</b> cuando ya acreditaste los diamantes al jugador. Recién ahí suma a ingresos totales.</div>
       </div>`;
-    openModal('Pedido ' + o.order_number, body, [el('button',{class:'btn ghost', onclick:closeModal},'Cerrar')]);
-    body.querySelector('#saveStatus').onclick = async () => {
-      const st = body.querySelector('#newStatus').value;
-      const { error } = await sbJess.rpc('set_order_status', { p_order_id:id, p_status:st, p_notes:null });
+
+    openModal({
+      title: 'Pedido ' + (o.order_number||''),
+      subtitle: escapeHtml(o.customer_name||''),
+      size: 'wide',
+      bodyHtml: body,
+      actions: [{ label:'Cerrar', style:'ghost', onClick: closeModal }]
+    });
+
+    document.getElementById('saveStatus').onclick = async () => {
+      const st = document.getElementById('newStatus').value;
+      const notes = document.getElementById('newNotes').value.trim() || null;
+      const { error } = await sbJess.rpc('set_order_status', { p_order_id:id, p_status:st, p_notes:notes });
       if(error){ toast(error.message, true); return; }
-      toast('Estado actualizado'); closeModal(); loadOrders && loadOrders();
+      toast('Estado actualizado');
+      openOrderModal(id);
+      if(state.view === 'orders') loadOrders();
+      if(state.view === 'dashboard') viewDashboard();
+      if(state.view === 'sales') loadSales($('#fFrom').value, $('#fTo').value);
     };
-    body.querySelectorAll('[data-approve]').forEach(b=> b.onclick = ()=>reviewPay(b.dataset.approve, true, id));
-    body.querySelectorAll('[data-reject]').forEach(b=> b.onclick = ()=>reviewPay(b.dataset.reject, false, id));
+    document.querySelectorAll('[data-approve]').forEach(b => b.onclick = () => reviewPay(b.dataset.approve, true, id));
+    document.querySelectorAll('[data-reject]').forEach(b => b.onclick = () => reviewPay(b.dataset.reject, false, id));
   }
 
   async function reviewPay(paymentId, approve, orderId){
+    const ok = await askConfirm({
+      title: approve ? 'Aprobar pago' : 'Rechazar pago',
+      message: approve
+        ? 'El pedido va a quedar marcado como pagado. ¿Confirmás?'
+        : 'El pedido va a quedar marcado como rechazado. ¿Confirmás?',
+      confirmLabel: approve ? 'Sí, aprobar' : 'Sí, rechazar',
+      danger: !approve
+    });
+    if(!ok) return;
     const { error } = await sbJess.rpc('review_payment', { p_payment_id:paymentId, p_approve:approve, p_notes:null });
     if(error){ toast(error.message, true); return; }
     toast(approve ? 'Pago aprobado' : 'Pago rechazado');
-    closeModal();
-    openOrderDetail(orderId);
+    openOrderModal(orderId);
   }
 
-  // ---- Sales history
+  // =====================================================================
+  // VENTAS
+  // =====================================================================
   async function viewSales(){
     const m = $('#main');
     const today = new Date().toISOString().slice(0,10);
     const monthAgo = new Date(Date.now() - 30*24*3600*1000).toISOString().slice(0,10);
     m.innerHTML = `
       <div class="page-head">
-        <div class="h1">Historial de ventas</div>
+        <div class="titles"><div class="h1">Historial de ventas</div><div class="sub">Solo pedidos marcados como completados</div></div>
         <div class="row">
           <label class="muted" style="font-size:13px">Desde</label>
           <input type="date" class="input" id="fFrom" value="${monthAgo}" style="width:auto">
@@ -426,34 +544,26 @@
         </div>
       </div>
       <div class="grid-stats" id="salesStats"></div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="h2" style="margin-bottom:12px">Ventas por día</div>
-        <div id="chartWrap" class="muted"><span class="loader"></span> cargando…</div>
-      </div>
-      <div class="card">
-        <div class="h2" style="margin-bottom:12px">Pedidos completados</div>
-        <div id="salesList" class="muted"><span class="loader"></span></div>
-      </div>`;
+      <div class="card" style="margin-bottom:16px"><h3>Ventas por día</h3><div id="chartWrap" class="muted"><span class="loader"></span> cargando…</div></div>
+      <div class="card"><h3>Pedidos completados</h3><div id="salesList" class="muted"><span class="loader"></span></div></div>`;
     const load = () => loadSales($('#fFrom').value, $('#fTo').value);
     $('#applyR').onclick = load;
     $('#expCsv').onclick = () => exportSalesCsv($('#fFrom').value, $('#fTo').value);
     load();
   }
+  window.viewSales = viewSales;
 
   async function loadSales(from, to){
-    const fromTs = from + 'T00:00:00';
-    const toTs   = to   + 'T23:59:59';
     const { data:orders, error } = await sbJess
       .from('v_orders').select('*')
       .eq('status','completed')
-      .gte('created_at', fromTs).lte('created_at', toTs)
+      .gte('created_at', from+'T00:00:00').lte('created_at', to+'T23:59:59')
       .order('created_at',{ascending:false}).limit(2000);
-    if(error){ $('#salesList').innerHTML = `Error: ${error.message}`; return; }
-
+    if(error){ $('#salesList').innerHTML = errBox(error); return; }
     const totalRev = (orders||[]).reduce((s,o)=>s+Number(o.total||0),0);
     const totalOrd = (orders||[]).length;
     const totalDia = (orders||[]).reduce((s,o)=>s+Number(o.total_diamonds||0),0);
-    const avg      = totalOrd ? Math.round(totalRev/totalOrd) : 0;
+    const avg = totalOrd ? Math.round(totalRev/totalOrd) : 0;
     $('#salesStats').innerHTML = [
       { k:'Pedidos', v:fmt(totalOrd), cls:'blue' },
       { k:'Ingresos', v:fmt(totalRev)+' Gs', cls:'gold' },
@@ -461,7 +571,6 @@
       { k:'Diamantes vendidos', v:fmt(totalDia) }
     ].map(x=>`<div class="stat card ${x.cls||''}"><div class="k">${x.k}</div><div class="v">${x.v}</div></div>`).join('');
 
-    // Agrupar por día
     const byDay = {};
     (orders||[]).forEach(o=>{
       const d = (o.created_at||'').slice(0,10);
@@ -472,29 +581,28 @@
     const days = Object.values(byDay).sort((a,b)=>a.day<b.day?-1:1);
     const maxRev = Math.max(1, ...days.map(d=>d.revenue));
     $('#chartWrap').innerHTML = days.length ? `
-      <div style="display:flex;align-items:flex-end;gap:6px;height:180px;padding:8px 0;overflow-x:auto">
+      <div style="display:flex;align-items:flex-end;gap:8px;height:190px;padding:8px 0;overflow-x:auto">
         ${days.map(d=>{
           const h = Math.max(4, Math.round(d.revenue / maxRev * 160));
-          return `<div title="${d.day}: ${fmt(d.revenue)} Gs. (${d.orders})" style="flex:0 0 34px;display:flex;flex-direction:column;align-items:center;gap:6px">
-            <div style="width:100%;height:${h}px;background:linear-gradient(180deg,#ffe08a,#c9971f);border-radius:5px 5px 0 0"></div>
+          return `<div title="${d.day}: ${fmt(d.revenue)} Gs. (${d.orders} pedidos)" style="flex:0 0 36px;display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:100%;height:${h}px;background:linear-gradient(180deg,#ffe08a,#c9971f);border-radius:6px 6px 0 0;box-shadow:0 4px 12px rgba(245,197,66,.35)"></div>
             <div class="muted" style="font-size:10px;font-family:monospace">${d.day.slice(5)}</div>
           </div>`;
         }).join('')}
       </div>` : '<div class="muted">Sin ventas en el rango elegido.</div>';
 
-    // Lista de pedidos
     $('#salesList').innerHTML = (orders||[]).length ? `<div class="table-scroll"><table>
-      <thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>ID Jugador</th><th>Diamantes</th><th>Total</th><th></th></tr></thead>
+      <thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th>ID Jugador</th><th>Diamantes</th><th>Total</th><th></th></tr></thead>
       <tbody>${orders.map(o=>`
         <tr>
-          <td><b style="font-family:Orbitron">${o.order_number}</b></td>
+          <td><b style="font-family:Orbitron">${escapeHtml(o.order_number)}</b></td>
           <td>${fmtDate(o.created_at)}</td>
-          <td>${o.customer_name}<br><span class="muted" style="font-size:12px">${o.customer_phone||''}</span></td>
-          <td>${o.player_id||'—'}</td>
+          <td>${escapeHtml(o.customer_name)}<br><span class="muted" style="font-size:12px">${escapeHtml(o.customer_phone||'')}</span></td>
+          <td>${escapeHtml(o.player_id||'—')}</td>
           <td>${fmt(o.total_diamonds)}</td>
           <td><b>${fmt(o.total)} Gs.</b></td>
           <td style="text-align:right"><button class="btn small" data-order="${o.id}">Ver</button></td>
-        </tr>`).join('')}</tbody></table></div>` : '<div class="muted">No hay pedidos completados en el rango.</div>';
+        </tr>`).join('')}</tbody></table></div>` : '<div class="muted">Sin pedidos completados en el rango.</div>';
     wireOrderRows();
   }
 
@@ -515,243 +623,257 @@
     document.body.appendChild(a); a.click(); a.remove();
   }
 
-  // ---- Products
+  // =====================================================================
+  // PRODUCTOS
+  // =====================================================================
   async function viewProducts(){
     const m = $('#main');
     m.innerHTML = `
       <div class="page-head">
-        <div class="h1">Productos</div>
-        <button class="btn primary" id="newProd">+ Nuevo</button>
+        <div class="titles"><div class="h1">Productos</div><div class="sub">Diamantes, precios y disponibilidad</div></div>
+        <button class="btn primary" onclick="openProductModal(null)">+ Nuevo producto</button>
       </div>
       <div id="prodBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
-    $('#newProd').onclick = () => editProduct(null);
-
     const [{data:cats}, {data:prods, error}] = await Promise.all([
       sbJess.from('categories').select('*').order('sort_order'),
       sbJess.from('products').select('*').order('sort_order')
     ]);
-    if(error){ $('#prodBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
-    const catMap = Object.fromEntries((cats||[]).map(c=>[c.id, c.name]));
+    if(error){ $('#prodBox').innerHTML = errBox(error); return; }
+    const catMap = Object.fromEntries((cats||[]).map(c => [c.id, c.name]));
     $('#prodBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
-      <thead><tr><th>Nombre</th><th>Categoría</th><th>Diamantes</th><th>Bonus</th><th>Precio</th><th>Estado</th><th>Featured</th><th></th></tr></thead>
+      <thead><tr><th>Nombre</th><th>Categoría</th><th>Diamantes</th><th>Bonus</th><th>Precio</th><th>Estado</th><th>Destacado</th><th></th></tr></thead>
       <tbody>${(prods||[]).map(p=>`
         <tr>
-          <td><b>${p.name}</b><br><span class="muted" style="font-size:12px">${p.slug}</span></td>
-          <td>${catMap[p.category_id]||'—'}</td>
+          <td><b>${escapeHtml(p.name)}</b><br><span class="muted" style="font-size:12px">${escapeHtml(p.slug)}</span></td>
+          <td>${escapeHtml(catMap[p.category_id]||'—')}</td>
           <td>${fmt(p.diamonds)}</td>
           <td>${fmt(p.bonus_diamonds)}</td>
           <td><b>${fmt(p.price)} Gs.</b></td>
-          <td>${p.is_active?'<span class="tag tag-approved">ACTIVO</span>':'<span class="tag tag-cancelled">INACTIVO</span>'}</td>
-          <td>${p.is_featured?'⭐':'—'}</td>
-          <td style="text-align:right"><button class="btn small" data-edit="${p.id}">Editar</button></td>
+          <td>${p.is_active ? '<span class="tag tag-active">ACTIVO</span>' : '<span class="tag tag-inactive">OCULTO</span>'}</td>
+          <td>${p.is_featured ? '<span class="tag tag-owner">DESTACADO</span>' : '<span class="muted">—</span>'}</td>
+          <td style="text-align:right"><button class="btn small" data-pedit="${p.id}">Editar</button></td>
         </tr>`).join('')}</tbody></table></div></div>`;
-    document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => {
-      editProduct((prods||[]).find(x=>x.id===b.dataset.edit), cats||[]);
-    });
-    window._cats = cats || [];
+    document.querySelectorAll('[data-pedit]').forEach(b => b.onclick = () => openProductModal(b.dataset.pedit));
   }
+  window.viewProducts = viewProducts;
 
-  function editProduct(p, cats){
-    cats = cats || window._cats || [];
-    const isNew = !p;
-    p = p || { category_id: cats[0]?.id, is_active:true, is_featured:false, diamonds:0, bonus_diamonds:0, price:0 };
-    const body = el('div');
-    body.innerHTML = `
+  async function openProductModal(id){
+    openModal({ title: id?'Editar producto':'Nuevo producto', bodyHtml:'<div class="muted"><span class="loader"></span> cargando…</div>', size:'wide' });
+    const [{data:cats}, prodResp] = await Promise.all([
+      sbJess.from('categories').select('*').order('sort_order'),
+      id ? sbJess.from('products').select('*').eq('id', id).single() : Promise.resolve({data:null})
+    ]);
+    const isNew = !id;
+    const p = (prodResp && prodResp.data) || { category_id: (cats||[])[0]?.id, is_active:true, is_featured:false, diamonds:0, bonus_diamonds:0, price:0, sort_order:0 };
+    const body = `
       <div class="grid-2">
-        <div><label class="label">Nombre</label><input class="input" id="fname" value="${p.name||''}"></div>
-        <div><label class="label">Slug (único)</label><input class="input" id="fslug" value="${p.slug||''}"></div>
-        <div><label class="label">Categoría</label><select class="input" id="fcat">${cats.map(c=>`<option value="${c.id}" ${c.id===p.category_id?'selected':''}>${c.name}</option>`).join('')}</select></div>
-        <div><label class="label">Precio (Gs.)</label><input class="input" id="fprice" type="number" value="${p.price||0}"></div>
-        <div><label class="label">Diamantes</label><input class="input" id="fdia" type="number" value="${p.diamonds||0}"></div>
-        <div><label class="label">Bonus</label><input class="input" id="fbon" type="number" value="${p.bonus_diamonds||0}"></div>
-        <div><label class="label">Orden</label><input class="input" id="fsort" type="number" value="${p.sort_order||0}"></div>
-        <div><label class="label">URL de imagen</label><input class="input" id="fimg" value="${p.image_url||''}"></div>
-        <div style="grid-column:1/-1"><label class="label">Descripción</label><textarea class="input" id="fdesc" rows="3">${p.description||''}</textarea></div>
-        <div><label class="row"><input type="checkbox" id="factive" ${p.is_active?'checked':''}> <span>Activo</span></label></div>
-        <div><label class="row"><input type="checkbox" id="ffeat" ${p.is_featured?'checked':''}> <span>Destacado (Más popular)</span></label></div>
+        <div><label class="label">Nombre del paquete</label><input class="input" id="fname" value="${escapeHtml(p.name||'')}" placeholder="Ej: 100 + 10 diamantes"></div>
+        <div><label class="label">Identificador (slug único)</label><input class="input" id="fslug" value="${escapeHtml(p.slug||'')}" placeholder="ff-110"></div>
+        <div><label class="label">Categoría</label><select class="input" id="fcat">${(cats||[]).map(c=>`<option value="${c.id}" ${c.id===p.category_id?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></div>
+        <div><label class="label">Precio en guaraníes</label><input class="input" id="fprice" type="number" min="0" value="${p.price||0}"></div>
+        <div><label class="label">Diamantes base</label><input class="input" id="fdia" type="number" min="1" value="${p.diamonds||0}"></div>
+        <div><label class="label">Diamantes bonus</label><input class="input" id="fbon" type="number" min="0" value="${p.bonus_diamonds||0}"></div>
+        <div><label class="label">Orden en la lista</label><input class="input" id="fsort" type="number" value="${p.sort_order||0}"></div>
+        <div><label class="label">URL de imagen (opcional)</label><input class="input" id="fimg" value="${escapeHtml(p.image_url||'')}" placeholder="https://…"></div>
+      </div>
+      <div style="margin-top:14px"><label class="label">Descripción</label><textarea class="input" id="fdesc" rows="3">${escapeHtml(p.description||'')}</textarea></div>
+      <div class="row" style="margin-top:16px;gap:24px">
+        <label class="checkbox"><input type="checkbox" id="factive" ${p.is_active?'checked':''}> <span>Activo (visible en la tienda)</span></label>
+        <label class="checkbox"><input type="checkbox" id="ffeat" ${p.is_featured?'checked':''}> <span>Destacado (marca "Más popular")</span></label>
       </div>`;
-    const saveBtn = el('button',{class:'btn primary'}, isNew?'Crear':'Guardar');
-    const foot = [el('button',{class:'btn ghost', onclick:closeModal},'Cancelar'), saveBtn];
-    if(!isNew) foot.unshift(el('button',{class:'btn danger', onclick:async()=>{
-      if(!confirm('¿Eliminar producto?')) return;
-      const { error } = await sbJess.from('products').delete().eq('id', p.id);
-      if(error){ toast(error.message, true); return; }
-      toast('Eliminado'); closeModal(); viewProducts();
-    }},'Eliminar'));
-    saveBtn.onclick = async () => {
+    const saveHandler = async () => {
       const payload = {
-        name: body.querySelector('#fname').value.trim(),
-        slug: body.querySelector('#fslug').value.trim(),
-        category_id: body.querySelector('#fcat').value,
-        price: Number(body.querySelector('#fprice').value||0),
-        diamonds: Number(body.querySelector('#fdia').value||0),
-        bonus_diamonds: Number(body.querySelector('#fbon').value||0),
-        sort_order: Number(body.querySelector('#fsort').value||0),
-        image_url: body.querySelector('#fimg').value.trim() || null,
-        description: body.querySelector('#fdesc').value.trim() || null,
-        is_active: body.querySelector('#factive').checked,
-        is_featured: body.querySelector('#ffeat').checked
+        name: $('#fname').value.trim(),
+        slug: $('#fslug').value.trim(),
+        category_id: $('#fcat').value,
+        price: Number($('#fprice').value||0),
+        diamonds: Number($('#fdia').value||0),
+        bonus_diamonds: Number($('#fbon').value||0),
+        sort_order: Number($('#fsort').value||0),
+        image_url: $('#fimg').value.trim() || null,
+        description: $('#fdesc').value.trim() || null,
+        is_active: $('#factive').checked,
+        is_featured: $('#ffeat').checked
       };
-      const q = isNew ? sbJess.from('products').insert(payload) : sbJess.from('products').update(payload).eq('id', p.id);
+      if(!payload.name || !payload.slug){ toast('Nombre y slug son obligatorios', true); return; }
+      const q = isNew ? sbJess.from('products').insert(payload) : sbJess.from('products').update(payload).eq('id', id);
       const { error } = await q;
       if(error){ toast(error.message, true); return; }
-      toast(isNew?'Producto creado':'Producto actualizado'); closeModal(); viewProducts();
+      toast(isNew?'Producto creado':'Cambios guardados');
+      closeModal();
+      viewProducts();
     };
-    openModal(isNew?'Nuevo producto':'Editar producto', body, foot);
-  }
+    const delHandler = async () => {
+      const ok = await askConfirm({
+        title: 'Eliminar producto',
+        message: `¿Eliminar "${p.name}"? Esta acción no se puede deshacer.`,
+        confirmLabel: 'Sí, eliminar',
+        danger: true
+      });
+      if(!ok){ openProductModal(id); return; }
+      const { error } = await sbJess.from('products').delete().eq('id', id);
+      if(error){ toast(error.message, true); return; }
+      toast('Producto eliminado');
+      closeModal();
+      viewProducts();
+    };
+    const actions = [];
+    if(!isNew) actions.push({ label:'Eliminar', style:'danger', side:'left', onClick:delHandler });
+    actions.push({ label:'Cancelar', style:'ghost', onClick:closeModal });
+    actions.push({ label: isNew?'Crear producto':'Guardar cambios', style:'primary', onClick:saveHandler });
 
-  // ---- Settings
+    openModal({
+      title: isNew?'Nuevo producto':'Editar producto',
+      subtitle: isNew ? 'Agregar un nuevo paquete de diamantes' : escapeHtml(p.name||''),
+      size: 'wide',
+      bodyHtml: body,
+      actions
+    });
+  }
+  window.openProductModal = openProductModal;
+
+  // =====================================================================
+  // CONFIGURACION
+  // =====================================================================
   const SETTINGS_SCHEMA = {
     whatsapp:         { title:'WhatsApp de contacto', fields:[
-      { k:'number',  label:'Número (sin +, con código país)', ph:'595973749759' },
-      { k:'display', label:'Cómo mostrarlo', ph:'+595 973 749759' }
+      { k:'number',  label:'Número (sin +, con código de país)', ph:'595973749759' },
+      { k:'display', label:'Cómo se muestra en el sitio',        ph:'+595 973 749759' }
     ]},
     payment_banco:    { title:'Transferencia bancaria', fields:[
       { k:'name',    label:'Nombre visible', ph:'Transferencia Bancaria' },
-      { k:'bank',    label:'Banco',           ph:'Banco Continental' },
-      { k:'account', label:'Cuenta',          ph:'12-3456789-01' },
-      { k:'holder',  label:'Titular',         ph:'Jessica R. Benitez' },
-      { k:'ruc',     label:'RUC',             ph:'4567890-1' }
+      { k:'bank',    label:'Banco',          ph:'Banco Continental' },
+      { k:'account', label:'Cuenta',         ph:'12-3456789-01' },
+      { k:'holder',  label:'Titular',        ph:'Jessica R. Benitez' },
+      { k:'ruc',     label:'RUC',            ph:'4567890-1' }
     ]},
     payment_tigo:     { title:'Tigo Money', fields:[
       { k:'name',   label:'Nombre visible', ph:'Tigo Money' },
-      { k:'number', label:'Número',          ph:'0971 234 567' },
-      { k:'holder', label:'Titular',         ph:'Jessica R. Benitez' },
-      { k:'ci',     label:'CI',              ph:'4.567.890' }
+      { k:'number', label:'Número',         ph:'0971 234 567' },
+      { k:'holder', label:'Titular',        ph:'Jessica R. Benitez' },
+      { k:'ci',     label:'Cédula',         ph:'4.567.890' }
     ]},
     payment_personal: { title:'Billetera Personal', fields:[
       { k:'name',   label:'Nombre visible', ph:'Billetera Personal' },
-      { k:'number', label:'Número',          ph:'0985 123 456' },
-      { k:'holder', label:'Titular',         ph:'Jessica R. Benitez' },
-      { k:'ci',     label:'CI',              ph:'4.567.890' }
+      { k:'number', label:'Número',         ph:'0985 123 456' },
+      { k:'holder', label:'Titular',        ph:'Jessica R. Benitez' },
+      { k:'ci',     label:'Cédula',         ph:'4.567.890' }
     ]}
   };
-
   async function viewSettings(){
     const m = $('#main');
-    m.innerHTML = `<div class="page-head"><div class="h1">Configuración</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="setBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
-    $('#reload').onclick = viewSettings;
-    const { data, error } = await sbJess.from('settings').select('*').order('key');
-    if(error){ $('#setBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
-
-    const box = $('#setBox');
-    box.innerHTML = '';
-    const orderedKeys = ['whatsapp','payment_banco','payment_tigo','payment_personal'];
-    const rows = (data||[]).sort((a,b) => {
-      const ia = orderedKeys.indexOf(a.key); const ib = orderedKeys.indexOf(b.key);
-      return (ia<0?99:ia) - (ib<0?99:ib);
-    });
-
+    m.innerHTML = `<div class="page-head"><div class="titles"><div class="h1">Configuración</div><div class="sub">Datos de contacto y métodos de cobro</div></div><button class="btn ghost" onclick="viewSettings()">Actualizar</button></div><div id="setBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    const { data, error } = await sbJess.from('settings').select('*');
+    if(error){ $('#setBox').innerHTML = errBox(error); return; }
+    const order = ['whatsapp','payment_banco','payment_tigo','payment_personal'];
+    const rows = (data||[]).sort((a,b) => (order.indexOf(a.key)<0?99:order.indexOf(a.key)) - (order.indexOf(b.key)<0?99:order.indexOf(b.key)));
+    const box = $('#setBox'); box.innerHTML = '';
     rows.forEach(s => {
       const schema = SETTINGS_SCHEMA[s.key];
-      const card = el('div', { class:'card', style:{marginBottom:'14px'} });
-      const head = el('div', { class:'row', style:{justifyContent:'space-between',marginBottom:'14px',flexWrap:'wrap',gap:'10px'} });
-      head.innerHTML = `<div><b class="h2">${schema?schema.title:s.key}</b>${s.description?` <span class="muted" style="font-size:13px">${s.description}</span>`:''}</div>`;
-      const saveBtn = el('button', { class:'btn primary small' }, 'Guardar');
-      head.appendChild(saveBtn);
-      card.appendChild(head);
-
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.marginBottom = '14px';
+      const title = schema ? schema.title : s.key;
+      card.innerHTML = `<div class="row" style="justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px"><div><b class="h2">${escapeHtml(title)}</b>${s.description?` <span class="muted" style="font-size:13px">· ${escapeHtml(s.description)}</span>`:''}</div><button class="btn primary small" data-save="${s.key}">Guardar</button></div>`;
       if(schema){
-        const grid = el('div', { class:'grid-2' });
-        const inputs = {};
+        const grid = document.createElement('div');
+        grid.className = 'grid-2';
         schema.fields.forEach(f => {
-          const wrap = el('div');
-          wrap.innerHTML = `<label class="label">${f.label}</label>`;
-          const inp = el('input', { class:'input', type:'text', placeholder:f.ph||'', value: (s.value && s.value[f.k]) || '' });
-          wrap.appendChild(inp);
-          inputs[f.k] = inp;
+          const wrap = document.createElement('div');
+          wrap.innerHTML = `<label class="label">${escapeHtml(f.label)}</label><input class="input" data-f="${escapeHtml(f.k)}" type="text" placeholder="${escapeHtml(f.ph||'')}" value="${escapeHtml((s.value && s.value[f.k]) || '')}">`;
           grid.appendChild(wrap);
         });
         card.appendChild(grid);
-        saveBtn.onclick = async () => {
+        card.querySelector('[data-save]').onclick = async () => {
           const value = {};
-          Object.keys(inputs).forEach(k => { value[k] = inputs[k].value.trim(); });
+          card.querySelectorAll('[data-f]').forEach(inp => { value[inp.dataset.f] = inp.value.trim(); });
           const { error } = await sbJess.from('settings').update({ value }).eq('key', s.key);
           if(error){ toast(error.message, true); return; }
           toast('Guardado');
         };
       } else {
-        // Fallback JSON para keys nuevas
-        const ta = el('textarea', { class:'input', rows:'5', style:{fontFamily:'monospace',fontSize:'13px'} }, JSON.stringify(s.value, null, 2));
+        const ta = document.createElement('textarea');
+        ta.className = 'input';
+        ta.rows = 5;
+        ta.style.fontFamily = 'monospace';
+        ta.style.fontSize = '13px';
+        ta.value = JSON.stringify(s.value, null, 2);
         card.appendChild(ta);
-        saveBtn.onclick = async () => {
-          let value;
-          try{ value = JSON.parse(ta.value); }catch(e){ toast('JSON inválido', true); return; }
+        card.querySelector('[data-save]').onclick = async () => {
+          let value; try{ value = JSON.parse(ta.value); }catch(e){ toast('JSON inválido', true); return; }
           const { error } = await sbJess.from('settings').update({ value }).eq('key', s.key);
           if(error){ toast(error.message, true); return; }
           toast('Guardado');
         };
       }
-
       box.appendChild(card);
     });
   }
+  window.viewSettings = viewSettings;
 
-  // ---- Activity
+  // =====================================================================
+  // ACTIVIDAD
+  // =====================================================================
+  const ACTION_LABEL = { 'order.set_status':'Cambio de estado de pedido', 'payment.review':'Revisión de pago' };
   async function viewActivity(){
     const m = $('#main');
-    m.innerHTML = `<div class="page-head"><div class="h1">Actividad</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="actBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
-    $('#reload').onclick = viewActivity;
-    const { data, error } = await sbJess.from('activity_log').select('*').order('created_at',{ascending:false}).limit(200);
-    if(error){ $('#actBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    m.innerHTML = `<div class="page-head"><div class="titles"><div class="h1">Actividad</div><div class="sub">Historial de acciones del panel</div></div><button class="btn ghost" onclick="viewActivity()">Actualizar</button></div><div id="actBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    const { data, error } = await sbJess.from('activity_log').select('*').order('created_at',{ascending:false}).limit(300);
+    if(error){ $('#actBox').innerHTML = errBox(error); return; }
+    if(!(data||[]).length){ $('#actBox').innerHTML = '<div class="card muted">Todavía no hay actividad registrada.</div>'; return; }
     $('#actBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
-      <thead><tr><th>Cuándo</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>ID</th><th>Detalle</th></tr></thead>
+      <thead><tr><th>Cuándo</th><th>Quién</th><th>Acción</th><th>Detalle</th></tr></thead>
       <tbody>${(data||[]).map(r=>`
         <tr>
           <td>${fmtDate(r.created_at)}</td>
-          <td>${r.actor_email||'—'}</td>
-          <td><b>${r.action}</b></td>
-          <td>${r.entity||'—'}</td>
-          <td style="font-family:monospace;font-size:12px">${r.entity_id||'—'}</td>
-          <td style="font-family:monospace;font-size:12px;max-width:280px;overflow:hidden;text-overflow:ellipsis">${r.detail?JSON.stringify(r.detail):'—'}</td>
+          <td>${escapeHtml(r.actor_email||'—')}</td>
+          <td><b>${escapeHtml(ACTION_LABEL[r.action]||r.action)}</b><br><span class="muted" style="font-size:12px">${escapeHtml(r.entity||'')} ${escapeHtml(r.entity_id||'')}</span></td>
+          <td style="font-size:13px">${r.detail?escapeHtml(JSON.stringify(r.detail)):'—'}</td>
         </tr>`).join('')}</tbody></table></div></div>`;
   }
+  window.viewActivity = viewActivity;
 
-  // ---- Admins (solo owner)
+  // =====================================================================
+  // ADMINISTRADORES (solo dueño)
+  // =====================================================================
   async function viewAdmins(){
     const m = $('#main');
-    if(!state.isOwner){ m.innerHTML = '<div class="card">Solo el owner puede ver esta sección.</div>'; return; }
+    if(!state.isOwner){ m.innerHTML = '<div class="card">Solo el dueño puede ver esta sección.</div>'; return; }
     m.innerHTML = `
-      <div class="page-head"><div class="h1">Administradores</div></div>
-      <div class="card" style="margin-bottom:14px">
-        <div class="h2" style="margin-bottom:10px">Agregar administrador</div>
-        <div class="muted" style="margin-bottom:12px;font-size:13px">El usuario debe existir primero en Authentication → Users. Pegá su UUID acá.</div>
+      <div class="page-head"><div class="titles"><div class="h1">Administradores</div><div class="sub">Cuentas con acceso al panel</div></div></div>
+      <div class="card" style="margin-bottom:16px">
+        <h3>Agregar administrador</h3>
+        <div class="muted" style="margin-bottom:14px;font-size:13px">Primero creá al usuario en <b>Authentication → Users</b> desde Supabase. Luego pegá su UUID acá.</div>
         <div class="grid-2">
-          <div><label class="label">UUID de auth.users</label><input class="input" id="nuId"></div>
-          <div><label class="label">Email</label><input class="input" id="nuEmail" type="email"></div>
+          <div><label class="label">UUID del usuario</label><input class="input" id="nuId"></div>
+          <div><label class="label">Correo</label><input class="input" id="nuEmail" type="email"></div>
           <div><label class="label">Nombre</label><input class="input" id="nuName"></div>
-          <div><label class="label">Rol</label><select class="input" id="nuRole"><option value="admin">admin</option><option value="owner">owner</option></select></div>
+          <div><label class="label">Rol</label><select class="input" id="nuRole"><option value="admin">Administrador</option><option value="owner">Dueño</option></select></div>
         </div>
-        <div style="margin-top:12px;text-align:right"><button class="btn primary" id="addAdmin">Agregar</button></div>
+        <div style="margin-top:14px;text-align:right"><button class="btn primary" id="addAdmin">Agregar</button></div>
       </div>
       <div id="adBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
     $('#addAdmin').onclick = async () => {
-      const payload = {
-        user_id: $('#nuId').value.trim(),
-        email: $('#nuEmail').value.trim(),
-        full_name: $('#nuName').value.trim() || null,
-        role: $('#nuRole').value,
-        is_active: true
-      };
-      if(!payload.user_id || !payload.email){ toast('UUID y email obligatorios', true); return; }
+      const payload = { user_id:$('#nuId').value.trim(), email:$('#nuEmail').value.trim(), full_name:$('#nuName').value.trim()||null, role:$('#nuRole').value, is_active:true };
+      if(!payload.user_id || !payload.email){ toast('UUID y correo son obligatorios', true); return; }
       const { error } = await sbJess.from('admin_users').insert(payload);
       if(error){ toast(error.message, true); return; }
-      toast('Admin agregado'); viewAdmins();
+      toast('Administrador agregado'); viewAdmins();
     };
     const { data, error } = await sbJess.from('admin_users').select('*').order('created_at');
-    if(error){ $('#adBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    if(error){ $('#adBox').innerHTML = errBox(error); return; }
     $('#adBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
-      <thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Estado</th><th>Creado</th><th></th></tr></thead>
+      <thead><tr><th>Correo</th><th>Nombre</th><th>Rol</th><th>Estado</th><th>Creado</th><th></th></tr></thead>
       <tbody>${(data||[]).map(a=>`
         <tr>
-          <td><b>${a.email}</b><br><span class="muted" style="font-size:11px;font-family:monospace">${a.user_id}</span></td>
-          <td>${a.full_name||'—'}</td>
-          <td><span class="tag ${a.role==='owner'?'tag-completed':'tag-review'}">${a.role}</span></td>
-          <td>${a.is_active?'<span class="tag tag-approved">ACTIVO</span>':'<span class="tag tag-cancelled">INACTIVO</span>'}</td>
+          <td><b>${escapeHtml(a.email)}</b><br><span class="muted" style="font-size:11px;font-family:monospace">${escapeHtml(a.user_id)}</span></td>
+          <td>${escapeHtml(a.full_name||'—')}</td>
+          <td><span class="tag tag-${a.role}">${(ROLE_LABEL[a.role]||a.role).toUpperCase()}</span></td>
+          <td>${a.is_active ? '<span class="tag tag-active">ACTIVO</span>' : '<span class="tag tag-inactive">INACTIVO</span>'}</td>
           <td>${fmtDate(a.created_at)}</td>
           <td style="text-align:right">
             <button class="btn small" data-toggle="${a.user_id}" data-active="${a.is_active}">${a.is_active?'Desactivar':'Activar'}</button>
-            ${a.user_id!==state.me.id ? `<button class="btn small danger" data-del="${a.user_id}">Eliminar</button>` : ''}
+            ${a.user_id !== state.me.id ? `<button class="btn small danger" data-del="${a.user_id}">Eliminar</button>` : ''}
           </td>
         </tr>`).join('')}</tbody></table></div></div>`;
     document.querySelectorAll('[data-toggle]').forEach(b => b.onclick = async () => {
@@ -760,14 +882,17 @@
       toast('Actualizado'); viewAdmins();
     });
     document.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
-      if(!confirm('¿Eliminar admin?')) return;
+      const ok = await askConfirm({ title:'Eliminar administrador', message:'¿Eliminar este administrador? Perderá acceso al panel.', confirmLabel:'Sí, eliminar', danger:true });
+      if(!ok) return;
       const { error } = await sbJess.from('admin_users').delete().eq('user_id', b.dataset.del);
       if(error){ toast(error.message, true); return; }
       toast('Eliminado'); viewAdmins();
     });
   }
+  window.viewAdmins = viewAdmins;
 
-  // ---- Go
+  function errBox(e){ return `<div class="card" style="border-color:rgba(242,84,91,.4);color:#ffb0b4"><b>Error:</b> ${escapeHtml((e&&e.message)||'algo salió mal')}</div>`; }
+
   boot();
 </script>
 </body>
