@@ -1,0 +1,713 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JESS STORE · Admin</title>
+<link rel="icon" type="image/png" href="uploads/logo-1785247877729.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./backend/supabase-config.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:radial-gradient(1000px 600px at 80% -10%,rgba(41,182,255,.14),transparent 55%),linear-gradient(180deg,#04060f 0%,#060a1a 40%,#04060f 100%);color:#e8eefc;font-family:'Rajdhani',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  a{color:#3ea6ff;text-decoration:none}
+  a:hover{color:#7cc6ff}
+  input,select,button,textarea{font-family:inherit;color:inherit}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:#070b19}
+  ::-webkit-scrollbar-thumb{background:#182645;border-radius:6px}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .btn{background:rgba(41,182,255,.14);border:1.5px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:9px 14px;border-radius:10px;cursor:pointer;font-size:14px;transition:all .18s}
+  .btn:hover{background:rgba(41,182,255,.25);border-color:#3ea6ff}
+  .btn.primary{background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;border:none;font-weight:900}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.danger{background:rgba(242,84,91,.14);border-color:#f2545b;color:#ffb0b4}
+  .btn.danger:hover{background:rgba(242,84,91,.28)}
+  .btn.ghost{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.14);color:#cdd8ef}
+  .btn.small{padding:6px 10px;font-size:12.5px;border-radius:8px}
+  .input{background:#070c1c;border:1px solid rgba(255,255,255,.14);color:#fff;padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;width:100%}
+  .input:focus{outline:none;border-color:#3ea6ff}
+  .label{display:block;font-weight:700;font-size:13px;color:#c3d2ee;margin-bottom:6px;letter-spacing:.3px}
+  .card{background:linear-gradient(180deg,rgba(13,20,44,.85),rgba(7,11,26,.9));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px}
+  .h1{font-family:'Orbitron';font-weight:900;font-size:26px;letter-spacing:.5px}
+  .h2{font-family:'Orbitron';font-weight:800;font-size:18px}
+  .muted{color:#8ea3c8}
+  .tag{display:inline-block;padding:3px 9px;border-radius:100px;font-weight:800;font-size:11px;letter-spacing:.6px;text-transform:uppercase}
+  .tag-pending{background:rgba(255,215,106,.14);color:#ffd76a;border:1px solid rgba(255,215,106,.35)}
+  .tag-review{background:rgba(41,182,255,.14);color:#8fe3ff;border:1px solid rgba(41,182,255,.35)}
+  .tag-paid,.tag-approved{background:rgba(62,232,122,.14);color:#7ff0a5;border:1px solid rgba(62,232,122,.35)}
+  .tag-processing{background:rgba(143,227,255,.14);color:#8fe3ff;border:1px solid rgba(143,227,255,.35)}
+  .tag-completed{background:rgba(62,232,122,.18);color:#3ee87a;border:1px solid rgba(62,232,122,.5)}
+  .tag-cancelled,.tag-rejected{background:rgba(242,84,91,.14);color:#ffb0b4;border:1px solid rgba(242,84,91,.35)}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;vertical-align:middle}
+  th{color:#8ea3c8;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.02)}
+  tr:hover td{background:rgba(41,182,255,.04)}
+
+  /* LOGIN */
+  #login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  #login .card{width:min(420px,100%);text-align:center;padding:30px}
+  #login img{height:110px;margin:0 auto 10px;filter:drop-shadow(0 4px 20px rgba(41,182,255,.55))}
+
+  /* APP LAYOUT */
+  #app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+  aside{background:rgba(4,7,15,.7);border-right:1px solid rgba(245,197,66,.18);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow-y:auto}
+  aside .logo{display:flex;justify-content:center;padding:6px 0 18px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:14px}
+  aside .logo img{height:78px;filter:drop-shadow(0 4px 16px rgba(41,182,255,.55))}
+  aside .nav{display:flex;flex-direction:column;gap:4px;flex:1}
+  aside .nav a{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;color:#cdd8ef;font-weight:700;font-size:15px;cursor:pointer;transition:all .18s}
+  aside .nav a:hover{background:rgba(41,182,255,.1);color:#fff}
+  aside .nav a.active{background:linear-gradient(135deg,rgba(245,197,66,.14),rgba(41,182,255,.14));color:#fff;border:1px solid rgba(245,197,66,.35)}
+  aside .who{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:#8ea3c8}
+  aside .who b{display:block;color:#e8eefc;font-size:14px;margin-bottom:4px;word-break:break-all}
+
+  main{padding:26px 30px;max-width:100%;overflow-x:hidden}
+  .page-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+  .grid-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+  .stat{padding:20px}
+  .stat .k{color:#8ea3c8;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .stat .v{font-family:'Orbitron';font-weight:900;font-size:26px;color:#fff}
+  .stat.gold .v{background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat.blue .v{background:linear-gradient(135deg,#8fe3ff,#3ea6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .table-wrap{background:linear-gradient(180deg,rgba(13,20,44,.85),rgba(7,11,26,.9));border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
+  .table-scroll{overflow-x:auto}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;z-index:100;background:rgba(2,4,10,.75);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
+  .modal-bg.on{display:flex}
+  .modal{width:min(640px,100%);background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.35);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.7);margin:auto 0}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .modal-body{padding:20px 22px}
+  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:flex-end;gap:10px}
+  .close{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:16px}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;background:linear-gradient(135deg,#0d1730,#111d3e);border:1px solid rgba(245,197,66,.4);color:#fff;font-weight:700;padding:12px 20px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.5);display:none}
+  #toast.on{display:block}
+  #toast.err{border-color:#f2545b}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:900px){
+    #app{grid-template-columns:1fr}
+    aside{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;padding:14px;gap:8px}
+    aside .logo{border:none;padding:0;margin:0;flex:1}
+    aside .logo img{height:50px}
+    aside .nav{flex-direction:row;flex-wrap:wrap;flex:100%}
+    aside .who{margin:0;padding:0;border:none;flex:100%}
+    main{padding:18px 14px}
+    .grid-2{grid-template-columns:1fr}
+  }
+
+  .loader{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:#8fe3ff;border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" style="display:none">
+  <div class="card">
+    <img src="uploads/logo-1785247877729.png" alt="JESS STORE">
+    <div class="h1" style="margin:6px 0 4px">Panel de admin</div>
+    <div class="muted" style="margin-bottom:22px">Ingresá con tu cuenta autorizada</div>
+    <form id="loginForm" style="text-align:left;display:flex;flex-direction:column;gap:12px">
+      <div><label class="label">Email</label><input class="input" type="email" name="email" required autocomplete="email"></div>
+      <div><label class="label">Contraseña</label><input class="input" type="password" name="password" required autocomplete="current-password"></div>
+      <button class="btn primary" type="submit" style="padding:13px;font-size:15px;margin-top:6px">Entrar</button>
+      <div id="loginMsg" class="muted" style="text-align:center;font-size:13px;min-height:16px"></div>
+    </form>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <aside>
+    <div class="logo"><img src="uploads/logo-1785247877729.png" alt="JESS"></div>
+    <nav class="nav" id="nav">
+      <a data-view="dashboard" class="active">Dashboard</a>
+      <a data-view="orders">Pedidos</a>
+      <a data-view="sales">Ventas</a>
+      <a data-view="products">Productos</a>
+      <a data-view="settings">Configuración</a>
+      <a data-view="activity">Actividad</a>
+      <a data-view="admins" id="navAdmins" style="display:none">Administradores</a>
+    </nav>
+    <div class="who">
+      <b id="whoEmail">—</b>
+      <span id="whoRole">—</span>
+      <div style="margin-top:10px"><button class="btn ghost small" id="btnLogout">Cerrar sesión</button></div>
+      <div style="margin-top:10px;text-align:center"><a href="/" style="font-size:12px">← Volver al sitio</a></div>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<!-- MODAL GENÉRICO -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="h2" id="modalTitle">—</div>
+      <button class="close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">—</div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ---- Supabase client
+  const cfg = window.JESS_SUPABASE || {};
+  if(!cfg.url || !cfg.anonKey || cfg.anonKey === 'REEMPLAZAR_CON_ANON_KEY'){
+    document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#e8eefc"><h2>Falta configurar Supabase</h2><p>Editá <code>backend/supabase-config.js</code> con tu <b>URL</b> y <b>anon key</b> reales.</p></div>';
+    throw new Error('supabase not configured');
+  }
+  const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
+  // Handles para acceder a schemas expuestos
+  const sbJess  = sb.schema ? sb.schema('jess')       : sb;
+  const sbAdmin = sb.schema ? sb.schema('jess_admin') : sb;
+
+  // ---- Estado global
+  const state = { view:'dashboard', me:null, isOwner:false };
+
+  // ---- UI helpers
+  const $ = s => document.querySelector(s);
+  const el = (t,a={},c=[])=>{ const n=document.createElement(t); for(const k in a){ if(k==='style') Object.assign(n.style,a[k]); else if(k.startsWith('on')) n.addEventListener(k.slice(2),a[k]); else n.setAttribute(k,a[k]); } (Array.isArray(c)?c:[c]).forEach(x=>{ if(x==null) return; n.appendChild(typeof x==='string'?document.createTextNode(x):x); }); return n; };
+  const fmt = n => Number(n||0).toLocaleString('es-PY');
+  const fmtDate = s => { if(!s) return '—'; const d=new Date(s); return d.toLocaleString('es-PY',{dateStyle:'short',timeStyle:'short'}); };
+  const toast = (msg, err=false) => { const t=$('#toast'); t.textContent=msg; t.className = 'on' + (err?' err':''); clearTimeout(toast._t); toast._t = setTimeout(()=>t.className='',2600); };
+  const openModal = (title, body, foot=[]) => { $('#modalTitle').textContent=title; const b=$('#modalBody'); b.innerHTML=''; b.appendChild(body); const f=$('#modalFoot'); f.innerHTML=''; foot.forEach(x=>f.appendChild(x)); $('#modal').classList.add('on'); };
+  window.closeModal = () => $('#modal').classList.remove('on');
+  $('#modal').addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
+
+  const statusTag = s => { const map={pending:'PENDIENTE',payment_review:'REVISAR PAGO',paid:'PAGADO',processing:'EN PROCESO',completed:'COMPLETADO',cancelled:'CANCELADO',rejected:'RECHAZADO',approved:'APROBADO',under_review:'EN REVISIÓN',refunded:'REEMBOLSADO'}; const cls='tag-'+(s||'pending'); return `<span class="tag ${cls}">${map[s]||s||'—'}</span>`; };
+
+  // ---- Auth
+  async function boot(){
+    const { data:{session} } = await sb.auth.getSession();
+    if(!session){ showLogin(); return; }
+    const isAdmin = await checkAdmin();
+    if(!isAdmin){ await sb.auth.signOut(); showLogin('No estás autorizado como admin.'); return; }
+    showApp(session.user);
+  }
+  async function checkAdmin(){
+    try{
+      const { data, error } = await sbAdmin.rpc('is_admin');
+      if(error) throw error;
+      return !!data;
+    }catch(e){ console.error(e); return false; }
+  }
+  function showLogin(msg){
+    $('#app').style.display='none';
+    $('#login').style.display='';
+    if(msg) $('#loginMsg').textContent=msg;
+  }
+  function showApp(user){
+    $('#login').style.display='none';
+    $('#app').style.display='grid';
+    state.me = user;
+    $('#whoEmail').textContent = user.email;
+    // owner?
+    sbAdmin.rpc('is_owner').then(({data})=>{
+      state.isOwner = !!data;
+      $('#whoRole').textContent = state.isOwner ? 'owner' : 'admin';
+      $('#navAdmins').style.display = state.isOwner ? '' : 'none';
+    });
+    router();
+  }
+
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f=e.target; const email=f.email.value.trim(); const password=f.password.value;
+    $('#loginMsg').innerHTML='<span class="loader"></span> Ingresando…';
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if(error){ $('#loginMsg').textContent = error.message || 'Error al ingresar'; return; }
+    const ok = await checkAdmin();
+    if(!ok){ await sb.auth.signOut(); $('#loginMsg').textContent='Tu usuario no está en la lista de admins.'; return; }
+    const { data:{user} } = await sb.auth.getUser();
+    showApp(user);
+  });
+
+  $('#btnLogout').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    location.reload();
+  });
+
+  // ---- Router / Sidebar
+  $('#nav').addEventListener('click', e => {
+    const a = e.target.closest('a[data-view]');
+    if(!a) return;
+    state.view = a.dataset.view;
+    document.querySelectorAll('#nav a').forEach(x=>x.classList.toggle('active', x===a));
+    router();
+  });
+
+  function router(){
+    const v = state.view;
+    if(v==='dashboard') return viewDashboard();
+    if(v==='orders')    return viewOrders();
+    if(v==='sales')     return viewSales();
+    if(v==='products')  return viewProducts();
+    if(v==='settings')  return viewSettings();
+    if(v==='activity')  return viewActivity();
+    if(v==='admins')    return viewAdmins();
+  }
+
+  // ---- Dashboard
+  async function viewDashboard(){
+    const m = $('#main');
+    m.innerHTML = '<div class="page-head"><div class="h1">Dashboard</div><button class="btn ghost" id="reload">Actualizar</button></div><div class="grid-stats" id="stats"><div class="stat card"><div class="k">Cargando…</div><div class="v"><span class="loader"></span></div></div></div><div class="card" id="latest"><div class="h2" style="margin-bottom:14px">Últimos pedidos</div><div class="muted"><span class="loader"></span> cargando…</div></div>';
+    document.getElementById('reload').onclick = viewDashboard;
+
+    const [dash, latest] = await Promise.all([
+      sbAdmin.from('v_dashboard').select('*').single(),
+      sbAdmin.from('v_orders').select('*').order('created_at',{ascending:false}).limit(10)
+    ]);
+
+    const s = dash.data || {};
+    const stats = [
+      { k:'Pedidos hoy',       v:fmt(s.orders_today),      cls:'gold' },
+      { k:'Ingresos hoy',      v:fmt(s.revenue_today)+' Gs', cls:'gold' },
+      { k:'Pedidos pendientes',v:fmt(s.orders_pending),    cls:'blue' },
+      { k:'Completados',       v:fmt(s.orders_completed),  cls:'blue' },
+      { k:'Ingresos totales',  v:fmt(s.revenue_total)+' Gs' },
+      { k:'Clientes',          v:fmt(s.customers_total) },
+      { k:'Productos activos', v:fmt(s.products_active) },
+      { k:'Total pedidos',     v:fmt(s.orders_total) }
+    ];
+    $('#stats').innerHTML = stats.map(x=>`<div class="stat card ${x.cls||''}"><div class="k">${x.k}</div><div class="v">${x.v}</div></div>`).join('');
+
+    const rows = latest.data || [];
+    $('#latest').innerHTML = '<div class="h2" style="margin-bottom:14px">Últimos pedidos</div>' + (rows.length? renderOrdersTable(rows) : '<div class="muted">Sin pedidos aún.</div>');
+    wireOrderRows();
+  }
+
+  // ---- Orders
+  async function viewOrders(){
+    const m = $('#main');
+    m.innerHTML = `
+      <div class="page-head">
+        <div class="h1">Pedidos</div>
+        <div class="row">
+          <select class="input" id="fStatus" style="width:auto">
+            <option value="">Todos los estados</option>
+            <option value="pending">Pendiente</option>
+            <option value="payment_review">Revisar pago</option>
+            <option value="paid">Pagado</option>
+            <option value="processing">En proceso</option>
+            <option value="completed">Completado</option>
+            <option value="cancelled">Cancelado</option>
+            <option value="rejected">Rechazado</option>
+          </select>
+          <button class="btn ghost" id="reload">Actualizar</button>
+        </div>
+      </div>
+      <div id="ordersBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    $('#reload').onclick = viewOrders;
+    $('#fStatus').onchange = loadOrders;
+    loadOrders();
+  }
+
+  async function loadOrders(){
+    const status = $('#fStatus').value;
+    let q = sbAdmin.from('v_orders').select('*').order('created_at',{ascending:false}).limit(200);
+    if(status) q = q.eq('status', status);
+    const { data, error } = await q;
+    if(error){ $('#ordersBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    $('#ordersBox').innerHTML = data.length? renderOrdersTable(data) : '<div class="card muted">Sin resultados.</div>';
+    wireOrderRows();
+  }
+
+  function renderOrdersTable(rows){
+    return `<div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>ID Jugador</th><th>Total</th><th>Estado</th><th>Pago</th><th></th></tr></thead>
+      <tbody>${rows.map(o=>`
+        <tr>
+          <td><b style="font-family:Orbitron">${o.order_number||'—'}</b></td>
+          <td>${fmtDate(o.created_at)}</td>
+          <td>${o.customer_name||'—'}<br><span class="muted" style="font-size:12px">${o.customer_phone||''}</span></td>
+          <td>${o.player_id||'—'}</td>
+          <td><b>${fmt(o.total)} Gs.</b></td>
+          <td>${statusTag(o.status)}</td>
+          <td>${statusTag(o.payment_status)}</td>
+          <td style="text-align:right"><button class="btn small" data-order="${o.id}">Ver</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div></div>`;
+  }
+
+  function wireOrderRows(){
+    document.querySelectorAll('[data-order]').forEach(b=>{
+      b.onclick = () => openOrderDetail(b.dataset.order);
+    });
+  }
+
+  async function openOrderDetail(id){
+    const [{data:o}, items, payments] = await Promise.all([
+      sbAdmin.from('v_orders').select('*').eq('id',id).single(),
+      sbJess.from('order_items').select('*').eq('order_id',id),
+      sbJess.from('payments').select('*').eq('order_id',id).order('created_at',{ascending:false})
+    ]);
+    if(!o){ toast('No se encontró el pedido', true); return; }
+    const body = el('div');
+    body.innerHTML = `
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="card"><div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:6px">CLIENTE</div><b>${o.customer_name}</b><div class="muted">${o.customer_phone||''}</div><div class="muted">${o.customer_email||''}</div></div>
+        <div class="card"><div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:6px">JUGADOR</div><b>ID: ${o.player_id||'—'}</b><div class="muted">${o.player_nickname||''}</div></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">ÍTEMS</div>
+        ${(items.data||[]).map(i=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)"><div>${i.product_name} <span class="muted">× ${i.quantity}</span></div><b>${fmt(i.subtotal)} Gs.</b></div>`).join('')}
+        <div class="row" style="justify-content:space-between;padding-top:12px;font-weight:900"><span>Total</span><span style="font-family:Orbitron;color:#ffd76a">${fmt(o.total)} Gs.</span></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">PAGOS</div>
+        ${(payments.data||[]).length ? (payments.data||[]).map(p=>`
+          <div class="row" style="justify-content:space-between;padding:6px 0;gap:10px;flex-wrap:wrap">
+            <div><b>${p.method}</b> · ${fmt(p.amount)} Gs. ${statusTag(p.status)}</div>
+            <div class="row">
+              <button class="btn small primary" data-approve="${p.id}">Aprobar</button>
+              <button class="btn small danger"  data-reject="${p.id}">Rechazar</button>
+            </div>
+          </div>
+        `).join('') : '<div class="muted">Sin pagos registrados.</div>'}
+        ${o.receipt_url ? `<div style="margin-top:8px"><a href="${o.receipt_url}" target="_blank">Ver comprobante</a></div>` : ''}
+      </div>
+      <div class="card">
+        <div class="k muted" style="font-size:11px;letter-spacing:1px;margin-bottom:10px">CAMBIAR ESTADO</div>
+        <div class="row">
+          <select class="input" id="newStatus" style="flex:1">
+            ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+          </select>
+          <button class="btn primary" id="saveStatus">Guardar</button>
+        </div>
+        ${o.notes ? `<div class="muted" style="margin-top:10px;font-size:13px">Notas: ${o.notes}</div>` : ''}
+      </div>`;
+    openModal('Pedido ' + o.order_number, body, [el('button',{class:'btn ghost', onclick:closeModal},'Cerrar')]);
+    body.querySelector('#saveStatus').onclick = async () => {
+      const st = body.querySelector('#newStatus').value;
+      const { error } = await sbAdmin.rpc('set_order_status', { p_order_id:id, p_status:st, p_notes:null });
+      if(error){ toast(error.message, true); return; }
+      toast('Estado actualizado'); closeModal(); loadOrders && loadOrders();
+    };
+    body.querySelectorAll('[data-approve]').forEach(b=> b.onclick = ()=>reviewPay(b.dataset.approve, true, id));
+    body.querySelectorAll('[data-reject]').forEach(b=> b.onclick = ()=>reviewPay(b.dataset.reject, false, id));
+  }
+
+  async function reviewPay(paymentId, approve, orderId){
+    const { error } = await sbAdmin.rpc('review_payment', { p_payment_id:paymentId, p_approve:approve, p_notes:null });
+    if(error){ toast(error.message, true); return; }
+    toast(approve ? 'Pago aprobado' : 'Pago rechazado');
+    closeModal();
+    openOrderDetail(orderId);
+  }
+
+  // ---- Sales history
+  async function viewSales(){
+    const m = $('#main');
+    const today = new Date().toISOString().slice(0,10);
+    const monthAgo = new Date(Date.now() - 30*24*3600*1000).toISOString().slice(0,10);
+    m.innerHTML = `
+      <div class="page-head">
+        <div class="h1">Historial de ventas</div>
+        <div class="row">
+          <label class="muted" style="font-size:13px">Desde</label>
+          <input type="date" class="input" id="fFrom" value="${monthAgo}" style="width:auto">
+          <label class="muted" style="font-size:13px">Hasta</label>
+          <input type="date" class="input" id="fTo" value="${today}" style="width:auto">
+          <button class="btn primary small" id="applyR">Aplicar</button>
+          <button class="btn ghost small" id="expCsv">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="grid-stats" id="salesStats"></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="h2" style="margin-bottom:12px">Ventas por día</div>
+        <div id="chartWrap" class="muted"><span class="loader"></span> cargando…</div>
+      </div>
+      <div class="card">
+        <div class="h2" style="margin-bottom:12px">Pedidos completados</div>
+        <div id="salesList" class="muted"><span class="loader"></span></div>
+      </div>`;
+    const load = () => loadSales($('#fFrom').value, $('#fTo').value);
+    $('#applyR').onclick = load;
+    $('#expCsv').onclick = () => exportSalesCsv($('#fFrom').value, $('#fTo').value);
+    load();
+  }
+
+  async function loadSales(from, to){
+    const fromTs = from + 'T00:00:00';
+    const toTs   = to   + 'T23:59:59';
+    const { data:orders, error } = await sbAdmin
+      .from('v_orders').select('*')
+      .eq('status','completed')
+      .gte('created_at', fromTs).lte('created_at', toTs)
+      .order('created_at',{ascending:false}).limit(2000);
+    if(error){ $('#salesList').innerHTML = `Error: ${error.message}`; return; }
+
+    const totalRev = (orders||[]).reduce((s,o)=>s+Number(o.total||0),0);
+    const totalOrd = (orders||[]).length;
+    const totalDia = (orders||[]).reduce((s,o)=>s+Number(o.total_diamonds||0),0);
+    const avg      = totalOrd ? Math.round(totalRev/totalOrd) : 0;
+    $('#salesStats').innerHTML = [
+      { k:'Pedidos', v:fmt(totalOrd), cls:'blue' },
+      { k:'Ingresos', v:fmt(totalRev)+' Gs', cls:'gold' },
+      { k:'Ticket promedio', v:fmt(avg)+' Gs' },
+      { k:'Diamantes vendidos', v:fmt(totalDia) }
+    ].map(x=>`<div class="stat card ${x.cls||''}"><div class="k">${x.k}</div><div class="v">${x.v}</div></div>`).join('');
+
+    // Agrupar por día
+    const byDay = {};
+    (orders||[]).forEach(o=>{
+      const d = (o.created_at||'').slice(0,10);
+      if(!byDay[d]) byDay[d] = { day:d, orders:0, revenue:0 };
+      byDay[d].orders += 1;
+      byDay[d].revenue += Number(o.total||0);
+    });
+    const days = Object.values(byDay).sort((a,b)=>a.day<b.day?-1:1);
+    const maxRev = Math.max(1, ...days.map(d=>d.revenue));
+    $('#chartWrap').innerHTML = days.length ? `
+      <div style="display:flex;align-items:flex-end;gap:6px;height:180px;padding:8px 0;overflow-x:auto">
+        ${days.map(d=>{
+          const h = Math.max(4, Math.round(d.revenue / maxRev * 160));
+          return `<div title="${d.day}: ${fmt(d.revenue)} Gs. (${d.orders})" style="flex:0 0 34px;display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:100%;height:${h}px;background:linear-gradient(180deg,#ffe08a,#c9971f);border-radius:5px 5px 0 0"></div>
+            <div class="muted" style="font-size:10px;font-family:monospace">${d.day.slice(5)}</div>
+          </div>`;
+        }).join('')}
+      </div>` : '<div class="muted">Sin ventas en el rango elegido.</div>';
+
+    // Lista de pedidos
+    $('#salesList').innerHTML = (orders||[]).length ? `<div class="table-scroll"><table>
+      <thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>ID Jugador</th><th>Diamantes</th><th>Total</th><th></th></tr></thead>
+      <tbody>${orders.map(o=>`
+        <tr>
+          <td><b style="font-family:Orbitron">${o.order_number}</b></td>
+          <td>${fmtDate(o.created_at)}</td>
+          <td>${o.customer_name}<br><span class="muted" style="font-size:12px">${o.customer_phone||''}</span></td>
+          <td>${o.player_id||'—'}</td>
+          <td>${fmt(o.total_diamonds)}</td>
+          <td><b>${fmt(o.total)} Gs.</b></td>
+          <td style="text-align:right"><button class="btn small" data-order="${o.id}">Ver</button></td>
+        </tr>`).join('')}</tbody></table></div>` : '<div class="muted">No hay pedidos completados en el rango.</div>';
+    wireOrderRows();
+  }
+
+  async function exportSalesCsv(from, to){
+    const { data, error } = await sbAdmin
+      .from('v_orders').select('*')
+      .eq('status','completed')
+      .gte('created_at', from+'T00:00:00').lte('created_at', to+'T23:59:59')
+      .order('created_at',{ascending:true}).limit(5000);
+    if(error){ toast(error.message, true); return; }
+    const cols = ['order_number','created_at','customer_name','customer_phone','player_id','total_diamonds','total','payment_method'];
+    const esc = v => { const s = v==null?'':String(v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+    const lines = [cols.join(',')].concat((data||[]).map(r=>cols.map(c=>esc(r[c])).join(',')));
+    const blob = new Blob([lines.join('\n')], {type:'text/csv;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `ventas_${from}_a_${to}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  // ---- Products
+  async function viewProducts(){
+    const m = $('#main');
+    m.innerHTML = `
+      <div class="page-head">
+        <div class="h1">Productos</div>
+        <button class="btn primary" id="newProd">+ Nuevo</button>
+      </div>
+      <div id="prodBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    $('#newProd').onclick = () => editProduct(null);
+
+    const [{data:cats}, {data:prods, error}] = await Promise.all([
+      sbJess.from('categories').select('*').order('sort_order'),
+      sbJess.from('products').select('*').order('sort_order')
+    ]);
+    if(error){ $('#prodBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    const catMap = Object.fromEntries((cats||[]).map(c=>[c.id, c.name]));
+    $('#prodBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr><th>Nombre</th><th>Categoría</th><th>Diamantes</th><th>Bonus</th><th>Precio</th><th>Estado</th><th>Featured</th><th></th></tr></thead>
+      <tbody>${(prods||[]).map(p=>`
+        <tr>
+          <td><b>${p.name}</b><br><span class="muted" style="font-size:12px">${p.slug}</span></td>
+          <td>${catMap[p.category_id]||'—'}</td>
+          <td>${fmt(p.diamonds)}</td>
+          <td>${fmt(p.bonus_diamonds)}</td>
+          <td><b>${fmt(p.price)} Gs.</b></td>
+          <td>${p.is_active?'<span class="tag tag-approved">ACTIVO</span>':'<span class="tag tag-cancelled">INACTIVO</span>'}</td>
+          <td>${p.is_featured?'⭐':'—'}</td>
+          <td style="text-align:right"><button class="btn small" data-edit="${p.id}">Editar</button></td>
+        </tr>`).join('')}</tbody></table></div></div>`;
+    document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => {
+      editProduct((prods||[]).find(x=>x.id===b.dataset.edit), cats||[]);
+    });
+    window._cats = cats || [];
+  }
+
+  function editProduct(p, cats){
+    cats = cats || window._cats || [];
+    const isNew = !p;
+    p = p || { category_id: cats[0]?.id, is_active:true, is_featured:false, diamonds:0, bonus_diamonds:0, price:0 };
+    const body = el('div');
+    body.innerHTML = `
+      <div class="grid-2">
+        <div><label class="label">Nombre</label><input class="input" id="fname" value="${p.name||''}"></div>
+        <div><label class="label">Slug (único)</label><input class="input" id="fslug" value="${p.slug||''}"></div>
+        <div><label class="label">Categoría</label><select class="input" id="fcat">${cats.map(c=>`<option value="${c.id}" ${c.id===p.category_id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+        <div><label class="label">Precio (Gs.)</label><input class="input" id="fprice" type="number" value="${p.price||0}"></div>
+        <div><label class="label">Diamantes</label><input class="input" id="fdia" type="number" value="${p.diamonds||0}"></div>
+        <div><label class="label">Bonus</label><input class="input" id="fbon" type="number" value="${p.bonus_diamonds||0}"></div>
+        <div><label class="label">Orden</label><input class="input" id="fsort" type="number" value="${p.sort_order||0}"></div>
+        <div><label class="label">URL de imagen</label><input class="input" id="fimg" value="${p.image_url||''}"></div>
+        <div style="grid-column:1/-1"><label class="label">Descripción</label><textarea class="input" id="fdesc" rows="3">${p.description||''}</textarea></div>
+        <div><label class="row"><input type="checkbox" id="factive" ${p.is_active?'checked':''}> <span>Activo</span></label></div>
+        <div><label class="row"><input type="checkbox" id="ffeat" ${p.is_featured?'checked':''}> <span>Destacado (Más popular)</span></label></div>
+      </div>`;
+    const saveBtn = el('button',{class:'btn primary'}, isNew?'Crear':'Guardar');
+    const foot = [el('button',{class:'btn ghost', onclick:closeModal},'Cancelar'), saveBtn];
+    if(!isNew) foot.unshift(el('button',{class:'btn danger', onclick:async()=>{
+      if(!confirm('¿Eliminar producto?')) return;
+      const { error } = await sbJess.from('products').delete().eq('id', p.id);
+      if(error){ toast(error.message, true); return; }
+      toast('Eliminado'); closeModal(); viewProducts();
+    }},'Eliminar'));
+    saveBtn.onclick = async () => {
+      const payload = {
+        name: body.querySelector('#fname').value.trim(),
+        slug: body.querySelector('#fslug').value.trim(),
+        category_id: body.querySelector('#fcat').value,
+        price: Number(body.querySelector('#fprice').value||0),
+        diamonds: Number(body.querySelector('#fdia').value||0),
+        bonus_diamonds: Number(body.querySelector('#fbon').value||0),
+        sort_order: Number(body.querySelector('#fsort').value||0),
+        image_url: body.querySelector('#fimg').value.trim() || null,
+        description: body.querySelector('#fdesc').value.trim() || null,
+        is_active: body.querySelector('#factive').checked,
+        is_featured: body.querySelector('#ffeat').checked
+      };
+      const q = isNew ? sbJess.from('products').insert(payload) : sbJess.from('products').update(payload).eq('id', p.id);
+      const { error } = await q;
+      if(error){ toast(error.message, true); return; }
+      toast(isNew?'Producto creado':'Producto actualizado'); closeModal(); viewProducts();
+    };
+    openModal(isNew?'Nuevo producto':'Editar producto', body, foot);
+  }
+
+  // ---- Settings
+  async function viewSettings(){
+    const m = $('#main');
+    m.innerHTML = `<div class="page-head"><div class="h1">Configuración</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="setBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    $('#reload').onclick = viewSettings;
+    const { data, error } = await sbAdmin.from('settings').select('*').order('key');
+    if(error){ $('#setBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    $('#setBox').innerHTML = (data||[]).map((s,i)=>`
+      <div class="card" style="margin-bottom:12px">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px">
+          <div><b style="font-family:Orbitron">${s.key}</b> <span class="muted">${s.description||''}</span></div>
+          <button class="btn primary small" data-save="${s.key}">Guardar</button>
+        </div>
+        <textarea class="input" data-key="${s.key}" rows="4" style="font-family:monospace;font-size:13px">${JSON.stringify(s.value, null, 2)}</textarea>
+      </div>`).join('');
+    document.querySelectorAll('[data-save]').forEach(b => b.onclick = async () => {
+      const key = b.dataset.save;
+      const ta = document.querySelector(`[data-key="${key}"]`);
+      let value;
+      try{ value = JSON.parse(ta.value); }catch(e){ toast('JSON inválido', true); return; }
+      const { error } = await sbAdmin.from('settings').update({ value }).eq('key', key);
+      if(error){ toast(error.message, true); return; }
+      toast('Guardado');
+    });
+  }
+
+  // ---- Activity
+  async function viewActivity(){
+    const m = $('#main');
+    m.innerHTML = `<div class="page-head"><div class="h1">Actividad</div><button class="btn ghost" id="reload">Actualizar</button></div><div id="actBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    $('#reload').onclick = viewActivity;
+    const { data, error } = await sbAdmin.from('activity_log').select('*').order('created_at',{ascending:false}).limit(200);
+    if(error){ $('#actBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    $('#actBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr><th>Cuándo</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>ID</th><th>Detalle</th></tr></thead>
+      <tbody>${(data||[]).map(r=>`
+        <tr>
+          <td>${fmtDate(r.created_at)}</td>
+          <td>${r.actor_email||'—'}</td>
+          <td><b>${r.action}</b></td>
+          <td>${r.entity||'—'}</td>
+          <td style="font-family:monospace;font-size:12px">${r.entity_id||'—'}</td>
+          <td style="font-family:monospace;font-size:12px;max-width:280px;overflow:hidden;text-overflow:ellipsis">${r.detail?JSON.stringify(r.detail):'—'}</td>
+        </tr>`).join('')}</tbody></table></div></div>`;
+  }
+
+  // ---- Admins (solo owner)
+  async function viewAdmins(){
+    const m = $('#main');
+    if(!state.isOwner){ m.innerHTML = '<div class="card">Solo el owner puede ver esta sección.</div>'; return; }
+    m.innerHTML = `
+      <div class="page-head"><div class="h1">Administradores</div></div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="h2" style="margin-bottom:10px">Agregar administrador</div>
+        <div class="muted" style="margin-bottom:12px;font-size:13px">El usuario debe existir primero en Authentication → Users. Pegá su UUID acá.</div>
+        <div class="grid-2">
+          <div><label class="label">UUID de auth.users</label><input class="input" id="nuId"></div>
+          <div><label class="label">Email</label><input class="input" id="nuEmail" type="email"></div>
+          <div><label class="label">Nombre</label><input class="input" id="nuName"></div>
+          <div><label class="label">Rol</label><select class="input" id="nuRole"><option value="admin">admin</option><option value="owner">owner</option></select></div>
+        </div>
+        <div style="margin-top:12px;text-align:right"><button class="btn primary" id="addAdmin">Agregar</button></div>
+      </div>
+      <div id="adBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
+    $('#addAdmin').onclick = async () => {
+      const payload = {
+        user_id: $('#nuId').value.trim(),
+        email: $('#nuEmail').value.trim(),
+        full_name: $('#nuName').value.trim() || null,
+        role: $('#nuRole').value,
+        is_active: true
+      };
+      if(!payload.user_id || !payload.email){ toast('UUID y email obligatorios', true); return; }
+      const { error } = await sbAdmin.from('admin_users').insert(payload);
+      if(error){ toast(error.message, true); return; }
+      toast('Admin agregado'); viewAdmins();
+    };
+    const { data, error } = await sbAdmin.from('admin_users').select('*').order('created_at');
+    if(error){ $('#adBox').innerHTML = `<div class="card">Error: ${error.message}</div>`; return; }
+    $('#adBox').innerHTML = `<div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Estado</th><th>Creado</th><th></th></tr></thead>
+      <tbody>${(data||[]).map(a=>`
+        <tr>
+          <td><b>${a.email}</b><br><span class="muted" style="font-size:11px;font-family:monospace">${a.user_id}</span></td>
+          <td>${a.full_name||'—'}</td>
+          <td><span class="tag ${a.role==='owner'?'tag-completed':'tag-review'}">${a.role}</span></td>
+          <td>${a.is_active?'<span class="tag tag-approved">ACTIVO</span>':'<span class="tag tag-cancelled">INACTIVO</span>'}</td>
+          <td>${fmtDate(a.created_at)}</td>
+          <td style="text-align:right">
+            <button class="btn small" data-toggle="${a.user_id}" data-active="${a.is_active}">${a.is_active?'Desactivar':'Activar'}</button>
+            ${a.user_id!==state.me.id ? `<button class="btn small danger" data-del="${a.user_id}">Eliminar</button>` : ''}
+          </td>
+        </tr>`).join('')}</tbody></table></div></div>`;
+    document.querySelectorAll('[data-toggle]').forEach(b => b.onclick = async () => {
+      const { error } = await sbAdmin.from('admin_users').update({ is_active: b.dataset.active !== 'true' }).eq('user_id', b.dataset.toggle);
+      if(error){ toast(error.message, true); return; }
+      toast('Actualizado'); viewAdmins();
+    });
+    document.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+      if(!confirm('¿Eliminar admin?')) return;
+      const { error } = await sbAdmin.from('admin_users').delete().eq('user_id', b.dataset.del);
+      if(error){ toast(error.message, true); return; }
+      toast('Eliminado'); viewAdmins();
+    });
+  }
+
+  // ---- Go
+  boot();
+</script>
+</body>
+</html>
