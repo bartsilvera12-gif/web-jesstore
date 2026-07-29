@@ -443,20 +443,29 @@
     <div onClick="{{ closeOrder }}" style="position:fixed;inset:0;z-index:110;background:rgba(2,4,10,.85);backdrop-filter:blur(6px)"></div>
     <div style="position:fixed;inset:0;z-index:111;overflow-y:auto;pointer-events:none;padding:24px 16px;display:flex;align-items:flex-start;justify-content:center">
     <div style="pointer-events:auto;width:min(620px,94vw);background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.45);border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.7)">
-      <div style="padding:26px 26px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)">
-        <div style="width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:rgba(62,232,122,.14);border:1.5px solid #3ee87a;display:flex;align-items:center;justify-content:center;font-size:28px;color:#3ee87a">✓</div>
+
+      <!-- STEP: idle (pantalla de pago + subir comprobante) -->
+      <sc-if value="{{ isStepIdle }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:22px 26px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div style="width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:rgba(62,232,122,.14);border:1.5px solid #3ee87a;display:flex;align-items:center;justify-content:center;font-size:28px;color:#3ee87a">✓</div>
         <h3 style="font-family:'Orbitron';font-weight:900;font-size:22px;color:#fff;margin-bottom:6px">¡Pedido confirmado!</h3>
         <div style="font-family:'Orbitron';font-weight:700;font-size:15px;color:#ffd76a;letter-spacing:1px">{{ orderNumber }}</div>
-        <p style="color:#8ea3c8;font-weight:500;font-size:14px;margin-top:10px">Realizá la transferencia con los datos de abajo y subí tu comprobante.</p>
       </div>
-      <div style="padding:22px 26px">
+      <div style="padding:18px 26px 0">
+        <div style="background:linear-gradient(135deg,rgba(245,197,66,.1),rgba(41,182,255,.05));border:1px solid rgba(245,197,66,.35);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <div style="color:#ffd76a;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:2px">TIEMPO PARA PAGAR</div>
+            <div style="color:#8ea3c8;font-size:12px;font-weight:600">El pedido se cancela cuando llega a 0</div>
+          </div>
+          <div style="font-family:'Orbitron';font-weight:900;font-size:28px;color:{{ countdownColor }};letter-spacing:1px">{{ countdown }}</div>
+        </div>
         <div style="color:#8ea3c8;font-weight:700;letter-spacing:1px;font-size:12px;margin-bottom:10px">RESUMEN</div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px">
           <sc-for list="{{ orderItems }}" as="i" hint-placeholder-count="1">
             <div style="display:flex;justify-content:space-between;gap:12px;color:#dbe6fb;font-weight:600;font-size:15px"><span>{{ i.label }}</span><span style="color:#fff;white-space:nowrap">{{ i.amount }}</span></div>
           </sc-for>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);margin-bottom:18px">
           <span style="color:#8ea3c8;font-weight:700">Total a pagar</span>
           <span style="font-family:'Orbitron';font-weight:900;font-size:24px;color:#ffd76a">{{ orderTotalFmt }} Gs.</span>
         </div>
@@ -468,7 +477,7 @@
             </sc-for>
           </div>
         </div>
-        <label style="display:block;cursor:pointer;border:1.5px dashed rgba(245,197,66,.45);border-radius:14px;padding:18px;text-align:center;margin-bottom:8px;transition:all .2s" style-hover="border-color:#f5c542;background:rgba(245,197,66,.06)">
+        <label style="display:block;cursor:pointer;border:1.5px dashed rgba(245,197,66,.45);border-radius:14px;padding:18px;text-align:center;margin-bottom:10px;transition:all .2s" style-hover="border-color:#f5c542;background:rgba(245,197,66,.06)">
           <input type="file" accept="image/*" onChange="{{ onReceipt }}" style="display:none">
           <div style="color:#ffd76a;font-weight:800;font-size:15px;margin-bottom:4px">Subir comprobante de pago</div>
           <div style="color:#6b7da0;font-size:13px;font-weight:500">JPG o PNG · toca para elegir</div>
@@ -476,14 +485,54 @@
         <sc-if value="{{ hasReceipt }}" hint-placeholder-val="{{ false }}">
           <div style="background:rgba(62,232,122,.1);border:1px solid rgba(62,232,122,.4);border-radius:11px;padding:11px 14px;color:#7ff0a5;font-weight:700;font-size:14px;margin-bottom:16px">✓ {{ receiptName }}</div>
         </sc-if>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
-          <button onClick="{{ sendReceipt }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(37,211,102,.12);border:1.5px solid #25d366;color:#7ff0a5;font-weight:800;padding:14px;border-radius:12px;cursor:pointer;font-size:15px;transition:all .2s" style-hover="background:#25d366;color:#03140a;transform:translateY(-2px)">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4zm-3 3.3c-.2 0-.4 0-.6.3-.2.3-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.2.2 1.6 2.6 4 3.5 1.9.8 2.3.6 2.7.6.4 0 1.3-.5 1.5-1 .2-.6.2-1 .1-1.1l-.6-.3s-1.4-.7-1.6-.8c-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.2-.1-.9-.4-1.8-1.2-.7-.6-1.1-1.3-1.2-1.5-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.3z"/></svg>
-            Enviar comprobante por WhatsApp
+        <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0 22px">
+          <button onClick="{{ startVerify }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:15px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.4px;border:none;box-shadow:0 10px 26px rgba(245,197,66,.35);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,197,66,.55);filter:brightness(1.06)">Verificar comprobante</button>
+          <button onClick="{{ sendReceipt }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(37,211,102,.12);border:1.5px solid #25d366;color:#7ff0a5;font-weight:800;padding:13px;border-radius:12px;cursor:pointer;font-size:15px;transition:all .2s" style-hover="background:#25d366;color:#03140a">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4z"/></svg>
+            Enviar por WhatsApp
           </button>
           <button onClick="{{ closeOrder }}" style="width:100%;background:none;border:none;color:#6b7da0;font-weight:700;padding:8px;cursor:pointer;font-size:14px;font-family:'Rajdhani'">Cerrar</button>
         </div>
       </div>
+      </sc-if>
+
+      <!-- STEP: verifying -->
+      <sc-if value="{{ isStepVerifying }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:60px 30px;text-align:center">
+        <div style="width:88px;height:88px;margin:0 auto 22px;border-radius:50%;border:3px solid rgba(143,227,255,.22);border-top-color:#8fe3ff;animation:jsSpin 1s linear infinite"></div>
+        <h3 style="font-family:'Orbitron';font-weight:900;font-size:22px;color:#fff;margin-bottom:8px">Verificando comprobante…</h3>
+        <p style="color:#8ea3c8;font-weight:500;font-size:14px;max-width:380px;margin:0 auto;line-height:1.5">Estamos revisando tu pago de forma segura. Este proceso puede tardar unos segundos.</p>
+      </div>
+      </sc-if>
+
+      <!-- STEP: done -->
+      <sc-if value="{{ isStepDone }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:26px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div style="width:66px;height:66px;margin:0 auto 14px;border-radius:50%;background:rgba(62,232,122,.16);border:1.5px solid #3ee87a;display:flex;align-items:center;justify-content:center;font-size:34px;color:#3ee87a">✓</div>
+        <div style="color:#3ee87a;font-weight:800;letter-spacing:2px;font-size:12px;margin-bottom:8px">ENTREGA INSTANTÁNEA</div>
+        <h3 style="font-family:'Orbitron';font-weight:900;font-size:24px;color:#fff;margin-bottom:8px">Tus diamantes están activos</h3>
+        <p style="color:#8ea3c8;font-weight:500;font-size:14px">Copiá tu PIN y completá el canje en pocos pasos.</p>
+      </div>
+      <div style="padding:22px 26px">
+        <div style="background:linear-gradient(180deg,rgba(41,182,255,.1),rgba(41,182,255,.02));border:1.5px solid rgba(41,182,255,.5);border-radius:14px;padding:18px;margin-bottom:16px;text-align:center;box-shadow:0 0 30px rgba(41,182,255,.15) inset">
+          <div style="color:#8fe3ff;font-weight:800;letter-spacing:2px;font-size:11px;margin-bottom:8px">PIN DE CANJE</div>
+          <div style="font-family:monospace;font-weight:900;font-size:19px;color:#fff;letter-spacing:2px;word-break:break-all;margin-bottom:12px">{{ orderPin }}</div>
+          <button onClick="{{ copyPin }}" style="background:rgba(41,182,255,.14);border:1px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:9px 18px;border-radius:10px;cursor:pointer;font-size:13px;letter-spacing:.5px" style-hover="background:rgba(41,182,255,.25);border-color:#3ea6ff">Copiar PIN</button>
+        </div>
+        <div style="background:rgba(13,20,44,.55);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:18px;font-size:13.5px;color:#c3d2ee;line-height:1.6">
+          <div style="font-family:'Orbitron';font-weight:800;color:#fff;margin-bottom:8px;font-size:14px;letter-spacing:.5px">CÓMO CANJEAR TUS DIAMANTES</div>
+          <div><b style="color:#ffd76a">1.</b> Copiá tu PIN de arriba.</div>
+          <div><b style="color:#ffd76a">2.</b> Tocá "Canjear ahora" y pegalo en el sitio.</div>
+          <div><b style="color:#ffd76a">3.</b> Ingresá tu ID de jugador y confirmá.</div>
+          <div><b style="color:#ffd76a">4.</b> Los diamantes se acreditan en tu cuenta.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button onClick="{{ openRedeem }}" style="width:100%;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:15px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.5px;border:none;box-shadow:0 10px 26px rgba(245,197,66,.35);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,197,66,.55);filter:brightness(1.06)">CANJEAR AHORA</button>
+          <button onClick="{{ closeOrder }}" style="width:100%;background:none;border:none;color:#6b7da0;font-weight:700;padding:8px;cursor:pointer;font-size:14px;font-family:'Rajdhani'">Cerrar</button>
+        </div>
+      </div>
+      </sc-if>
+
     </div>
     </div>
   </sc-if>
@@ -583,6 +632,7 @@ class Component extends DCLogic {
     form: { firstName:'', lastName:'', cedula:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
     productOpen:false, selOpt:0, modalPlayerId:'',
     order:null, receiptName:'', view:'home',
+    verifyStep:'idle', orderPin:'', countdownSec:0,
     products: [],           // se llena desde Supabase (jess_products_public)
     productsLoading: true,
     submitting: false
@@ -606,7 +656,37 @@ class Component extends DCLogic {
     return 'JESS-'+String(n).padStart(6,'0');
   }
   onReceipt=e=>{ const f=e.target.files&&e.target.files[0]; if(f) this.setState({receiptName:f.name}); };
-  closeOrder=()=>{ this.setState({order:null,receiptName:'',view:'home'}); window.scrollTo({top:0}); };
+  closeOrder=()=>{ this.stopCountdown(); this.setState({order:null,receiptName:'',view:'home',verifyStep:'idle',orderPin:'',countdownSec:0}); window.scrollTo({top:0}); };
+
+  genPin(){
+    const hex = () => Math.floor(Math.random()*16).toString(16).toUpperCase();
+    const seg = n => Array.from({length:n},hex).join('');
+    return seg(8)+'-'+seg(4)+'-'+seg(4)+'-'+seg(4)+'-'+seg(12);
+  }
+  startCountdown(){
+    this.stopCountdown();
+    this._countdownIv = setInterval(()=>{
+      const s = Math.max(0, this.state.countdownSec - 1);
+      this.setState({ countdownSec: s });
+      if(s === 0){ this.stopCountdown(); }
+    }, 1000);
+  }
+  stopCountdown(){ if(this._countdownIv){ clearInterval(this._countdownIv); this._countdownIv=null; } }
+  startVerify=()=>{
+    this.stopCountdown();
+    this.setState({ verifyStep:'verifying' });
+    clearTimeout(this._verifyT);
+    this._verifyT = setTimeout(()=>{
+      this.setState({ verifyStep:'done', orderPin: this.genPin() });
+    }, 2200);
+  };
+  copyPin=()=>{
+    const pin = this.state.orderPin || '';
+    if(!pin) return;
+    if(navigator.clipboard) navigator.clipboard.writeText(pin).then(()=>this.flash('PIN copiado'), ()=>this.flash('No se pudo copiar'));
+    else this.flash('Copiá manualmente el PIN');
+  };
+  openRedeem=()=>{ window.open('https://redeempins.com', '_blank'); };
   sendReceipt=()=>{
     const o=this.state.order; if(!o) return;
     const shortNum = '#' + String(o.number || '').replace(/^JESS-/,'');
@@ -733,8 +813,12 @@ class Component extends DCLogic {
       submitting:false,
       order:{ number:orderNumber, name:f.firstName+' '+f.lastName, playerId:f.cedula, method:f.method,
         whatsapp:f.whatsapp, items, totalFmt, pay:this.payDetails(f.method) },
-      receiptName:''
+      receiptName:'',
+      verifyStep:'idle',
+      orderPin:'',
+      countdownSec:900
     });
+    this.startCountdown();
     this.persist([]);
   };
 
@@ -951,6 +1035,13 @@ class Component extends DCLogic {
       orderMethod:this.state.order?this.state.order.method:'',
       orderPayLines:this.state.order?this.state.order.pay.lines.map(l=>({k:l[0],v:l[1]})):[],
       closeOrder:this.closeOrder, sendReceipt:this.sendReceipt,
+      startVerify:this.startVerify, openRedeem:this.openRedeem, copyPin:this.copyPin,
+      isStepIdle:this.state.verifyStep==='idle',
+      isStepVerifying:this.state.verifyStep==='verifying',
+      isStepDone:this.state.verifyStep==='done',
+      orderPin:this.state.orderPin || '—',
+      countdown:(()=>{ const s=this.state.countdownSec||0; const m=Math.floor(s/60); const r=s%60; return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0'); })(),
+      countdownColor:(this.state.countdownSec||0) < 120 ? '#ff6b6b' : '#ffd76a',
       onReceipt:this.onReceipt, receiptName:this.state.receiptName,
       hasReceipt:!!this.state.receiptName,
       modalPlayerId:this.state.modalPlayerId, onModalId:this.onModalId,
