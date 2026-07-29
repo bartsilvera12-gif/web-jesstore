@@ -133,11 +133,11 @@
       <img class="js-logo" src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
     </a>
     <nav class="js-nav-desktop" style="display:flex;align-items:center;gap:clamp(10px,1.6vw,26px);flex-wrap:wrap">
-      <a href="#inicio" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Inicio</a>
-      <a href="#paquetes" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Comprar diamantes</a>
-      <a href="#proceso" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Cómo funciona</a>
-      <a href="#faq" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Preguntas frecuentes</a>
-      <a href="#contacto" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Contacto</a>
+      <a href="#inicio" style="position:relative;color:#cdd8ef;font-weight:600;font-size:17px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Inicio</a>
+      <a href="#paquetes" style="position:relative;color:#cdd8ef;font-weight:600;font-size:17px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Comprar diamantes</a>
+      <a href="#proceso" style="position:relative;color:#cdd8ef;font-weight:600;font-size:17px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Cómo funciona</a>
+      <a href="#faq" style="position:relative;color:#cdd8ef;font-weight:600;font-size:17px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Preguntas frecuentes</a>
+      <a href="#contacto" style="position:relative;color:#cdd8ef;font-weight:600;font-size:17px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Contacto</a>
     </nav>
     <div style="display:flex;align-items:center;gap:10px">
       <button onClick="{{ openCart }}" style="position:relative;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(41,182,255,.4);color:#dff0ff;font-weight:700;padding:9px 14px;border-radius:12px;cursor:pointer;font-size:14px;transition:all .22s ease" style-hover="background:rgba(41,182,255,.16);border-color:#3ea6ff;box-shadow:0 0 20px rgba(41,182,255,.4);transform:translateY(-2px)">
@@ -227,7 +227,7 @@
       <sc-for list="{{ packages }}" as="p" hint-placeholder-count="6">
         <div class="js-package-card" data-reveal style="{{ p.cardStyle }}" style-hover="transform:translateY(-8px);box-shadow:0 20px 50px rgba(41,182,255,.28);border-color:rgba(41,182,255,.6)">
           <sc-if value="{{ p.tag }}" hint-placeholder-val="OFERTA"><span class="js-package-tag" style="{{ p.tagStyle }}">{{ p.tag }}</span></sc-if>
-          <div style="display:flex;justify-content:center;margin:6px 0 18px"><image-slot id="{{ p.slotId }}" class="js-package-diamond-slot" shape="rounded" radius="10" fit="contain" placeholder="💎" style="width:72px;height:72px;filter:drop-shadow(0 0 14px rgba(41,182,255,.4))"></image-slot></div>
+          <div style="display:flex;justify-content:center;margin:6px 0 18px"><image-slot id="{{ p.slotId }}" class="js-package-diamond-slot" shape="rounded" radius="10" fit="contain" placeholder="" style="width:72px;height:72px;filter:drop-shadow(0 0 14px rgba(41,182,255,.4))"></image-slot></div>
           <div class="js-package-diamonds" style="font-family:'Orbitron';font-weight:900;font-size:clamp(22px,2.4vw,30px);text-align:center;line-height:1.1;color:#fff;white-space:nowrap;letter-spacing:-.5px">{{ p.diamondsFmt }}</div>
           <div class="js-package-label" style="text-align:center;color:#8ea3c8;font-weight:600;letter-spacing:1px;font-size:13px;margin-top:4px;margin-bottom:16px">DIAMANTES</div>
           <div class="js-package-price" style="text-align:center;font-family:'Orbitron';font-weight:700;font-size:24px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:18px">{{ p.priceFmt }} Gs.</div>
@@ -338,7 +338,7 @@
           </sc-for>
         </div>
         <button type="submit" style="width:100%;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:16px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.5px;border:none;box-shadow:0 12px 30px rgba(245,197,66,.35);transition:all .25s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 44px rgba(245,197,66,.55);filter:brightness(1.08)">REALIZAR EL PEDIDO</button>
-        <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">🔒 Nunca pedimos la contraseña de tu cuenta.</div>
+        <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">Nunca pedimos la contraseña de tu cuenta.</div>
       </div>
     </form>
   </section>
@@ -403,7 +403,7 @@
         </div>
       </sc-for>
     </div>
-    <div data-reveal style="margin-top:20px;text-align:center;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:14px;padding:16px;color:#ffd76a;font-weight:700;font-size:15px">🔒 Nunca solicitamos la contraseña de tu cuenta. Solo necesitamos tu ID de jugador.</div>
+    <div data-reveal style="margin-top:20px;text-align:center;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:14px;padding:16px;color:#ffd76a;font-weight:700;font-size:15px">Nunca solicitamos la contraseña de tu cuenta. Solo necesitamos tu ID de jugador.</div>
   </section>
 
   <!-- FOOTER -->
@@ -468,7 +468,7 @@
         </div>
         <label style="display:block;cursor:pointer;border:1.5px dashed rgba(245,197,66,.45);border-radius:14px;padding:18px;text-align:center;margin-bottom:8px;transition:all .2s" style-hover="border-color:#f5c542;background:rgba(245,197,66,.06)">
           <input type="file" accept="image/*" onChange="{{ onReceipt }}" style="display:none">
-          <div style="color:#ffd76a;font-weight:800;font-size:15px;margin-bottom:4px">📎 Subir comprobante de pago</div>
+          <div style="color:#ffd76a;font-weight:800;font-size:15px;margin-bottom:4px">Subir comprobante de pago</div>
           <div style="color:#6b7da0;font-size:13px;font-weight:500">JPG o PNG · toca para elegir</div>
         </label>
         <sc-if value="{{ hasReceipt }}" hint-placeholder-val="{{ false }}">
@@ -498,14 +498,14 @@
         <button onClick="{{ closeProduct }}" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:18px">✕</button>
       </div>
       <div style="padding:22px">
-        <div style="background:rgba(41,182,255,.08);border:1px solid rgba(41,182,255,.25);border-radius:12px;padding:16px;color:#bfe4ff;font-weight:600;font-size:15px;margin-bottom:18px;text-align:center">Se te acreditarán <b style="color:#8fe3ff;font-family:'Orbitron'">{{ modalTotalDiamonds }} 💎</b> en tu cuenta</div>
+        <div style="background:rgba(41,182,255,.08);border:1px solid rgba(41,182,255,.25);border-radius:12px;padding:16px;color:#bfe4ff;font-weight:600;font-size:15px;margin-bottom:18px;text-align:center">Se te acreditarán <b style="color:#8fe3ff;font-family:'Orbitron'">{{ modalTotalDiamonds }} diamantes</b> en tu cuenta</div>
         <div style="text-align:center;font-family:'Orbitron';font-weight:900;font-size:32px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:20px">{{ modalPriceFmt }} Gs.</div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
           <label style="font-weight:700;font-size:14px;color:#c3d2ee">ID del jugador <span style="color:#ff6b6b">*</span></label>
           <input value="{{ modalPlayerId }}" onInput="{{ onModalId }}" placeholder="Ej: 1234567890" style="background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:14px 15px;border-radius:12px;font-size:16px;font-weight:700">
         </div>
         <button onClick="{{ addModal }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ff7a7a,# f2545b);background:linear-gradient(135deg,#ff7a7a,#f2545b);color:#fff;font-weight:900;padding:16px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.6px;border:none;box-shadow:0 12px 30px rgba(242,84,91,.4);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(242,84,91,.6);filter:brightness(1.06)">AÑADIR AL CARRITO</button>
-        <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">🔒 Nunca pedimos tu contraseña, solo tu ID de jugador.</div>
+        <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">Nunca pedimos tu contraseña, solo tu ID de jugador.</div>
       </div>
     </div>
   </sc-if>
@@ -608,7 +608,7 @@ class Component extends DCLogic {
   sendReceipt=()=>{
     const o=this.state.order; if(!o) return;
     const shortNum = '#' + String(o.number || '').replace(/^JESS-/,'');
-    const msg=`¡Hola JESS STORE! Envío el comprobante de mi pedido ${shortNum}.\n\nNombre: ${o.name}\n🏦 ${o.method}\n💰 Total: ${o.totalFmt} Gs.`;
+    const msg=`¡Hola JESS STORE! Envío el comprobante de mi pedido ${shortNum}.\n\nNombre: ${o.name}\n${o.method}\nTotal: ${o.totalFmt} Gs.`;
     window.open(`https://wa.me/${this.wa()}?text=${encodeURIComponent(msg)}`,'_blank');
   };
 
@@ -656,7 +656,7 @@ class Component extends DCLogic {
     });
     this.persist(cart);
     this.setState({ cartOpen:true });
-    this.flash('✅ Agregado al carrito');
+    this.flash('Agregado al carrito');
   }
   changeQty(id,d){ this.persist(this.state.cart.map(x=>x.id===id?{...x,qty:x.qty+d}:x).filter(x=>x.qty>0)); }
   removeFromCart(id){ this.persist(this.state.cart.filter(x=>x.id!==id)); }
@@ -955,7 +955,7 @@ class Component extends DCLogic {
       modalTotalDiamonds:this.fmt((sp.diamonds||0)+(sp.bonusDiamonds||0)), modalPriceFmt:this.fmt(sp.price),
       form:this.state.form, onFormChange:this.onFormChange, onSubmitOrder:this.onSubmitOrder,
       faqs, toast:this.state.toast,
-      heroWaHref:'https://wa.me/'+this.wa()+'?text='+encodeURIComponent('¡Hola JESS STORE! 👋 Quiero recargar diamantes de Free Fire.'),
+      heroWaHref:'https://wa.me/'+this.wa()+'?text='+encodeURIComponent('¡Hola JESS STORE! Quiero recargar diamantes de Free Fire.'),
       whatsappDisplay:this.props.whatsappDisplay || '+595 973 749759',
       stat:{ recargas:this.fmt(this.state.stat.recargas)+'+', minutos:this.state.stat.minutos+' min', satis:this.state.stat.satis+'%' },
       steps:[
