@@ -473,7 +473,13 @@
           <div style="font-family:'Orbitron';font-weight:800;font-size:15px;color:#8fe3ff;margin-bottom:12px">{{ orderMethod }}</div>
           <div style="display:flex;flex-direction:column;gap:9px">
             <sc-for list="{{ orderPayLines }}" as="l" hint-placeholder-count="3">
-              <div style="display:flex;justify-content:space-between;gap:12px;font-size:15px"><span style="color:#8ea3c8;font-weight:600">{{ l.k }}</span><span style="color:#fff;font-weight:700;font-family:'Orbitron';font-size:14px">{{ l.v }}</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px">
+                <span style="color:#8ea3c8;font-weight:600">{{ l.k }}</span>
+                <span style="display:flex;align-items:center;gap:8px">
+                  <span style="color:#fff;font-weight:700;font-family:'Orbitron';font-size:14px">{{ l.v }}</span>
+                  <button onClick="{{ l.copy }}" title="Copiar" style="background:rgba(41,182,255,.14);border:1px solid rgba(41,182,255,.5);color:#bfe4ff;font-weight:800;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px;letter-spacing:.4px;transition:all .18s" style-hover="background:rgba(41,182,255,.28);border-color:#3ea6ff">COPIAR</button>
+                </span>
+              </div>
             </sc-for>
           </div>
         </div>
@@ -707,12 +713,23 @@ class Component extends DCLogic {
       this.setState({ verifyStep:'done', orderPin: this.genPin() });
     }, 2200);
   };
-  copyPin=()=>{
-    const pin = this.state.orderPin || '';
-    if(!pin) return;
-    if(navigator.clipboard) navigator.clipboard.writeText(pin).then(()=>this.flash('PIN copiado'), ()=>this.flash('No se pudo copiar'));
-    else this.flash('Copiá manualmente el PIN');
-  };
+  copyPin=()=>{ this.copyText(this.state.orderPin || '', 'PIN copiado'); };
+  copyText(text, label){
+    const t = String(text||'').trim();
+    if(!t) return;
+    const done = () => this.flash((label||'Copiado')+': '+t);
+    const fail = () => this.flash('No se pudo copiar');
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(t).then(done, fail);
+    } else {
+      try{
+        const ta = document.createElement('textarea');
+        ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        done();
+      }catch(e){ fail(); }
+    }
+  }
   openRedeem=()=>{ window.open('https://redeempins.com', '_blank'); };
   sendReceipt=()=>{
     const o=this.state.order; if(!o) return;
@@ -1074,7 +1091,7 @@ class Component extends DCLogic {
       orderItems:this.state.order?this.state.order.items:[],
       orderTotalFmt:this.state.order?this.state.order.totalFmt:'',
       orderMethod:this.state.order?this.state.order.method:'',
-      orderPayLines:this.state.order?this.state.order.pay.lines.map(l=>({k:l[0],v:l[1]})):[],
+      orderPayLines:this.state.order?this.state.order.pay.lines.map(l=>({k:l[0],v:l[1],copy:()=>this.copyText(l[1])})):[],
       closeOrder:this.closeOrder, sendReceipt:this.sendReceipt,
       startVerify:this.startVerify, openRedeem:this.openRedeem, copyPin:this.copyPin,
       isStepIdle:this.state.verifyStep==='idle',
