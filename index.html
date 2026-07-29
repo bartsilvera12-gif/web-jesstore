@@ -53,34 +53,61 @@
   @keyframes jsShine{0%{transform:translate(-120%,-120%) rotate(25deg)}60%,100%{transform:translate(220%,220%) rotate(25deg)}}
   @keyframes jsScan{0%{top:0}100%{top:100%}}
   @keyframes jsCornerPulse{0%,100%{opacity:.6;filter:drop-shadow(0 0 4px rgba(245,197,66,.6))}50%{opacity:1;filter:drop-shadow(0 0 12px rgba(245,197,66,.95))}}
+  @keyframes jsSlideIn{from{transform:translateX(105%)}to{transform:translateX(0)}}
   .js-hero-card{transition:transform .5s cubic-bezier(.2,.7,.3,1),box-shadow .5s ease}
   .js-hero-card:hover{transform:perspective(1000px) rotateY(-4deg) rotateX(3deg) scale(1.02)}
   .js-hero-card:hover .js-shine{animation-duration:1.8s}
+  .js-hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:0;background:rgba(255,255,255,.04);border:1px solid rgba(41,182,255,.4);border-radius:11px;cursor:pointer;transition:all .2s}
+  .js-hamburger:hover{background:rgba(41,182,255,.16);border-color:#3ea6ff}
+  .js-hamburger span{display:block;width:20px;height:2px;background:#dff0ff;margin:0 auto;border-radius:2px;transition:all .25s}
+  @media (max-width:900px){
+    html{scroll-padding-top:160px}
+    .js-nav-desktop{display:none !important}
+    .js-cta-desktop{display:none !important}
+    .js-hamburger{display:flex}
+    .js-hero-section{padding-top:clamp(180px,22vh,220px) !important}
+    .js-hero-text h1{font-size:clamp(30px,7vw,44px) !important}
+    .js-cart-label{display:none}
+    .js-header{padding:8px clamp(12px,4vw,24px) !important}
+  }
+  @media (max-width:600px){
+    html{scroll-padding-top:150px}
+    .js-hero-section{padding:clamp(170px,20vh,200px) 16px 40px !important;gap:24px !important}
+    .js-hero-card-wrap{max-width:340px !important}
+    .js-logo{height:74px !important}
+    .js-ticker{font-size:12px !important;gap:18px !important}
+    .js-section{padding:40px 16px !important}
+    .js-h2{font-size:26px !important}
+  }
 </style>
 </helmet>
 <div ref="{{ rootRef }}" style="position:relative;overflow:hidden;background:radial-gradient(1200px 700px at 78% -8%,rgba(41,182,255,.16),transparent 55%),radial-gradient(1000px 600px at 10% 10%,rgba(245,197,66,.08),transparent 55%),linear-gradient(180deg,#04060f 0%,#060a1a 40%,#04060f 100%);min-height:100vh">
 
   <!-- HEADER -->
-  <header style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:4px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
+  <header class="js-header" style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between;padding:4px clamp(16px,4vw,48px);background:rgba(6,10,26,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(245,197,66,.22)">
     <div ref="{{ progressRef }}" style="position:absolute;left:0;bottom:-1px;height:3px;width:0%;background:linear-gradient(90deg,#3ea6ff,#8fe3ff,#f5c542);box-shadow:0 0 12px rgba(41,182,255,.8);transition:width .12s linear;z-index:2"></div>
     <a href="#inicio" style="display:flex;align-items:center;gap:12px;transition:transform .25s ease" style-hover="transform:scale(1.05)">
-      <img src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
+      <img class="js-logo" src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
     </a>
-    <nav style="display:flex;align-items:center;gap:clamp(10px,1.6vw,26px);flex-wrap:wrap">
+    <nav class="js-nav-desktop" style="display:flex;align-items:center;gap:clamp(10px,1.6vw,26px);flex-wrap:wrap">
       <a href="#inicio" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Inicio</a>
       <a href="#paquetes" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Comprar diamantes</a>
       <a href="#proceso" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Cómo funciona</a>
       <a href="#faq" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Preguntas frecuentes</a>
       <a href="#contacto" style="position:relative;color:#cdd8ef;font-weight:600;font-size:15px;letter-spacing:.3px;padding:6px 2px;border-bottom:2px solid transparent;transition:color .22s ease,text-shadow .22s ease,border-color .22s ease" style-hover="color:#fff;text-shadow:0 0 14px rgba(41,182,255,.8);border-bottom-color:#f5c542">Contacto</a>
     </nav>
-    <div style="display:flex;align-items:center;gap:12px">
+    <div style="display:flex;align-items:center;gap:10px">
       <button onClick="{{ openCart }}" style="position:relative;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(41,182,255,.4);color:#dff0ff;font-weight:700;padding:9px 14px;border-radius:12px;cursor:pointer;font-size:14px;transition:all .22s ease" style-hover="background:rgba(41,182,255,.16);border-color:#3ea6ff;box-shadow:0 0 20px rgba(41,182,255,.4);transform:translateY(-2px)">
-        Carrito
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="js-cart-label">Carrito</span>
         <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}"><span style="min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffe08a,#f5c542);color:#111;border-radius:11px;font-weight:900;font-size:12px;padding:0 6px;font-family:'Orbitron'">{{ cartCount }}</span></sc-if>
       </button>
-      <a href="#paquetes" style="background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:10px 20px;border-radius:12px;font-size:14px;letter-spacing:.4px;box-shadow:0 6px 20px rgba(245,197,66,.35);transition:all .22s ease" style-hover="transform:translateY(-2px) scale(1.03);box-shadow:0 10px 28px rgba(245,197,66,.6);filter:brightness(1.08)">COMPRAR AHORA</a>
+      <a href="#paquetes" class="js-cta-desktop" style="background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:10px 20px;border-radius:12px;font-size:14px;letter-spacing:.4px;box-shadow:0 6px 20px rgba(245,197,66,.35);transition:all .22s ease" style-hover="transform:translateY(-2px) scale(1.03);box-shadow:0 10px 28px rgba(245,197,66,.6);filter:brightness(1.08)">COMPRAR AHORA</a>
+      <button onClick="{{ toggleMenu }}" class="js-hamburger" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <div style="width:100%;order:9;overflow:hidden;margin:6px 0 -4px;padding:8px 0;border-top:1px solid rgba(41,182,255,.18);background:linear-gradient(90deg,rgba(5,8,18,.9),rgba(10,16,36,.9),rgba(5,8,18,.9));mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
+    <div class="js-ticker" style="width:100%;order:9;overflow:hidden;margin:6px 0 -4px;padding:8px 0;border-top:1px solid rgba(41,182,255,.18);background:linear-gradient(90deg,rgba(5,8,18,.9),rgba(10,16,36,.9),rgba(5,8,18,.9));mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
       <div style="display:flex;width:max-content;gap:34px;animation:jsTicker 42s linear infinite">
         <sc-for list="{{ ticker }}" as="t" hint-placeholder-count="16">
           <div style="display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:13.5px;font-weight:600;color:#9db0d4">
@@ -96,10 +123,35 @@
     </div>
   </header>
 
+  <!-- MOBILE MENU -->
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:85;background:rgba(2,4,10,.72);backdrop-filter:blur(6px)"></div>
+    <aside style="position:fixed;top:0;right:0;bottom:0;z-index:86;width:min(320px,88vw);display:flex;flex-direction:column;background:linear-gradient(180deg,#080d1e,#050813);border-left:1px solid rgba(245,197,66,.28);box-shadow:-20px 0 60px rgba(0,0,0,.6);animation:jsSlideIn .32s cubic-bezier(.2,.7,.3,1)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid rgba(255,255,255,.08)">
+        <img src="uploads/logo-1785247877729.png" alt="JESS STORE" style="height:52px;width:auto;filter:drop-shadow(0 4px 16px rgba(41,182,255,.5))">
+        <button onClick="{{ closeMenu }}" aria-label="Cerrar menú" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:19px">✕</button>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:4px;padding:20px 16px;flex:1;overflow-y:auto">
+        <a href="#inicio" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;color:#dbe6fb;font-weight:700;font-size:16px;transition:all .2s">Inicio</a>
+        <a href="#paquetes" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;color:#dbe6fb;font-weight:700;font-size:16px;transition:all .2s">Comprar diamantes</a>
+        <a href="#proceso" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;color:#dbe6fb;font-weight:700;font-size:16px;transition:all .2s">Cómo funciona</a>
+        <a href="#faq" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;color:#dbe6fb;font-weight:700;font-size:16px;transition:all .2s">Preguntas frecuentes</a>
+        <a href="#contacto" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;color:#dbe6fb;font-weight:700;font-size:16px;transition:all .2s">Contacto</a>
+      </nav>
+      <div style="padding:16px 20px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:10px">
+        <a href="#paquetes" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:13px;border-radius:12px;font-size:15px;letter-spacing:.4px;box-shadow:0 8px 22px rgba(245,197,66,.35)">COMPRAR AHORA</a>
+        <a href="{{ heroWaHref }}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(37,211,102,.14);border:1px solid #25d366;color:#7ff0a5;font-weight:800;padding:12px;border-radius:12px;font-size:14px">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </aside>
+  </sc-if>
+
   <!-- HERO -->
-  <section id="inicio" style="position:relative;padding:clamp(265px,27vh,295px) clamp(16px,5vw,64px) clamp(60px,8vh,90px);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(30px,4vw,60px);justify-content:center">
+  <section id="inicio" class="js-hero-section" style="position:relative;padding:clamp(265px,27vh,295px) clamp(16px,5vw,64px) clamp(60px,8vh,90px);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(30px,4vw,60px);justify-content:center">
     <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
-    <div style="position:relative;z-index:2;flex:1 1 440px;max-width:640px;animation:jsFadeUp .8s ease both">
+    <div class="js-hero-text" style="position:relative;z-index:2;flex:1 1 440px;max-width:640px;animation:jsFadeUp .8s ease both">
       <h1 style="font-family:'Orbitron';font-weight:900;font-size:clamp(34px,5.4vw,58px);line-height:1.05;letter-spacing:-.5px;margin-bottom:20px;text-wrap:balance">
         Recargá tus <span style="background:linear-gradient(135deg,#8fe3ff,#29b6ff);-webkit-background-clip:text;background-clip:text;color:transparent">diamantes</span> de forma <span style="background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent">rápida y segura</span>
       </h1>
@@ -108,7 +160,7 @@
         <a href="#paquetes" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:16px 30px;border-radius:14px;font-size:16px;letter-spacing:.5px;box-shadow:0 10px 30px rgba(245,197,66,.35);transition:all .25s ease;position:relative;overflow:hidden" style-hover="transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px rgba(245,197,66,.6);filter:brightness(1.08)" style-after="content:'';position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:jsSweep 3.4s ease-in-out infinite">VER PAQUETES</a>
       </div>
     </div>
-    <div style="position:relative;z-index:2;flex:1 1 360px;max-width:520px;display:flex;justify-content:center;animation:jsFadeUp 1s ease both;perspective:1200px">
+    <div class="js-hero-card-wrap" style="position:relative;z-index:2;flex:1 1 360px;max-width:520px;display:flex;justify-content:center;animation:jsFadeUp 1s ease both;perspective:1200px">
       <div style="position:absolute;width:min(460px,86%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(41,182,255,.4),transparent 65%);filter:blur(38px);animation:jsHalo 6s ease-in-out infinite;pointer-events:none;z-index:0"></div>
       <div style="position:absolute;width:min(420px,80%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(245,197,66,.22),transparent 60%);filter:blur(50px);animation:jsHalo 8s ease-in-out infinite reverse;pointer-events:none;z-index:0"></div>
       <div class="js-hero-card" style="position:relative;width:100%;max-width:460px;aspect-ratio:4/5;border-radius:24px;padding:2px;background:linear-gradient(160deg,#3ea6ff,#8fe3ff 35%,#f5c542 70%,#ffe08a);box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(41,182,255,.25)">
@@ -120,9 +172,10 @@
           <svg style="position:absolute;top:10px;right:10px;width:34px;height:34px;animation:jsCornerPulse 2.6s ease-in-out infinite .3s;z-index:4" viewBox="0 0 34 34" fill="none" stroke="#f5c542" stroke-width="2.4" stroke-linecap="round"><path d="M22 2h10v10"/></svg>
           <svg style="position:absolute;bottom:10px;left:10px;width:34px;height:34px;animation:jsCornerPulse 2.6s ease-in-out infinite .6s;z-index:4" viewBox="0 0 34 34" fill="none" stroke="#f5c542" stroke-width="2.4" stroke-linecap="round"><path d="M2 22v10h10"/></svg>
           <svg style="position:absolute;bottom:10px;right:10px;width:34px;height:34px;animation:jsCornerPulse 2.6s ease-in-out infinite .9s;z-index:4" viewBox="0 0 34 34" fill="none" stroke="#f5c542" stroke-width="2.4" stroke-linecap="round"><path d="M32 22v10H22"/></svg>
-          <div style="position:absolute;top:24px;left:24px;right:24px;display:flex;justify-content:center;z-index:5"><img src="uploads/logo-1785247877729.png" style="width:80%;filter:drop-shadow(0 6px 20px rgba(41,182,255,.6))"></div>
-          <div style="position:absolute;inset:64px 24px 24px;animation:jsFloat 5s ease-in-out infinite;z-index:1">
-            <image-slot id="hero-diamantes" shape="rounded" radius="18" fit="cover" placeholder="Subí la imagen oficial de diamantes Free Fire" style="width:100%;height:100%"></image-slot>
+          <div style="position:absolute;top:20px;left:24px;right:24px;display:flex;justify-content:center;z-index:5"><img src="uploads/logo-1785247877729.png" style="width:70%;filter:drop-shadow(0 6px 20px rgba(41,182,255,.6))"></div>
+          <div style="position:absolute;inset:0;z-index:1;overflow:hidden;border-radius:22px">
+            <img src="uploads/hero-freefire.png" alt="Free Fire" style="width:100%;height:100%;object-fit:cover;object-position:center;animation:jsFloat 6s ease-in-out infinite">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,6,15,.5) 0%,rgba(4,6,15,0) 22%,rgba(4,6,15,0) 60%,rgba(4,6,15,.55) 100%);pointer-events:none"></div>
           </div>
           <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(4,6,15,.72);border:1px solid rgba(245,197,66,.5);border-radius:100px;font-family:'Orbitron';font-weight:800;font-size:11px;letter-spacing:2px;color:#ffd76a;backdrop-filter:blur(6px);z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.5)">
             <span style="width:6px;height:6px;border-radius:50%;background:#3ee87a;box-shadow:0 0 8px #3ee87a;animation:jsPulse 1.6s ease-in-out infinite"></span>
@@ -497,6 +550,7 @@ class Component extends DCLogic {
   state = {
     cart: this._load(),
     cartOpen: false,
+    menuOpen: false,
     openFaq: 0,
     custom: '',
     toast: null,
@@ -598,6 +652,8 @@ class Component extends DCLogic {
   onFormChange = e => this.setState({ form: { ...this.state.form, [e.target.name]: e.target.value } });
   openCart = () => this.setState({ cartOpen:true });
   closeCart = () => this.setState({ cartOpen:false });
+  toggleMenu = () => this.setState({ menuOpen: !this.state.menuOpen });
+  closeMenu = () => this.setState({ menuOpen:false });
   toggleFaq(i){ this.setState({ openFaq: this.state.openFaq===i ? -1 : i }); }
 
   cartCheckout = () => { this.openCheckout(); };
@@ -826,6 +882,7 @@ class Component extends DCLogic {
       packages, cartItems,
       custom:this.state.custom, onCustomChange:this.onCustomChange, addCustom:()=>this.addCustom(), customPriceFmt,
       cartOpen:this.state.cartOpen, openCart:this.openCart, closeCart:this.closeCart, cartCheckout:this.cartCheckout,
+      menuOpen:this.state.menuOpen, toggleMenu:this.toggleMenu, closeMenu:this.closeMenu,
       cartCount:this.cartCount(), cartTotalFmt:this.fmt(this.cartTotal()),
       hasItems:this.state.cart.length>0, cartEmpty:this.state.cart.length===0,
       drawerStyle,
