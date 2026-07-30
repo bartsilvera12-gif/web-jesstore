@@ -84,8 +84,8 @@
     .js-ticker{font-size:12px !important;gap:18px !important}
     .js-section{padding:40px 16px !important}
     .js-h2{font-size:26px !important}
-    .js-packages-grid,.js-steps-grid,.js-payments-grid,.js-trust-grid{grid-template-columns:repeat(2,1fr) !important;gap:12px !important}
-    .js-step-card,.js-pay-card,.js-trust-card{padding:16px 12px !important;border-radius:14px !important}
+    .js-packages-grid,.js-steps-grid,.js-payments-grid,.js-trust-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important}
+    .js-step-card,.js-pay-card,.js-trust-card{padding:14px 10px !important;border-radius:14px !important;min-width:0 !important;overflow:hidden}
     .js-step-n{font-size:32px !important;margin-bottom:8px !important}
     .js-step-title,.js-pay-title,.js-trust-title{font-size:14px !important;margin-bottom:4px !important}
     .js-step-desc,.js-pay-desc,.js-trust-desc{font-size:12.5px !important;line-height:1.4 !important}
@@ -335,7 +335,7 @@
             <div onClick="{{ m.pick }}" style="{{ m.rowStyle }}">
               <span style="{{ m.dotStyle }}"><span style="{{ m.innerStyle }}"></span></span>
               <span style="flex:1;color:#e8eefc;font-weight:700;font-size:15px">{{ m.name }}</span>
-              <image-slot id="{{ m.slotId }}" shape="rounded" radius="9" fit="cover" placeholder="logo" style="width:64px;height:34px;flex-shrink:0;background:rgba(255,255,255,.07)"></image-slot>
+              <img src="uploads/{{ m.slotId }}.webp" alt="{{ m.name }}" style="width:64px;height:34px;flex-shrink:0;object-fit:contain;border-radius:9px;background:rgba(255,255,255,.07);padding:4px">
             </div>
           </sc-for>
         </div>
@@ -356,7 +356,7 @@
     <div class="js-payments-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
       <sc-for list="{{ payments }}" as="m" hint-placeholder-count="3">
         <div class="js-pay-card" data-reveal style="display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,rgba(13,20,44,.8),rgba(7,11,26,.8));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .25s ease" style-hover="transform:translateY(-5px);border-color:rgba(245,197,66,.45);box-shadow:0 16px 40px rgba(0,0,0,.4)">
-          <image-slot id="{{ m.slotId }}" shape="rounded" radius="16" fit="cover" placeholder="logo" style="width:64px;height:64px;flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)"></image-slot>
+          <img src="uploads/{{ m.slotId }}.webp" alt="{{ m.name }}" style="width:64px;height:64px;flex-shrink:0;object-fit:contain;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:6px">
           <div><div class="js-pay-title" style="font-family:'Orbitron';font-weight:700;font-size:17px;color:#fff">{{ m.name }}</div><div class="js-pay-desc" style="color:#8ea3c8;font-size:14px;font-weight:500">{{ m.desc }}</div></div>
         </div>
       </sc-for>
