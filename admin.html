@@ -133,6 +133,22 @@
   .close:hover{background:rgba(41,182,255,.18);border-color:#3ea6ff}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   @keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+  /* CUSTOM DROPDOWN */
+  .cs{position:relative;font-family:inherit}
+  .cs-btn{width:100%;background:#070c1c;border:1px solid rgba(255,255,255,.14);color:#fff;padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;transition:border-color .18s}
+  .cs-btn:hover{border-color:#3ea6ff}
+  .cs.open > .cs-btn{border-color:#3ea6ff;box-shadow:0 0 0 3px rgba(41,182,255,.15)}
+  .cs-current{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cs-chev{color:#8fe3ff;font-size:11px;transition:transform .18s;flex-shrink:0}
+  .cs.open .cs-chev{transform:rotate(180deg)}
+  .cs-panel{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:150;max-height:280px;overflow-y:auto;background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(41,182,255,.45);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.7);padding:6px;animation:popIn .16s cubic-bezier(.2,.7,.3,1.2)}
+  .cs-panel[hidden]{display:none}
+  .cs-opt{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;padding:10px 12px;background:transparent;border:none;color:#dbe6fb;font-weight:600;font-size:14px;cursor:pointer;border-radius:8px;text-align:left;transition:all .12s}
+  .cs-opt:hover{background:rgba(41,182,255,.14);color:#fff}
+  .cs-opt.selected{background:rgba(245,197,66,.15);color:#ffd76a}
+  .cs-opt-price{color:#8ea3c8;font-family:'Orbitron';font-size:13px;flex-shrink:0}
+  .cs-opt.selected .cs-opt-price{color:#ffd76a}
 </style>
 </head>
 <body>
@@ -425,9 +441,19 @@
       box.innerHTML = items.map((it, idx) => {
         const p = products.find(x => x.id === it.product_id) || products[0];
         const subtotal = Number(p.price||0) * Number(it.quantity||1);
+        const opts = (products||[]).map(o => `<button type="button" class="cs-opt ${o.id===it.product_id?'selected':''}" data-cs-pick="${idx}" data-cs-value="${o.id}"><span>${escapeHtml(o.name)}</span><span class="cs-opt-price">${fmt(o.price)} Gs.</span></button>`).join('');
         return `
           <div style="display:grid;grid-template-columns:1fr 100px 130px 44px;gap:10px;align-items:end;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-            <div><label class="label">Producto</label><select class="input" data-item="${idx}" data-f="product_id">${productOptions().replace(`value="${it.product_id}"`, `value="${it.product_id}" selected`)}</select></div>
+            <div>
+              <label class="label">Producto</label>
+              <div class="cs" data-cs="${idx}">
+                <button type="button" class="cs-btn" data-cs-toggle="${idx}">
+                  <span class="cs-current">${escapeHtml(p.name)} · ${fmt(p.price)} Gs.</span>
+                  <span class="cs-chev">▼</span>
+                </button>
+                <div class="cs-panel" data-cs-panel="${idx}" hidden>${opts}</div>
+              </div>
+            </div>
             <div><label class="label">Cantidad</label><input class="input" type="number" min="1" value="${it.quantity}" data-item="${idx}" data-f="quantity"></div>
             <div><label class="label">Subtotal</label><div class="input" style="display:flex;align-items:center;background:rgba(255,255,255,.02)"><b style="color:#ffd76a;font-family:Orbitron">${fmt(subtotal)} Gs.</b></div></div>
             <div><label class="label" style="opacity:0">.</label><button class="btn danger small" data-remove="${idx}" ${items.length===1?'disabled style="opacity:.3;cursor:not-allowed"':''} title="Quitar">✕</button></div>
@@ -439,21 +465,51 @@
         return s + Number(p.price||0) * Number(it.quantity||1);
       }, 0);
       if(totalEl) totalEl.textContent = fmt(total) + ' Gs.';
-      // Wire item inputs
-      box.querySelectorAll('[data-item]').forEach(el => {
+      // Wire cantidad
+      box.querySelectorAll('input[data-item]').forEach(el => {
         el.addEventListener('input', () => {
           const idx = Number(el.dataset.item);
-          const f = el.dataset.f;
-          items[idx][f] = f === 'quantity' ? Number(el.value||1) : el.value;
+          items[idx].quantity = Number(el.value||1);
           renderItemsList();
         });
       });
+      // Wire custom dropdown toggle
+      box.querySelectorAll('[data-cs-toggle]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const idx = btn.dataset.csToggle;
+          const cs = btn.closest('.cs');
+          const panel = cs.querySelector('.cs-panel');
+          const wasOpen = cs.classList.contains('open');
+          // cerrar cualquier otro
+          document.querySelectorAll('.cs.open').forEach(x => { x.classList.remove('open'); const p = x.querySelector('.cs-panel'); if(p) p.hidden = true; });
+          if(!wasOpen){ cs.classList.add('open'); panel.hidden = false; }
+        });
+      });
+      // Wire custom dropdown pick
+      box.querySelectorAll('[data-cs-pick]').forEach(opt => {
+        opt.addEventListener('click', e => {
+          e.stopPropagation();
+          const idx = Number(opt.dataset.csPick);
+          items[idx].product_id = opt.dataset.csValue;
+          renderItemsList();
+        });
+      });
+      // Wire eliminar ítem
       box.querySelectorAll('[data-remove]').forEach(b => b.onclick = () => {
         if(items.length <= 1) return;
         items.splice(Number(b.dataset.remove), 1);
         renderItemsList();
       });
     };
+
+    // Cerrar dropdowns al click fuera
+    if(!window._csOutsideBound){
+      window._csOutsideBound = true;
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.cs.open').forEach(x => { x.classList.remove('open'); const p = x.querySelector('.cs-panel'); if(p) p.hidden = true; });
+      });
+    }
 
     const body = `
       <div class="grid-2">
