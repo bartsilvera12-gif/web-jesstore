@@ -367,6 +367,7 @@
             ${['pending','payment_review','paid','processing','completed','cancelled','rejected'].map(s=>`<option value="${s}">${STATUS_LABEL[s]}</option>`).join('')}
           </select>
           <button class="btn ghost" onclick="viewOrders()">Actualizar</button>
+          <button class="btn primary" onclick="openManualOrderModal()">+ Cargar pedido manual</button>
         </div>
       </div>
       <div id="ordersBox"><div class="muted"><span class="loader"></span> cargando…</div></div>`;
@@ -405,6 +406,152 @@
   function wireOrderRows(){
     document.querySelectorAll('[data-order]').forEach(b => b.onclick = () => openOrderModal(b.dataset.order));
   }
+
+  // ---- PEDIDO MANUAL (crear desde admin: p. ej. venta por WhatsApp)
+  async function openManualOrderModal(){
+    openModal({ title:'Cargar pedido manual', bodyHtml:'<div class="muted"><span class="loader"></span> cargando…</div>', size:'wide' });
+    const { data:products, error } = await sbJess.from('products').select('*').eq('is_active', true).order('sort_order');
+    if(error){ openModal({ title:'Error', bodyHtml:errBox(error), size:'narrow', actions:[{label:'Cerrar', style:'ghost', onClick:closeModal}] }); return; }
+    if(!(products||[]).length){ openModal({ title:'Sin productos', bodyHtml:'<div class="muted">Cargá al menos un producto en la sección Productos antes de crear pedidos manuales.</div>', size:'narrow', actions:[{label:'Cerrar', style:'ghost', onClick:closeModal}] }); return; }
+
+    // Estado local del formulario
+    const items = [{ product_id: products[0].id, quantity: 1 }];
+
+    const productOptions = () => (products||[]).map(p => `<option value="${p.id}">${escapeHtml(p.name)} · ${fmt(p.price)} Gs.</option>`).join('');
+
+    const renderItemsList = () => {
+      const box = document.getElementById('manualItems');
+      if(!box) return;
+      box.innerHTML = items.map((it, idx) => {
+        const p = products.find(x => x.id === it.product_id) || products[0];
+        const subtotal = Number(p.price||0) * Number(it.quantity||1);
+        return `
+          <div style="display:grid;grid-template-columns:1fr 100px 130px 44px;gap:10px;align-items:end;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+            <div><label class="label">Producto</label><select class="input" data-item="${idx}" data-f="product_id">${productOptions().replace(`value="${it.product_id}"`, `value="${it.product_id}" selected`)}</select></div>
+            <div><label class="label">Cantidad</label><input class="input" type="number" min="1" value="${it.quantity}" data-item="${idx}" data-f="quantity"></div>
+            <div><label class="label">Subtotal</label><div class="input" style="display:flex;align-items:center;background:rgba(255,255,255,.02)"><b style="color:#ffd76a;font-family:Orbitron">${fmt(subtotal)} Gs.</b></div></div>
+            <div><label class="label" style="opacity:0">.</label><button class="btn danger small" data-remove="${idx}" ${items.length===1?'disabled style="opacity:.3;cursor:not-allowed"':''} title="Quitar">✕</button></div>
+          </div>`;
+      }).join('');
+      const totalEl = document.getElementById('manualTotal');
+      const total = items.reduce((s, it) => {
+        const p = products.find(x => x.id === it.product_id) || {price:0};
+        return s + Number(p.price||0) * Number(it.quantity||1);
+      }, 0);
+      if(totalEl) totalEl.textContent = fmt(total) + ' Gs.';
+      // Wire item inputs
+      box.querySelectorAll('[data-item]').forEach(el => {
+        el.addEventListener('input', () => {
+          const idx = Number(el.dataset.item);
+          const f = el.dataset.f;
+          items[idx][f] = f === 'quantity' ? Number(el.value||1) : el.value;
+          renderItemsList();
+        });
+      });
+      box.querySelectorAll('[data-remove]').forEach(b => b.onclick = () => {
+        if(items.length <= 1) return;
+        items.splice(Number(b.dataset.remove), 1);
+        renderItemsList();
+      });
+    };
+
+    const body = `
+      <div class="grid-2">
+        <div><label class="label">Nombre del cliente <span style="color:#ff6b6b">*</span></label><input class="input" id="mName" placeholder="Nombre y apellido"></div>
+        <div><label class="label">Teléfono <span style="color:#ff6b6b">*</span></label><input class="input" id="mPhone" placeholder="+595 9XX XXX XXX"></div>
+        <div><label class="label">Correo (opcional)</label><input class="input" id="mEmail" type="email" placeholder="correo@ejemplo.com"></div>
+        <div><label class="label">ID del jugador <span style="color:#ff6b6b">*</span></label><input class="input" id="mPlayer" placeholder="ID de Free Fire"></div>
+        <div><label class="label">Método de pago</label>
+          <select class="input" id="mMethod">
+            <option>Transferencia Bancaria</option>
+            <option>Tigo Money</option>
+            <option>Billetera Personal</option>
+            <option>Efectivo</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div><label class="label">Estado inicial</label>
+          <select class="input" id="mStatus">
+            <option value="pending">Pendiente (esperando pago)</option>
+            <option value="paid">Pagado</option>
+            <option value="completed" selected>Completado (ya se cargaron los diamantes)</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:14px"><label class="label">Notas (opcional)</label><textarea class="input" id="mNotes" rows="2" placeholder="Ej: venta por WhatsApp, ya se envió comprobante"></textarea></div>
+
+      <div style="margin-top:22px">
+        <div class="row" style="justify-content:space-between;margin-bottom:6px">
+          <div><b class="h2">Ítems del pedido</b></div>
+          <button class="btn small" id="addItem">+ Agregar ítem</button>
+        </div>
+        <div id="manualItems"></div>
+        <div class="row" style="justify-content:flex-end;margin-top:14px;padding-top:14px;border-top:1px solid rgba(245,197,66,.3)">
+          <div style="font-family:Orbitron;font-weight:900;font-size:18px">Total: <span id="manualTotal" style="color:#ffd76a">0 Gs.</span></div>
+        </div>
+      </div>`;
+
+    const saveHandler = async () => {
+      const name  = $('#mName').value.trim();
+      const phone = $('#mPhone').value.trim();
+      const email = $('#mEmail').value.trim() || null;
+      const player_id = $('#mPlayer').value.trim();
+      const method = $('#mMethod').value;
+      const initStatus = $('#mStatus').value;
+      const notes = $('#mNotes').value.trim() || null;
+      if(!name)      { toast('Falta el nombre del cliente', true); return; }
+      if(!phone)     { toast('Falta el teléfono', true); return; }
+      if(!player_id) { toast('Falta el ID del jugador', true); return; }
+      if(!items.length) { toast('Agregá al menos un ítem', true); return; }
+
+      const payload = {
+        customer: { name, phone, email },
+        player_id,
+        payment_method: method,
+        discount: 0,
+        notes,
+        items: items.map(it => {
+          const p = products.find(x => x.id === it.product_id);
+          return {
+            product_id: p.id,
+            product_name: p.name,
+            diamonds: p.diamonds,
+            bonus_diamonds: p.bonus_diamonds || 0,
+            quantity: Number(it.quantity||1),
+            unit_price: Number(p.price||0)
+          };
+        })
+      };
+      const { data, error } = await sb.rpc('create_jess_order', { payload });
+      if(error){ toast(error.message, true); return; }
+      const newId = data && data.order_id;
+      if(newId && initStatus !== 'pending'){
+        await sbJess.rpc('set_order_status', { p_order_id:newId, p_status:initStatus, p_notes:notes });
+      }
+      toast('Pedido registrado: ' + (data && data.order_number || ''));
+      closeModal();
+      if(state.view === 'orders') loadOrders();
+      if(state.view === 'dashboard') viewDashboard();
+    };
+
+    openModal({
+      title: 'Cargar pedido manual',
+      subtitle: 'Registrar una venta hecha por WhatsApp u otro canal',
+      size: 'wide',
+      bodyHtml: body,
+      actions: [
+        { label:'Cancelar', style:'ghost', onClick:closeModal },
+        { label:'Registrar pedido', style:'primary', onClick:saveHandler }
+      ]
+    });
+
+    renderItemsList();
+    document.getElementById('addItem').onclick = () => {
+      items.push({ product_id: products[0].id, quantity: 1 });
+      renderItemsList();
+    };
+  }
+  window.openManualOrderModal = openManualOrderModal;
 
   // ---- PEDIDO DETALLE (modal)
   async function openOrderModal(id){
