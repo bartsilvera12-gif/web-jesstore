@@ -652,7 +652,32 @@ class Component extends DCLogic {
     let n=1; try{ n=parseInt(localStorage.getItem('jess_seq')||'0',10)+1; localStorage.setItem('jess_seq',String(n)); }catch(e){}
     return 'JESS-'+String(n).padStart(6,'0');
   }
-  onReceipt=e=>{ const f=e.target.files&&e.target.files[0]; if(f) this.setState({receiptName:f.name}); };
+  onReceipt=async e=>{
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    this.setState({ receiptName: f.name, receiptUploading: true });
+    try{
+      const sb = window.jessSb;
+      const orderId = this.state.order && this.state.order.id;
+      if(!sb || !orderId) throw new Error('no-order');
+      const ext = (f.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+      const path = `${orderId}-${Date.now()}.${ext}`;
+      const up = await sb.storage.from('receipts').upload(path, f, { upsert:true, contentType: f.type || 'image/jpeg' });
+      if(up.error) throw up.error;
+      const pub = sb.storage.from('receipts').getPublicUrl(path);
+      const url = pub && pub.data && pub.data.publicUrl;
+      if(!url) throw new Error('sin-url');
+      const rpc = await sb.rpc('attach_jess_receipt', { p_order_id: orderId, p_url: url });
+      if(rpc.error) throw rpc.error;
+      this.setState({ receiptUploading:false, receiptUrl:url });
+      this._persistOrder({ receiptUrl:url, receiptName:f.name });
+      this.flash('Comprobante subido');
+    }catch(err){
+      console.error('[JESS] Error subiendo comprobante:', err);
+      this.setState({ receiptUploading:false });
+      this.flash('No se pudo subir el comprobante');
+    }
+  };
   closeOrder=()=>{ this.stopCountdown(); try{ localStorage.removeItem('jess_active_order'); }catch(e){} this._orderExpiresAt=null; this.setState({order:null,receiptName:'',view:'home',verifyStep:'idle',orderPin:'',countdownSec:0}); window.scrollTo({top:0}); };
 
   _persistOrder(patch){
@@ -728,7 +753,8 @@ class Component extends DCLogic {
     const o=this.state.order; if(!o) return;
     const shortNum = '#' + String(o.number || '').replace(/^JESS-/,'');
     const itemsList = (o.items||[]).map(i => `• ${i.label} — ${i.amount} Gs.`).join('\n');
-    const msg = `¡Hola JESS STORE! 👋 Envío el comprobante de mi pedido ${shortNum}.\n\n👤 ${o.name}\n\n🎮 Pedido:\n${itemsList}\n\n💳 ${o.method}\n💰 Total: ${o.totalFmt} Gs.`;
+    const wave='\u{1F44B}', person='\u{1F464}', game='\u{1F3AE}', card='\u{1F4B3}', money='\u{1F4B0}';
+    const msg = `¡Hola JESS STORE! ${wave} Envío el comprobante de mi pedido ${shortNum}.\n\n${person} ${o.name}\n\n${game} Pedido:\n${itemsList}\n\n${card} ${o.method}\n${money} Total: ${o.totalFmt} Gs.`;
     window.open(`https://wa.me/${this.wa()}?text=${encodeURIComponent(msg)}`,'_blank');
   };
 
@@ -841,6 +867,7 @@ class Component extends DCLogic {
         const { data, error } = await sb.rpc('create_jess_order', { payload });
         if(error) throw error;
         orderNumber = data && data.order_number;
+        var newOrderId = data && data.order_id;
       }catch(err){
         console.error('[JESS] Error creando el pedido:', err);
         this.flash('No se pudo registrar el pedido, guardamos una copia local');
@@ -848,7 +875,7 @@ class Component extends DCLogic {
     }
     if(!orderNumber) orderNumber = this.nextOrderNumber(); // fallback offline
 
-    const newOrder = { number:orderNumber, name:f.firstName+' '+f.lastName, playerId:f.cedula, method:f.method,
+    const newOrder = { id:newOrderId||null, number:orderNumber, name:f.firstName+' '+f.lastName, playerId:f.cedula, method:f.method,
       whatsapp:f.whatsapp, items, totalFmt, pay:this.payDetails(f.method) };
     const expiresAt = Date.now() + 900*1000;
     this._orderExpiresAt = expiresAt;

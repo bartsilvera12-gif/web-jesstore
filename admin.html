@@ -511,28 +511,41 @@
       });
     }
 
+    const methodOpts = [
+      { value:'Transferencia Bancaria', label:'Transferencia Bancaria' },
+      { value:'Tigo Money',             label:'Tigo Money' },
+      { value:'Billetera Personal',     label:'Billetera Personal' },
+      { value:'Efectivo',               label:'Efectivo' },
+      { value:'Otro',                   label:'Otro' }
+    ];
+    const statusOpts = [
+      { value:'pending',   label:'Pendiente (esperando pago)' },
+      { value:'paid',      label:'Pagado' },
+      { value:'completed', label:'Completado (ya se cargaron los diamantes)' }
+    ];
+    const formSel = { method:'Transferencia Bancaria', status:'completed' };
+
+    const csHtml = (id, options, currentValue) => {
+      const current = options.find(o => o.value === currentValue) || options[0];
+      return `<div class="cs" data-cs="${id}">
+        <button type="button" class="cs-btn" data-cs-toggle="${id}">
+          <span class="cs-current">${escapeHtml(current.label)}</span>
+          <span class="cs-chev">▼</span>
+        </button>
+        <div class="cs-panel" data-cs-panel="${id}" hidden>
+          ${options.map(o => `<button type="button" class="cs-opt ${o.value===currentValue?'selected':''}" data-cs-pick="${id}" data-cs-value="${escapeHtml(o.value)}">${escapeHtml(o.label)}</button>`).join('')}
+        </div>
+      </div>`;
+    };
+
     const body = `
       <div class="grid-2">
         <div><label class="label">Nombre del cliente <span style="color:#ff6b6b">*</span></label><input class="input" id="mName" placeholder="Nombre y apellido"></div>
         <div><label class="label">Teléfono <span style="color:#ff6b6b">*</span></label><input class="input" id="mPhone" placeholder="+595 9XX XXX XXX"></div>
         <div><label class="label">Correo (opcional)</label><input class="input" id="mEmail" type="email" placeholder="correo@ejemplo.com"></div>
         <div><label class="label">ID del jugador <span style="color:#ff6b6b">*</span></label><input class="input" id="mPlayer" placeholder="ID de Free Fire"></div>
-        <div><label class="label">Método de pago</label>
-          <select class="input" id="mMethod">
-            <option>Transferencia Bancaria</option>
-            <option>Tigo Money</option>
-            <option>Billetera Personal</option>
-            <option>Efectivo</option>
-            <option>Otro</option>
-          </select>
-        </div>
-        <div><label class="label">Estado inicial</label>
-          <select class="input" id="mStatus">
-            <option value="pending">Pendiente (esperando pago)</option>
-            <option value="paid">Pagado</option>
-            <option value="completed" selected>Completado (ya se cargaron los diamantes)</option>
-          </select>
-        </div>
+        <div><label class="label">Método de pago</label>${csHtml('mMethod', methodOpts, formSel.method)}</div>
+        <div><label class="label">Estado inicial</label>${csHtml('mStatus', statusOpts, formSel.status)}</div>
       </div>
       <div style="margin-top:14px"><label class="label">Notas (opcional)</label><textarea class="input" id="mNotes" rows="2" placeholder="Ej: venta por WhatsApp, ya se envió comprobante"></textarea></div>
 
@@ -552,8 +565,8 @@
       const phone = $('#mPhone').value.trim();
       const email = $('#mEmail').value.trim() || null;
       const player_id = $('#mPlayer').value.trim();
-      const method = $('#mMethod').value;
-      const initStatus = $('#mStatus').value;
+      const method = formSel.method;
+      const initStatus = formSel.status;
       const notes = $('#mNotes').value.trim() || null;
       if(!name)      { toast('Falta el nombre del cliente', true); return; }
       if(!phone)     { toast('Falta el teléfono', true); return; }
@@ -606,6 +619,35 @@
       items.push({ product_id: products[0].id, quantity: 1 });
       renderItemsList();
     };
+
+    // Wire de los dropdowns custom de método/estado
+    const wireTopSelect = (id, opts, target, key) => {
+      const cs = document.querySelector(`[data-cs="${id}"]`);
+      if(!cs) return;
+      const btn   = cs.querySelector('.cs-btn');
+      const panel = cs.querySelector('.cs-panel');
+      const label = cs.querySelector('.cs-current');
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const wasOpen = cs.classList.contains('open');
+        document.querySelectorAll('.cs.open').forEach(x => { x.classList.remove('open'); const p = x.querySelector('.cs-panel'); if(p) p.hidden = true; });
+        if(!wasOpen){ cs.classList.add('open'); panel.hidden = false; }
+      });
+      panel.querySelectorAll('.cs-opt').forEach(opt => {
+        opt.addEventListener('click', e => {
+          e.stopPropagation();
+          const v = opt.dataset.csValue;
+          target[key] = v;
+          const found = opts.find(o => o.value === v);
+          if(found && label) label.textContent = found.label;
+          panel.querySelectorAll('.cs-opt').forEach(o => o.classList.toggle('selected', o.dataset.csValue === v));
+          cs.classList.remove('open');
+          panel.hidden = true;
+        });
+      });
+    };
+    wireTopSelect('mMethod', methodOpts, formSel, 'method');
+    wireTopSelect('mStatus', statusOpts, formSel, 'status');
   }
   window.openManualOrderModal = openManualOrderModal;
 
