@@ -450,19 +450,11 @@
         </table>
       </div>
 
-      <div class="card" style="margin-top:14px"><h3>Pagos</h3>
+      <div class="card" style="margin-top:14px"><h3>Método de pago</h3>
         ${(payments||[]).length ? (payments||[]).map(p => `
-          <div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);gap:10px;flex-wrap:wrap">
-            <div>
-              <b>${escapeHtml(p.method)}</b> · ${fmt(p.amount)} Gs.
-              <span style="margin-left:8px">${statusTag(p.status)}</span>
-              <div class="muted" style="font-size:12px;margin-top:3px">${fmtDate(p.created_at)}${p.reviewed_at ? ' · Revisado '+fmtDate(p.reviewed_at) : ''}</div>
-            </div>
-            ${p.status==='pending' || p.status==='under_review' ? `
-              <div class="row">
-                <button class="btn small success" data-approve="${p.id}">Aprobar</button>
-                <button class="btn small danger" data-reject="${p.id}">Rechazar</button>
-              </div>` : ''}
+          <div style="padding:8px 0">
+            <b>${escapeHtml(p.method)}</b> · ${fmt(p.amount)} Gs.
+            <div class="muted" style="font-size:12px;margin-top:3px">Pedido creado ${fmtDate(p.created_at)}</div>
           </div>
         `).join('') : '<div class="muted">Sin pagos registrados.</div>'}
         ${o.receipt_url ? `<div style="margin-top:10px"><a href="${escapeHtml(o.receipt_url)}" target="_blank">Ver comprobante subido</a></div>` : ''}
@@ -504,24 +496,6 @@
       if(state.view === 'dashboard') viewDashboard();
       if(state.view === 'sales') loadSales($('#fFrom').value, $('#fTo').value);
     };
-    document.querySelectorAll('[data-approve]').forEach(b => b.onclick = () => reviewPay(b.dataset.approve, true, id));
-    document.querySelectorAll('[data-reject]').forEach(b => b.onclick = () => reviewPay(b.dataset.reject, false, id));
-  }
-
-  async function reviewPay(paymentId, approve, orderId){
-    const ok = await askConfirm({
-      title: approve ? 'Aprobar pago' : 'Rechazar pago',
-      message: approve
-        ? 'El pedido va a quedar marcado como pagado. ¿Confirmás?'
-        : 'El pedido va a quedar marcado como rechazado. ¿Confirmás?',
-      confirmLabel: approve ? 'Sí, aprobar' : 'Sí, rechazar',
-      danger: !approve
-    });
-    if(!ok) return;
-    const { error } = await sbJess.rpc('review_payment', { p_payment_id:paymentId, p_approve:approve, p_notes:null });
-    if(error){ toast(error.message, true); return; }
-    toast(approve ? 'Pago aprobado' : 'Pago rechazado');
-    openOrderModal(orderId);
   }
 
   // =====================================================================
