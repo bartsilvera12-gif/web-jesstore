@@ -669,7 +669,10 @@
         is_active: $('#factive').checked,
         is_featured: $('#ffeat').checked
       };
-      if(!payload.name || !payload.slug){ toast('Nombre y slug son obligatorios', true); return; }
+      if(!payload.name){ toast('Falta el nombre del paquete', true); return; }
+      if(!payload.slug){ toast('Falta el identificador (slug)', true); return; }
+      if(payload.diamonds <= 0){ toast('Los diamantes base deben ser mayor a 0', true); return; }
+      if(payload.price < 0){ toast('El precio no puede ser negativo', true); return; }
       const q = isNew ? sbJess.from('products').insert(payload) : sbJess.from('products').update(payload).eq('id', id);
       const { error } = await q;
       if(error){ toast(error.message, true); return; }
@@ -703,6 +706,29 @@
       bodyHtml: body,
       actions
     });
+
+    // Auto-generar slug mientras el usuario tipea (mientras no lo edite a mano)
+    const slugify = s => String(s||'').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);
+    const slugInput = $('#fslug');
+    const nameInput = $('#fname');
+    const diaInput  = $('#fdia');
+    const bonInput  = $('#fbon');
+    let slugTouched = !!(p.slug && p.slug.length);
+    slugInput.addEventListener('input', () => { slugTouched = true; });
+    const autoSlug = () => {
+      if(slugTouched) return;
+      const d = Number(diaInput.value||0);
+      const b = Number(bonInput.value||0);
+      let s = '';
+      if(d > 0) s = 'ff-' + (d + b);
+      else if(nameInput.value.trim()) s = slugify(nameInput.value);
+      slugInput.value = s;
+    };
+    nameInput.addEventListener('input', autoSlug);
+    diaInput.addEventListener('input', autoSlug);
+    bonInput.addEventListener('input', autoSlug);
   }
   window.openProductModal = openProductModal;
 
