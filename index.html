@@ -494,48 +494,10 @@
           <div style="background:rgba(62,232,122,.1);border:1px solid rgba(62,232,122,.4);border-radius:11px;padding:11px 14px;color:#7ff0a5;font-weight:700;font-size:14px;margin-bottom:16px">✓ {{ receiptName }}</div>
         </sc-if>
         <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0 22px">
-          <button onClick="{{ startVerify }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:15px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.4px;border:none;box-shadow:0 10px 26px rgba(245,197,66,.35);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,197,66,.55);filter:brightness(1.06)">Verificar comprobante</button>
-          <button onClick="{{ sendReceipt }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(37,211,102,.12);border:1.5px solid #25d366;color:#7ff0a5;font-weight:800;padding:13px;border-radius:12px;cursor:pointer;font-size:15px;transition:all .2s" style-hover="background:#25d366;color:#03140a">
+          <button onClick="{{ sendReceipt }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#25d366,#128c4b);border:none;color:#03140a;font-weight:900;padding:15px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.4px;box-shadow:0 10px 26px rgba(37,211,102,.35);transition:all .2s" style-hover="transform:translateY(-2px);filter:brightness(1.06)">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 0 16 8 8 0 0 1-4.1-1.1l-.3-.2-2.5.8.8-2.4-.2-.3A8 8 0 0 1 12 4z"/></svg>
-            Enviar por WhatsApp
+            Enviar comprobante por WhatsApp
           </button>
-          <button onClick="{{ closeOrder }}" style="width:100%;background:none;border:none;color:#6b7da0;font-weight:700;padding:8px;cursor:pointer;font-size:14px;font-family:'Rajdhani'">Cerrar</button>
-        </div>
-      </div>
-      </sc-if>
-
-      <!-- STEP: verifying -->
-      <sc-if value="{{ isStepVerifying }}" hint-placeholder-val="{{ false }}">
-      <div style="padding:60px 30px;text-align:center">
-        <div style="width:88px;height:88px;margin:0 auto 22px;border-radius:50%;border:3px solid rgba(143,227,255,.22);border-top-color:#8fe3ff;animation:jsSpin 1s linear infinite"></div>
-        <h3 style="font-family:'Orbitron';font-weight:900;font-size:22px;color:#fff;margin-bottom:8px">Verificando comprobante…</h3>
-        <p style="color:#8ea3c8;font-weight:500;font-size:14px;max-width:380px;margin:0 auto;line-height:1.5">Estamos revisando tu pago de forma segura. Este proceso puede tardar unos segundos.</p>
-      </div>
-      </sc-if>
-
-      <!-- STEP: done -->
-      <sc-if value="{{ isStepDone }}" hint-placeholder-val="{{ false }}">
-      <div style="padding:26px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)">
-        <div style="width:66px;height:66px;margin:0 auto 14px;border-radius:50%;background:rgba(62,232,122,.16);border:1.5px solid #3ee87a;display:flex;align-items:center;justify-content:center;font-size:34px;color:#3ee87a">✓</div>
-        <div style="color:#3ee87a;font-weight:800;letter-spacing:2px;font-size:12px;margin-bottom:8px">ENTREGA INSTANTÁNEA</div>
-        <h3 style="font-family:'Orbitron';font-weight:900;font-size:24px;color:#fff;margin-bottom:8px">Tus diamantes están activos</h3>
-        <p style="color:#8ea3c8;font-weight:500;font-size:14px">Copiá tu PIN y completá el canje en pocos pasos.</p>
-      </div>
-      <div style="padding:22px 26px">
-        <div style="background:linear-gradient(180deg,rgba(41,182,255,.1),rgba(41,182,255,.02));border:1.5px solid rgba(41,182,255,.5);border-radius:14px;padding:18px;margin-bottom:16px;text-align:center;box-shadow:0 0 30px rgba(41,182,255,.15) inset">
-          <div style="color:#8fe3ff;font-weight:800;letter-spacing:2px;font-size:11px;margin-bottom:8px">PIN DE CANJE</div>
-          <div style="font-family:monospace;font-weight:900;font-size:19px;color:#fff;letter-spacing:2px;word-break:break-all;margin-bottom:12px">{{ orderPin }}</div>
-          <button onClick="{{ copyPin }}" style="background:rgba(41,182,255,.14);border:1px solid rgba(41,182,255,.55);color:#bfe4ff;font-weight:800;padding:9px 18px;border-radius:10px;cursor:pointer;font-size:13px;letter-spacing:.5px" style-hover="background:rgba(41,182,255,.25);border-color:#3ea6ff">Copiar PIN</button>
-        </div>
-        <div style="background:rgba(13,20,44,.55);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:18px;font-size:13.5px;color:#c3d2ee;line-height:1.6">
-          <div style="font-family:'Orbitron';font-weight:800;color:#fff;margin-bottom:8px;font-size:14px;letter-spacing:.5px">CÓMO CANJEAR TUS DIAMANTES</div>
-          <div><b style="color:#ffd76a">1.</b> Copiá tu PIN de arriba.</div>
-          <div><b style="color:#ffd76a">2.</b> Tocá "Canjear ahora" y pegalo en el sitio.</div>
-          <div><b style="color:#ffd76a">3.</b> Ingresá tu ID de jugador y confirmá.</div>
-          <div><b style="color:#ffd76a">4.</b> Los diamantes se acreditan en tu cuenta.</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <button onClick="{{ openRedeem }}" style="width:100%;background:linear-gradient(135deg,#ffe08a,#f5c542,#c9971f);color:#1a1204;font-weight:900;padding:15px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.5px;border:none;box-shadow:0 10px 26px rgba(245,197,66,.35);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(245,197,66,.55);filter:brightness(1.06)">CANJEAR AHORA</button>
           <button onClick="{{ closeOrder }}" style="width:100%;background:none;border:none;color:#6b7da0;font-weight:700;padding:8px;cursor:pointer;font-size:14px;font-family:'Rajdhani'">Cerrar</button>
         </div>
       </div>
@@ -1051,26 +1013,15 @@ class Component extends DCLogic {
     const base = (this.state.products && this.state.products.length)
       ? this.state.products
       : this.fallbackProducts();
-    const packages = base.map(p=>{
-      const label = this.fmt(p.diamonds) + (p.bonusDiamonds ? ' + ' + this.fmt(p.bonusDiamonds) : '');
-      return {
-        slotId: 'diam-'+p.id,
-        diamondsFmt: label,
-        priceFmt: this.fmt(p.price),
-        tag: p.tag,
-        cardStyle: p.featured ? cardFeat : cardBase,
-        tagStyle: p.featured ? tagGold : tagBlue,
-        add: ()=>this.addToCart({
-          id: p.id,
-          productId: p.id,
-          name: label + ' diamantes',
-          diamonds: p.diamonds,
-          bonusDiamonds: p.bonusDiamonds || 0,
-          price: p.price,
-          type: 'diamond'
-        })
-      };
-    });
+    const packages = base.map(p=>({
+      slotId: 'diam-'+p.id,
+      diamondsFmt: this.fmt(p.diamonds) + (p.bonusDiamonds ? ' + ' + this.fmt(p.bonusDiamonds) : ''),
+      priceFmt: this.fmt(p.price),
+      tag: p.tag,
+      cardStyle: p.featured ? cardFeat : cardBase,
+      tagStyle: p.featured ? tagGold : tagBlue,
+      add: ()=>this.openProduct(p)
+    }));
 
     const cn = parseInt(this.state.custom,10);
     const customPriceFmt = (cn && cn>=100) ? ('≈ '+this.fmt(Math.round(cn*this.rate()/500)*500)+' Gs.') : 'Precio estimado según cantidad';
