@@ -148,6 +148,12 @@
     </div>
   </header>
 
+  <!-- HORARIO -->
+  <div style="background:linear-gradient(90deg,rgba(62,232,122,.1),rgba(41,182,255,.06),rgba(62,232,122,.1));border-bottom:1px solid rgba(62,232,122,.25);padding:8px clamp(16px,4vw,32px);text-align:center;font-weight:700;font-size:clamp(11px,1.4vw,13px);color:#c3d2ee;letter-spacing:.6px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+    <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#3ee87a;box-shadow:0 0 10px #3ee87a;animation:jsPulse 1.8s ease-in-out infinite"></span><b style="color:#7ff0a5;letter-spacing:1px">HORARIO</b></span>
+    <span>07:00 A 23:00 HS · TODOS LOS DÍAS <span style="color:#8ea3c8">(incluidos feriados)</span></span>
+  </div>
+
   <!-- MOBILE MENU -->
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:85;background:rgba(2,4,10,.72);backdrop-filter:blur(6px)"></div>
