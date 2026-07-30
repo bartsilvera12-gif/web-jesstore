@@ -675,7 +675,8 @@ class Component extends DCLogic {
     }catch(err){
       console.error('[JESS] Error subiendo comprobante:', err);
       this.setState({ receiptUploading:false });
-      this.flash('No se pudo subir el comprobante');
+      const detail = (err && (err.message || err.error_description)) || 'error desconocido';
+      this.flash('Comprobante: ' + detail);
     }
   };
   closeOrder=()=>{ this.stopCountdown(); try{ localStorage.removeItem('jess_active_order'); }catch(e){} this._orderExpiresAt=null; this.setState({order:null,receiptName:'',view:'home',verifyStep:'idle',orderPin:'',countdownSec:0}); window.scrollTo({top:0}); };
