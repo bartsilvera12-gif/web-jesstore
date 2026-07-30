@@ -414,13 +414,34 @@
           <td><b>${fmt(o.total)} Gs.</b></td>
           <td>${statusTag(o.status)}</td>
           <td>${statusTag(o.payment_status)}</td>
-          <td style="text-align:right"><button class="btn small" data-order="${o.id}">Ver detalle</button></td>
+          <td style="text-align:right;white-space:nowrap">
+            <button class="btn small" data-order="${o.id}">Ver</button>
+            <button class="btn small danger" data-order-del="${o.id}" data-order-num="${escapeHtml(o.order_number||'')}" title="Eliminar pedido" style="padding:6px 9px;margin-left:6px">✕</button>
+          </td>
         </tr>`).join('')}
       </tbody>
     </table></div></div>`;
   }
   function wireOrderRows(){
     document.querySelectorAll('[data-order]').forEach(b => b.onclick = () => openOrderModal(b.dataset.order));
+    document.querySelectorAll('[data-order-del]').forEach(b => b.onclick = async e => {
+      e.stopPropagation();
+      const id  = b.dataset.orderDel;
+      const num = b.dataset.orderNum;
+      const ok = await askConfirm({
+        title: 'Eliminar pedido',
+        message: `¿Eliminar ${num}? Esta acción no se puede deshacer y también borra sus ítems y pagos.`,
+        confirmLabel: 'Sí, eliminar',
+        danger: true
+      });
+      if(!ok) return;
+      const { error } = await sbJess.from('orders').delete().eq('id', id);
+      if(error){ toast(error.message, true); return; }
+      toast('Pedido eliminado');
+      if(state.view === 'orders') loadOrders();
+      if(state.view === 'dashboard') viewDashboard();
+      if(state.view === 'sales') loadSales($('#fFrom').value, $('#fTo').value);
+    });
   }
 
   // ---- PEDIDO MANUAL (crear desde admin: p. ej. venta por WhatsApp)
