@@ -733,12 +733,32 @@
         <div class="muted" style="font-size:12.5px;margin-top:10px">Marcá <b>Completado</b> cuando ya acreditaste los diamantes al jugador. Recién ahí suma a ingresos totales.</div>
       </div>`;
 
+    const delHandler = async () => {
+      const ok = await askConfirm({
+        title: 'Eliminar pedido',
+        message: `¿Eliminar el pedido ${o.order_number}? Esta acción no se puede deshacer y también borra sus ítems y pagos.`,
+        confirmLabel: 'Sí, eliminar',
+        danger: true
+      });
+      if(!ok){ openOrderModal(id); return; }
+      const { error } = await sbJess.from('orders').delete().eq('id', id);
+      if(error){ toast(error.message, true); return; }
+      toast('Pedido eliminado');
+      closeModal();
+      if(state.view === 'orders') loadOrders();
+      if(state.view === 'dashboard') viewDashboard();
+      if(state.view === 'sales') loadSales($('#fFrom').value, $('#fTo').value);
+    };
+
     openModal({
       title: 'Pedido ' + (o.order_number||''),
       subtitle: escapeHtml(o.customer_name||''),
       size: 'wide',
       bodyHtml: body,
-      actions: [{ label:'Cerrar', style:'ghost', onClick: closeModal }]
+      actions: [
+        { label:'Eliminar pedido', style:'danger', side:'left', onClick: delHandler },
+        { label:'Cerrar', style:'ghost', onClick: closeModal }
+      ]
     });
 
     document.getElementById('saveStatus').onclick = async () => {
