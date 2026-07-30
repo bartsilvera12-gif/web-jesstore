@@ -127,7 +127,7 @@
   .modal-head .h2{font-family:'Orbitron';font-weight:900;font-size:19px;color:#fff}
   .modal-head .sub{color:#8ea3c8;font-size:13px;margin-top:2px}
   .modal-body{padding:22px}
-  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;position:sticky;bottom:0;background:#0a1024;border-radius:0 0 18px 18px}
+  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0a1024;border-radius:0 0 18px 18px}
   .modal-foot .l,.modal-foot .r{display:flex;gap:10px;flex-wrap:wrap}
   .close{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:17px;display:inline-flex;align-items:center;justify-content:center}
   .close:hover{background:rgba(41,182,255,.18);border-color:#3ea6ff}
@@ -702,7 +702,18 @@
             <div class="muted" style="font-size:12px;margin-top:3px">Pedido creado ${fmtDate(p.created_at)}</div>
           </div>
         `).join('') : '<div class="muted">Sin pagos registrados.</div>'}
-        ${o.receipt_url ? `<div style="margin-top:10px"><a href="${escapeHtml(o.receipt_url)}" target="_blank">Ver comprobante subido</a></div>` : ''}
+      </div>
+
+      <div class="card" style="margin-top:14px"><h3>Comprobante de pago</h3>
+        ${o.receipt_url ? `
+          <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+            <a href="${escapeHtml(o.receipt_url)}" target="_blank" style="display:block;max-width:100%">
+              <img src="${escapeHtml(o.receipt_url)}" alt="Comprobante" style="max-width:100%;max-height:360px;border-radius:12px;border:1px solid rgba(255,255,255,.1);display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+              <span class="btn" style="display:none">Abrir en nueva pestaña</span>
+            </a>
+            <a href="${escapeHtml(o.receipt_url)}" target="_blank" class="btn ghost small">Abrir en pestaña nueva</a>
+          </div>
+        ` : '<div class="muted">El cliente todavía no subió comprobante.</div>'}
       </div>
 
       <div class="card" style="margin-top:14px"><h3>Cambiar estado del pedido</h3>
