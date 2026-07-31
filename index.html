@@ -302,6 +302,7 @@
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Nombres <span style="color:#ff6b6b">*</span></label><input name="firstName" value="{{ form.firstName }}" onInput="{{ onFormChange }}" placeholder="Tu nombre" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Apellidos <span style="color:#ff6b6b">*</span></label><input name="lastName" value="{{ form.lastName }}" onInput="{{ onFormChange }}" placeholder="Tu apellido" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Número de Cédula <span style="color:#ff6b6b">*</span></label><input name="cedula" value="{{ form.cedula }}" onInput="{{ onFormChange }}" placeholder="4.567.890" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">C.I. del jugador <span style="color:#ff6b6b">*</span></label><input name="playerCi" value="{{ form.playerCi }}" onInput="{{ onFormChange }}" placeholder="Cédula del jugador" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Ciudad <span style="color:#ff6b6b">*</span></label><input name="city" value="{{ form.city }}" onInput="{{ onFormChange }}" placeholder="Asunción" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Dirección de correo electrónico</label><input name="email" value="{{ form.email }}" onInput="{{ onFormChange }}" placeholder="tucorreo@mail.com" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1"><label style="font-weight:700;font-size:14px;color:#c3d2ee">WhatsApp <span style="color:#ff6b6b">*</span></label><input name="whatsapp" value="{{ form.whatsapp }}" onInput="{{ onFormChange }}" placeholder="+595 9XX XXXXXX" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
@@ -519,13 +520,9 @@
       <div style="padding:22px">
         <div style="background:rgba(41,182,255,.08);border:1px solid rgba(41,182,255,.25);border-radius:12px;padding:16px;color:#bfe4ff;font-weight:600;font-size:15px;margin-bottom:18px;text-align:center">Se te acreditarán <b style="color:#8fe3ff;font-family:'Orbitron'">{{ modalTotalDiamonds }} diamantes</b> en tu cuenta</div>
         <div style="text-align:center;font-family:'Orbitron';font-weight:900;font-size:32px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:20px">{{ modalPriceFmt }} Gs.</div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
           <label style="font-weight:700;font-size:14px;color:#c3d2ee">ID del jugador <span style="color:#ff6b6b">*</span></label>
           <input value="{{ modalPlayerId }}" onInput="{{ onModalId }}" placeholder="Ej: 1234567890" style="background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:14px 15px;border-radius:12px;font-size:16px;font-weight:700">
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
-          <label style="font-weight:700;font-size:14px;color:#c3d2ee">C.I. del jugador <span style="color:#ff6b6b">*</span></label>
-          <input value="{{ modalPlayerCi }}" onInput="{{ onModalCi }}" placeholder="Ej: 1.234.567" style="background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:14px 15px;border-radius:12px;font-size:16px;font-weight:700">
         </div>
         <button onClick="{{ addModal }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ff7a7a,# f2545b);background:linear-gradient(135deg,#ff7a7a,#f2545b);color:#fff;font-weight:900;padding:16px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.6px;border:none;box-shadow:0 12px 30px rgba(242,84,91,.4);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(242,84,91,.6);filter:brightness(1.06)">AÑADIR AL CARRITO</button>
         <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">Nunca pedimos tu contraseña, solo tu ID de jugador.</div>
@@ -601,8 +598,8 @@ class Component extends DCLogic {
     custom: '',
     toast: null,
     stat: { recargas:0, minutos:0, satis:0 },
-    form: { firstName:'', lastName:'', cedula:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
-    productOpen:false, selOpt:0, modalPlayerId:'', modalPlayerCi:'',
+    form: { firstName:'', lastName:'', cedula:'', playerCi:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
+    productOpen:false, selOpt:0, modalPlayerId:'',
     order:null, receiptName:'', view:'home',
     verifyStep:'idle', orderPin:'', countdownSec:0,
     products: [],           // se llena desde Supabase (jess_products_public)
@@ -765,28 +762,24 @@ class Component extends DCLogic {
     const base=[[100,10],[200,20],[310,31],[410,41],[520,52],[620,62],[830,83],[1060,106],[1150,115],[1360,136],[1570,157],[1880,188],[2180,218],[2470,247],[3210,321],[3730,373],[4320,432],[4840,484],[5600,560]];
     return base.map(([d,b])=>{ const t=d+b; const rate=63-Math.min(1,(t-110)/6050)*21; const price=Math.round(t*rate/1000)*1000; return { diamonds:d, bonus:b, total:t, price }; });
   }
-  openProduct(p){ this.setState({ productOpen:true, selProduct:p, modalPlayerId:'', modalPlayerCi:'' }); }
+  openProduct(p){ this.setState({ productOpen:true, selProduct:p, modalPlayerId:'' }); }
   closeProduct=()=>this.setState({productOpen:false});
   selOptFn(i){ this.setState({selOpt:i}); }
   onModalId=e=>this.setState({modalPlayerId:e.target.value});
-  onModalCi=e=>this.setState({modalPlayerCi:e.target.value});
   addModal=()=>{
     const p=this.state.selProduct; if(!p) return;
     const pid=this.state.modalPlayerId.trim();
-    const pci=this.state.modalPlayerCi.trim();
     if(!pid){ this.flash('Ingresá tu ID de jugador'); return; }
-    if(!pci){ this.flash('Ingresá tu C.I.'); return; }
     const label=this.fmt(p.diamonds)+(p.bonusDiamonds?' + '+this.fmt(p.bonusDiamonds):'');
     this.addToCart({
-      id: p.id+'-'+pid+'-'+pci,
+      id: p.id+'-'+pid,
       productId: p.id,
       name: label+' diamantes · ID '+pid,
       diamonds: p.diamonds,
       bonusDiamonds: p.bonusDiamonds||0,
       price: p.price,
       type: 'diamond',
-      playerId: pid,
-      playerCi: pci
+      playerId: pid
     });
     this.setState({productOpen:false});
   };
@@ -856,7 +849,7 @@ class Component extends DCLogic {
     e.preventDefault();
     if(this.state.submitting) return;
     const f = this.state.form;
-    if(!f.firstName || !f.lastName || !f.cedula || !f.city || !f.whatsapp){ this.flash('Completá todos los campos obligatorios'); return; }
+    if(!f.firstName || !f.lastName || !f.cedula || !f.playerCi || !f.city || !f.whatsapp){ this.flash('Completá todos los campos obligatorios'); return; }
     if(!this.state.cart.length){ this.flash('Tu carrito está vacío'); return; }
 
     this.setState({ submitting:true });
@@ -875,7 +868,7 @@ class Component extends DCLogic {
             email: f.email || null
           },
           player_id: f.cedula,
-          player_ci: (this.state.cart[0] && this.state.cart[0].playerCi) || null,
+          player_ci: f.playerCi || null,
           payment_method: f.method,
           discount: 0,
           notes: null,
