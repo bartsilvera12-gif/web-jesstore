@@ -814,7 +814,8 @@ class Component extends DCLogic {
       bonusDiamonds:p.bonusDiamonds||0,
       price:p.price,
       qty:1,
-      type:p.type||'diamond'
+      type:p.type||'diamond',
+      playerId:p.playerId||null      // ID del juego que puso el cliente en el modal
     });
     this.persist(cart);
     this.setState({ cartOpen:true });
