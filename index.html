@@ -125,6 +125,10 @@
         <span class="js-boom-shard" style="--ja:315deg;--jd:26px;position:absolute;top:50%;left:50%;width:5px;height:2px;background:linear-gradient(90deg,#fff,#ffb050);border-radius:2px;opacity:0"></span>
       </div>
     </div>
+    <div style="order:-1;width:calc(100% + clamp(32px,8vw,96px));margin:-4px calc(-1 * clamp(16px,4vw,48px)) 4px;padding:6px clamp(16px,4vw,32px);background:linear-gradient(90deg,rgba(62,232,122,.14),rgba(41,182,255,.08),rgba(62,232,122,.14));border-bottom:1px solid rgba(62,232,122,.28);text-align:center;font-weight:700;font-size:clamp(11px,1.4vw,13px);color:#c3d2ee;letter-spacing:.6px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+      <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#3ee87a;box-shadow:0 0 10px #3ee87a;animation:jsPulse 1.8s ease-in-out infinite"></span><b style="color:#7ff0a5;letter-spacing:1px">HORARIO</b></span>
+      <span>07:00 A 23:00 HS · TODOS LOS DÍAS <span style="color:#8ea3c8">(incluidos feriados)</span></span>
+    </div>
     <a href="#inicio" style="display:flex;align-items:center;gap:12px;transition:transform .25s ease" style-hover="transform:scale(1.05)">
       <img class="js-logo" src="uploads/logo-1785247877729.png" alt="JESS STORE OFFICIAL" style="height:clamp(86px,10vw,118px);width:auto;filter:drop-shadow(0 4px 26px rgba(41,182,255,.65))">
     </a>
@@ -147,12 +151,6 @@
       </button>
     </div>
   </header>
-
-  <!-- HORARIO -->
-  <div style="background:linear-gradient(90deg,rgba(62,232,122,.1),rgba(41,182,255,.06),rgba(62,232,122,.1));border-bottom:1px solid rgba(62,232,122,.25);padding:8px clamp(16px,4vw,32px);text-align:center;font-weight:700;font-size:clamp(11px,1.4vw,13px);color:#c3d2ee;letter-spacing:.6px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
-    <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#3ee87a;box-shadow:0 0 10px #3ee87a;animation:jsPulse 1.8s ease-in-out infinite"></span><b style="color:#7ff0a5;letter-spacing:1px">HORARIO</b></span>
-    <span>07:00 A 23:00 HS · TODOS LOS DÍAS <span style="color:#8ea3c8">(incluidos feriados)</span></span>
-  </div>
 
   <!-- MOBILE MENU -->
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
@@ -521,9 +519,13 @@
       <div style="padding:22px">
         <div style="background:rgba(41,182,255,.08);border:1px solid rgba(41,182,255,.25);border-radius:12px;padding:16px;color:#bfe4ff;font-weight:600;font-size:15px;margin-bottom:18px;text-align:center">Se te acreditarán <b style="color:#8fe3ff;font-family:'Orbitron'">{{ modalTotalDiamonds }} diamantes</b> en tu cuenta</div>
         <div style="text-align:center;font-family:'Orbitron';font-weight:900;font-size:32px;background:linear-gradient(135deg,#ffe08a,#f5c542);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:20px">{{ modalPriceFmt }} Gs.</div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
           <label style="font-weight:700;font-size:14px;color:#c3d2ee">ID del jugador <span style="color:#ff6b6b">*</span></label>
           <input value="{{ modalPlayerId }}" onInput="{{ onModalId }}" placeholder="Ej: 1234567890" style="background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:14px 15px;border-radius:12px;font-size:16px;font-weight:700">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+          <label style="font-weight:700;font-size:14px;color:#c3d2ee">C.I. del jugador <span style="color:#ff6b6b">*</span></label>
+          <input value="{{ modalPlayerCi }}" onInput="{{ onModalCi }}" placeholder="Ej: 1.234.567" style="background:#070c1c;border:1px solid rgba(41,182,255,.4);color:#fff;padding:14px 15px;border-radius:12px;font-size:16px;font-weight:700">
         </div>
         <button onClick="{{ addModal }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#ff7a7a,# f2545b);background:linear-gradient(135deg,#ff7a7a,#f2545b);color:#fff;font-weight:900;padding:16px;border-radius:13px;cursor:pointer;font-size:16px;letter-spacing:.6px;border:none;box-shadow:0 12px 30px rgba(242,84,91,.4);transition:all .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(242,84,91,.6);filter:brightness(1.06)">AÑADIR AL CARRITO</button>
         <div style="text-align:center;color:#6b7da0;font-size:13px;font-weight:500;margin-top:12px">Nunca pedimos tu contraseña, solo tu ID de jugador.</div>
@@ -600,7 +602,7 @@ class Component extends DCLogic {
     toast: null,
     stat: { recargas:0, minutos:0, satis:0 },
     form: { firstName:'', lastName:'', cedula:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
-    productOpen:false, selOpt:0, modalPlayerId:'',
+    productOpen:false, selOpt:0, modalPlayerId:'', modalPlayerCi:'',
     order:null, receiptName:'', view:'home',
     verifyStep:'idle', orderPin:'', countdownSec:0,
     products: [],           // se llena desde Supabase (jess_products_public)
@@ -763,11 +765,31 @@ class Component extends DCLogic {
     const base=[[100,10],[200,20],[310,31],[410,41],[520,52],[620,62],[830,83],[1060,106],[1150,115],[1360,136],[1570,157],[1880,188],[2180,218],[2470,247],[3210,321],[3730,373],[4320,432],[4840,484],[5600,560]];
     return base.map(([d,b])=>{ const t=d+b; const rate=63-Math.min(1,(t-110)/6050)*21; const price=Math.round(t*rate/1000)*1000; return { diamonds:d, bonus:b, total:t, price }; });
   }
-  openProduct(p){ this.setState({ productOpen:true, selProduct:p, modalPlayerId:'' }); }
+  openProduct(p){ this.setState({ productOpen:true, selProduct:p, modalPlayerId:'', modalPlayerCi:'' }); }
   closeProduct=()=>this.setState({productOpen:false});
   selOptFn(i){ this.setState({selOpt:i}); }
   onModalId=e=>this.setState({modalPlayerId:e.target.value});
-  addModal=()=>{ const p=this.state.selProduct; if(!p) return; const pid=this.state.modalPlayerId.trim(); if(!pid){ this.flash('Ingresá tu ID de jugador'); return; } const label=this.fmt(p.diamonds)+(p.bonusDiamonds?' + '+this.fmt(p.bonusDiamonds):''); this.addToCart({ id:p.id+'-'+pid, productId:p.id, name:label+' diamantes · ID '+pid, diamonds:p.diamonds, bonusDiamonds:p.bonusDiamonds||0, price:p.price, type:'diamond', playerId:pid }); this.setState({productOpen:false}); };
+  onModalCi=e=>this.setState({modalPlayerCi:e.target.value});
+  addModal=()=>{
+    const p=this.state.selProduct; if(!p) return;
+    const pid=this.state.modalPlayerId.trim();
+    const pci=this.state.modalPlayerCi.trim();
+    if(!pid){ this.flash('Ingresá tu ID de jugador'); return; }
+    if(!pci){ this.flash('Ingresá tu C.I.'); return; }
+    const label=this.fmt(p.diamonds)+(p.bonusDiamonds?' + '+this.fmt(p.bonusDiamonds):'');
+    this.addToCart({
+      id: p.id+'-'+pid+'-'+pci,
+      productId: p.id,
+      name: label+' diamantes · ID '+pid,
+      diamonds: p.diamonds,
+      bonusDiamonds: p.bonusDiamonds||0,
+      price: p.price,
+      type: 'diamond',
+      playerId: pid,
+      playerCi: pci
+    });
+    this.setState({productOpen:false});
+  };
 
   wa(){ const w=(this.state.settings||{}).whatsapp||{}; return String(w.number || this.props.whatsappNumber || '595973749759').replace(/[^0-9]/g,''); }
   waDisplay(){ const w=(this.state.settings||{}).whatsapp||{}; return w.display || this.props.whatsappDisplay || '+595 973 749759'; }
@@ -853,6 +875,7 @@ class Component extends DCLogic {
             email: f.email || null
           },
           player_id: f.cedula,
+          player_ci: (this.state.cart[0] && this.state.cart[0].playerCi) || null,
           payment_method: f.method,
           discount: 0,
           notes: null,
