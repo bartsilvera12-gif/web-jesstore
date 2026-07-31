@@ -866,7 +866,7 @@ class Component extends DCLogic {
             phone: f.whatsapp,
             email: f.email || null
           },
-          player_id: f.cedula,
+          player_id: (this.state.cart[0] && this.state.cart[0].playerId) || f.cedula,
           player_ci: f.cedula || null,
           payment_method: f.method,
           discount: 0,
