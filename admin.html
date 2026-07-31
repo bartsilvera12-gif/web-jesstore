@@ -686,20 +686,22 @@
       <div class="row" style="margin-bottom:14px;gap:8px">${statusTag(o.status)} ${statusTag(o.payment_status)}<span class="muted" style="font-size:13px;margin-left:6px">${fmtDate(o.created_at)}</span></div>
       <div class="grid-2">
         <div class="card"><h3>Cliente</h3>
-          <div class="kv">
-            <div class="k">Nombre</div>       <div class="v">${escapeHtml(o.customer_name||'—')}</div>
-            <div class="k">Teléfono</div>     <div class="v">${escapeHtml(o.customer_phone||'—')}</div>
-            <div class="k">Correo</div>       <div class="v">${escapeHtml(o.customer_email||'—')}</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><label class="label">Nombre</label><input class="input" id="edCustName" value="${escapeHtml(o.customer_name||'')}"></div>
+            <div><label class="label">Teléfono</label><input class="input" id="edCustPhone" value="${escapeHtml(o.customer_phone||'')}"></div>
+            <div><label class="label">Correo</label><input class="input" id="edCustEmail" type="email" value="${escapeHtml(o.customer_email||'')}"></div>
           </div>
         </div>
         <div class="card"><h3>Datos del juego</h3>
-          <div class="kv">
-            <div class="k">ID Jugador</div>   <div class="v">${escapeHtml(o.player_id||'—')}</div>
-            <div class="k">Nickname</div>     <div class="v">${escapeHtml(o.player_nickname||'—')}</div>
-            <div class="k">Método pago</div>  <div class="v">${escapeHtml(o.payment_method||'—')}</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div><label class="label">ID Jugador</label><input class="input" id="edPlayerId" value="${escapeHtml(o.player_id||'')}"></div>
+            <div><label class="label">C.I. del jugador</label><input class="input" id="edPlayerCi" value="${escapeHtml(o.player_ci||'')}"></div>
+            <div><label class="label">Nickname</label><input class="input" id="edNickname" value="${escapeHtml(o.player_nickname||'')}"></div>
+            <div><label class="label">Método de pago</label><input class="input" id="edMethod" value="${escapeHtml(o.payment_method||'')}"></div>
           </div>
         </div>
       </div>
+      <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn primary small" id="saveEditData">Guardar datos</button></div>
 
       <div class="card" style="margin-top:14px"><h3>Ítems</h3>
         <table>
@@ -781,6 +783,30 @@
         { label:'Cerrar', style:'ghost', onClick: closeModal }
       ]
     });
+
+    document.getElementById('saveEditData').onclick = async () => {
+      const custPatch = {
+        name:  $('#edCustName').value.trim(),
+        phone: $('#edCustPhone').value.trim(),
+        email: $('#edCustEmail').value.trim() || null
+      };
+      const orderPatch = {
+        player_id:       $('#edPlayerId').value.trim(),
+        player_ci:       $('#edPlayerCi').value.trim() || null,
+        player_nickname: $('#edNickname').value.trim() || null,
+        payment_method:  $('#edMethod').value.trim() || null
+      };
+      if(!custPatch.name || !custPatch.phone){ toast('Nombre y teléfono son obligatorios', true); return; }
+      if(!orderPatch.player_id){ toast('El ID del jugador es obligatorio', true); return; }
+      const [cRes, oRes] = await Promise.all([
+        sbJess.from('customers').update(custPatch).eq('id', o.customer_id),
+        sbJess.from('orders').update(orderPatch).eq('id', id)
+      ]);
+      if(cRes.error || oRes.error){ toast((cRes.error || oRes.error).message, true); return; }
+      toast('Datos guardados');
+      openOrderModal(id);
+      if(state.view === 'orders') loadOrders();
+    };
 
     document.getElementById('saveStatus').onclick = async () => {
       const st = document.getElementById('newStatus').value;
