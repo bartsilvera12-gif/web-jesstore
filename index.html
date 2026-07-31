@@ -301,8 +301,7 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Nombres <span style="color:#ff6b6b">*</span></label><input name="firstName" value="{{ form.firstName }}" onInput="{{ onFormChange }}" placeholder="Tu nombre" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Apellidos <span style="color:#ff6b6b">*</span></label><input name="lastName" value="{{ form.lastName }}" onInput="{{ onFormChange }}" placeholder="Tu apellido" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
-          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Número de Cédula <span style="color:#ff6b6b">*</span></label><input name="cedula" value="{{ form.cedula }}" onInput="{{ onFormChange }}" placeholder="4.567.890" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
-          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">C.I. del jugador <span style="color:#ff6b6b">*</span></label><input name="playerCi" value="{{ form.playerCi }}" onInput="{{ onFormChange }}" placeholder="Cédula del jugador" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
+          <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Cédula <span style="color:#ff6b6b">*</span></label><input name="cedula" value="{{ form.cedula }}" onInput="{{ onFormChange }}" placeholder="4.567.890" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Ciudad <span style="color:#ff6b6b">*</span></label><input name="city" value="{{ form.city }}" onInput="{{ onFormChange }}" placeholder="Asunción" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1"><label style="font-weight:700;font-size:14px;color:#c3d2ee">Dirección de correo electrónico</label><input name="email" value="{{ form.email }}" onInput="{{ onFormChange }}" placeholder="tucorreo@mail.com" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
           <div style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1"><label style="font-weight:700;font-size:14px;color:#c3d2ee">WhatsApp <span style="color:#ff6b6b">*</span></label><input name="whatsapp" value="{{ form.whatsapp }}" onInput="{{ onFormChange }}" placeholder="+595 9XX XXXXXX" style="background:#070c1c;border:1px solid rgba(255,255,255,.12);color:#fff;padding:13px 14px;border-radius:11px;font-size:15px;font-weight:600;transition:border-color .2s" style-focus="border-color:#3ea6ff;outline:none"></div>
@@ -598,7 +597,7 @@ class Component extends DCLogic {
     custom: '',
     toast: null,
     stat: { recargas:0, minutos:0, satis:0 },
-    form: { firstName:'', lastName:'', cedula:'', playerCi:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
+    form: { firstName:'', lastName:'', cedula:'', city:'', email:'', whatsapp:'', method:'Transferencia Bancaria', newsletter:true, createAccount:false },
     productOpen:false, selOpt:0, modalPlayerId:'',
     order:null, receiptName:'', view:'home',
     verifyStep:'idle', orderPin:'', countdownSec:0,
@@ -849,7 +848,7 @@ class Component extends DCLogic {
     e.preventDefault();
     if(this.state.submitting) return;
     const f = this.state.form;
-    if(!f.firstName || !f.lastName || !f.cedula || !f.playerCi || !f.city || !f.whatsapp){ this.flash('Completá todos los campos obligatorios'); return; }
+    if(!f.firstName || !f.lastName || !f.cedula || !f.city || !f.whatsapp){ this.flash('Completá todos los campos obligatorios'); return; }
     if(!this.state.cart.length){ this.flash('Tu carrito está vacío'); return; }
 
     this.setState({ submitting:true });
@@ -868,7 +867,7 @@ class Component extends DCLogic {
             email: f.email || null
           },
           player_id: f.cedula,
-          player_ci: f.playerCi || null,
+          player_ci: f.cedula || null,
           payment_method: f.method,
           discount: 0,
           notes: null,

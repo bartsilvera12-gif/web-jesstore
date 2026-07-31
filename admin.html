@@ -118,16 +118,16 @@
   @keyframes sp{to{transform:rotate(360deg)}}
 
   /* MODAL */
-  .modal-bg{position:fixed;inset:0;z-index:100;background:rgba(2,4,10,.78);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;animation:fadeIn .18s ease}
+  .modal-bg{position:fixed;inset:0;z-index:100;background:rgba(2,4,10,.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px 16px;animation:fadeIn .18s ease}
   .modal-bg.on{display:flex}
-  .modal{width:min(720px,100%);background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.35);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.7);margin:auto 0;animation:popIn .22s cubic-bezier(.2,.7,.3,1.2)}
+  .modal{width:min(720px,100%);max-height:calc(100vh - 48px);background:linear-gradient(180deg,#0a1024,#070b1a);border:1px solid rgba(245,197,66,.35);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.7);display:flex;flex-direction:column;overflow:hidden;animation:popIn .22s cubic-bezier(.2,.7,.3,1.2)}
   .modal.wide{width:min(860px,100%)}
   .modal.narrow{width:min(460px,100%)}
-  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0a1024;z-index:2;border-radius:18px 18px 0 0}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08);background:#0a1024;border-radius:18px 18px 0 0;flex-shrink:0}
   .modal-head .h2{font-family:'Orbitron';font-weight:900;font-size:19px;color:#fff}
   .modal-head .sub{color:#8ea3c8;font-size:13px;margin-top:2px}
-  .modal-body{padding:22px}
-  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0a1024;border-radius:0 0 18px 18px}
+  .modal-body{padding:22px;overflow-y:auto;flex:1;min-height:0}
+  .modal-foot{padding:16px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0a1024;border-radius:0 0 18px 18px;flex-shrink:0}
   .modal-foot .l,.modal-foot .r{display:flex;gap:10px;flex-wrap:wrap}
   .close{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:17px;display:inline-flex;align-items:center;justify-content:center}
   .close:hover{background:rgba(41,182,255,.18);border-color:#3ea6ff}
@@ -695,7 +695,7 @@
         <div class="card"><h3>Datos del juego</h3>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div><label class="label">ID Jugador</label><input class="input" id="edPlayerId" value="${escapeHtml(o.player_id||'')}"></div>
-            <div><label class="label">C.I. del jugador</label><input class="input" id="edPlayerCi" value="${escapeHtml(o.player_ci||'')}"></div>
+            <div><label class="label">Cédula</label><input class="input" id="edPlayerCi" value="${escapeHtml(o.player_ci||'')}"></div>
             <div><label class="label">Nickname</label><input class="input" id="edNickname" value="${escapeHtml(o.player_nickname||'')}"></div>
             <div><label class="label">Método de pago</label><input class="input" id="edMethod" value="${escapeHtml(o.payment_method||'')}"></div>
           </div>
