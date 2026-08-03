@@ -658,15 +658,23 @@ class Component extends DCLogic {
     this.setState({ receiptName: f.name, receiptUploading: true });
     try{
       const sb = window.jessSb;
+      const cfg = window.JESS_SUPABASE || {};
       const orderId = this.state.order && this.state.order.id;
       if(!sb || !orderId) throw new Error('no-order');
       const ext = (f.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
       const path = `${orderId}-${Date.now()}.${ext}`;
-      const up = await sb.storage.from('receipts').upload(path, f, { upsert:true, contentType: f.type || 'image/jpeg' });
-      if(up.error) throw up.error;
-      const pub = sb.storage.from('receipts').getPublicUrl(path);
-      const url = pub && pub.data && pub.data.publicUrl;
-      if(!url) throw new Error('sin-url');
+      // Subida manual con fetch: evitamos el header x-upsert que el CORS del storage no permite.
+      const res = await fetch(`${cfg.url}/storage/v1/object/receipts/${path}`, {
+        method: 'POST',
+        headers: {
+          'apikey': cfg.anonKey,
+          'Authorization': 'Bearer ' + cfg.anonKey,
+          'Content-Type': f.type || 'image/jpeg'
+        },
+        body: f
+      });
+      if(!res.ok){ const t = await res.text().catch(()=> ''); throw new Error('subida ' + res.status + ' ' + t.slice(0,120)); }
+      const url = `${cfg.url}/storage/v1/object/public/receipts/${path}`;
       const rpc = await sb.rpc('attach_jess_receipt', { p_order_id: orderId, p_url: url });
       if(rpc.error) throw rpc.error;
       this.setState({ receiptUploading:false, receiptUrl:url });
